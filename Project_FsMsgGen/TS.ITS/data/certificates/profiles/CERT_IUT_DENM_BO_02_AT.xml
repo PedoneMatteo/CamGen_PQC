@@ -1,0 +1,31 @@
+<!-- Authorization ticket certificate for DENM testing
+     do NOT permiting accident cause code
+-->
+<certificate name="CERT_IUT_DENM_BO_02_AT">
+	<version>2</version>
+	<signer type="digest" name="CERT_TS_A_AA"/>
+	<subject type="AT" name="">
+		<!-- verification_key -->
+		<attribute type="verification_key">
+			<public_key algorythm="0">
+				<ecc_point type="uncompressed"/>
+			</public_key>
+		</attribute>
+		<!-- assurance_level -->
+		<attribute type="assurance_level">
+			<assurance level="3"/>
+		</attribute>
+		<!-- its_aid_ssp_list -->
+		<attribute type="its_aid_ssp_list">
+			<ssp aid="CAM">01 FF FC</ssp>  <!-- Keep CAM permission for compatibility -->
+			<ssp aid="DENM">01 BF FF FF</ssp>  <!-- DENM: no accident -->
+		</attribute>
+	</subject>
+	<validity>
+		<restriction type="time" start="+0d" end="+365d"/>
+		<restriction type="region">
+			<none/>
+		</restriction>
+	</validity>
+	<signature algorithm="0"/>
+</certificate>

@@ -1,0 +1,127 @@
+
+[MODULE_PARAMETERS]
+# This section shall contain the values of all parameters that are defined in your TTCN-3 modules.
+
+# The GeoNetworking address of the IUT.
+LibItsGeoNetworking_Pics.PICS_GN_LOCAL_GN_ADDR := {
+  typeOfAddress := e_initial,
+  stationType := e_unknown, #e_roadSideUnit,
+  stationCountryCode := 0, #33,
+  mid := '4C5E0C14D2EB'O
+}
+
+# IUT Station ID. See testdata set and plugtest1026-log-locD 002.pcap
+LibItsCommon_Pixits.PX_IUT_STATION_ID := 10143;
+
+LibItsGeoNetworking_Pixits.PX_GN_UPPER_LAYER := e_btpB
+
+[LOGGING]
+# In this section you can specify the name of the log file and the classes of events
+# you want to log into the file or display on console (standard error).
+
+LogFile := "../logs/%e.%h-%r.%s"
+FileMask := USER | MATCHING|ACTION|DEFAULTOP|ERROR|EXECUTOR|FUNCTION|PARALLEL|PORTEVENT|STATISTICS|TESTCASE|TIMEROP|VERDICTOP|WARNING
+ConsoleMask := USER | MATCHING|ACTION|DEFAULTOP|ERROR|EXECUTOR|FUNCTION|PARALLEL|PORTEVENT|STATISTICS|TESTCASE|TIMEROP|VERDICTOP|WARNING
+#FileMask := ERROR | WARNING | USER | MATCHING | EXECUTOR_RUNTIME | VERDICTOP
+#ConsoleMask := ERROR | WARNING | USER | MATCHING | EXECUTOR_RUNTIME | VERDICTOP
+LogSourceInfo := Stack
+LogEntityName:= Yes
+LogEventTypes:= Yes
+#TimeStampFormat := DateTime
+
+[TESTPORT_PARAMETERS]
+# In this section you can specify parameters that are passed to Test Ports.
+# CAM Layer
+#   next_header     : btpA|btpB (overwrite BTP.type)
+#   header_type     : tsb|gbc
+#   header_sub_type : sh (single hop)
+# DENM Layer
+#   next_header     : btpA|btpB (overwrite BTP.type)
+#   header_type     : tsb|gbc
+# BTP Layer
+#   type            : btpA|btpB
+#   destination port: dst_port
+#   source port     : src_port
+#   device_mode     : Set to 1 if the layer shall encapsulate upper layer PDU
+#   device_mode     : Set to 1 if the layer shall encapsulate upper layer PDU
+# GN Layer
+#   ll_address             : GeoNetworking address of the Test System
+#   latitude               : Latitude of the Test System
+#   longitude              : Longitude of the Test System
+#   beaconing              : Set to 1 if GnLayer shall start beaconing
+#   expiry                 : Beaconning timer expiry (ms)
+#   device_mode            : Set to 1 if the layer shall encapsulate upper layer PDU
+#   secured_mode           : Set to 1 if message exchanges shall be signed
+#   encrypted_mode         : Set to 1 if message exchanges shall be encrypted
+#                            NOTE: For signed & encrypted message exchanges, both secured_mode and encrypted_mode shall be set to 1
+#   secure_db_path         : Path to the certificates and keys storage location
+#   hash                   : Hash algorithm to be used when secured mode is set
+#                            Authorized values are SHA-256 or SHA-384
+#                            Default: SHA-256
+#   signature              : Signature algorithm to be used when secured mode is set
+#                            Authorized values are NISTP-256, NISTP-384, BP-256 and BP-384
+#                            Default: NISTP-256
+#   cypher                 : Cyphering algorithm to be used when secured mode is set
+#                            Authorized values are NISTP-256, BP-256 and BP-384
+#                            Default: NISTP-256
+# Ethernet layer
+#   mac_src  :Source MAC address
+#   mac_bc   :Broadcast address
+#   eth_type : Ethernet type
+# Commsignia layer
+#   mac_src     : Device MAC address, used to discard packets
+#                 To indicate no filering, use the value 000000000000
+#   mac_bc      : Broadcast address
+#   eth_type    : Ethernet type, used to discard packets
+#   target_host : Device address
+#   target_port : Device port
+#   source_port : Test System port
+#   interface_id: Interface id, used to discard packets
+#   tx_power    : TX power (dB)
+# UDP layer (IP/UDP based on Pcap)
+#   dst_ip  : Destination IPv4 address (aa.bb.cc.dd)
+#   dst_port: Destination port
+#   src_ip  : Source IPv4 address (aa.bb.cc.dd)
+#   src_port: Source port
+# Pcap layer
+#   mac_src    : Source MAC address, used to exclude from capture the acket sent by the Test System
+#   filter     : Pcap filter (compliant with tcpdump syntax) 
+#   Online mode:
+#     nic: Local NIC
+#          If set, online mode is used
+#   Offline mode (nic is present but not set):
+#     file        : File to read
+#     frame_offset: Frame offset, used to skip packets with frame number < frame_offset
+#     time_offset : Time offset, used to skip packets with time offset < time_offset
+#     save_mode   : Set to 1 to save sent packet, 0 otherwise
+#
+
+# Non secured IUT (LAN USB)
+system.camPort.params := "
+    CAM(next_header=btpB,header_type=tsb,header_sub_type=sh)/
+    BTP(type=btpB,dst_port=2001,src_port=0,device_mode=1)/
+    GN(ll_address=4C5E0C14D2EA,latitude=43551050,longitude=10298730,distanceA=1500,distanceB=1500,angle=0,device_mode=1)/
+    ETH(mac_src=803f5d092bdc)/
+    PCAP_FILE(file=../testdata/test_9950_cam.pcap,realtime=yes)"
+
+# Non secured IUT-WIFI
+#system.camPort.params := "CAM(next_header=btpB,header_type=tsb,header_sub_type=sh)/BTP(type=btpB,dst_port=2001,src_port=0,device_mode=1)/GN(ll_address=4C5E0C14D2EA,latitude=43551050,longitude=10298730,distanceA=1500,distanceB=1500,angle=0,device_mode=1)/ETH(mac_src=1002b522d4f4)/PCAP(mac_src=1002b522d4f4,nic=A9142677-63D9-4DAC-93C9-F80C75DABE66,filter=and ether proto 0x8947)"
+# Secured IUT
+#system.camPort.params := "CAM(next_header=btpB,header_type=tsb,header_sub_type=sh)/BTP(type=btpB,dst_port=2001,src_port=0,deviceMode=1)/GN(ll_address=4C5E0C14D2EA,latitude=43551050,longitude=10298730,distanceA=1500,distanceB=1500,angle=0,expiry=1000,deviceMode=1,secured_mode=1,certificate=CERT_IUT_F_AT,sec_db_path=/home/vagrant/tmp/test_01)/ETH(mac_src=080027D2B658,mac_bc=FFFFFFFFFFFF,eth_type=8947)/PCAP(mac_src=803F5D092BDC,nic=eth1,filter=and ether proto 0x8947)"
+
+# CAM UpperTester port based on UDP (LAN USB)
+system.utPort.params := "UT_CAM(loopback=1)"
+
+# CAM UpperTester port based on UDP (WIFI)
+#system.utPort.params := "UT_CAM(loopback=0)/UDP(dst_ip=172.28.1.208,dst_port=12345,src_ip=172.28.0.123,src_port=12345)/ETH(mac_src=1002b522d4f4,mac_dst=08002794290a,eth_type=0800)/PCAP(mac_src=1002b522d4f4,nic=A9142677-63D9-4DAC-93C9-F80C75DABE66,filter=and udp port 12345)"
+
+[EXECUTE]
+ItsCam_TestCases.TC_CAM_MSD_FMT_BV_01
+ItsCam_TestCases.TC_CAM_MSD_FMT_BV_02
+
+[MAIN_CONTROLLER]
+# The options herein control the behavior of MC.
+KillTimer := 10.0
+LocalAddress := 127.0.0.1
+TCPPort := 12000
+NumHCs := 1

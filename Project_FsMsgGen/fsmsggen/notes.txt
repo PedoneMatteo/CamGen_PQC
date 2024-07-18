@@ -1,0 +1,10 @@
+    - - - - CHANGES - - - -
+
+in msggen_cam.c:
+    "static int _o_secured = 1;" cambiato in "static int _o_secured = 0;"
+
+in fsmsggen.c:
+    "static int _o_secured = 1;" cambiato in "static int _o_secured = 0;"
+
+N.B: setting the variable _o_secured to 0 in both the files, I obtain only cam messages 
+     without signatures and so without the secured packet inside the Geonetworking layer.

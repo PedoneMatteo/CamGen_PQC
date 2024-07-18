@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<EtsiTs103097Certificate>
+  <version>3</version>
+  <type>
+    <explicit/>
+  </type>
+  <issuer name="CERT_IUT_A_B_AA">
+    <!--CERT_IUT_A_B_AA-->
+    <sha256AndDigest/>
+  </issuer>
+  <toBeSigned>
+    <id>
+      <none/>
+    </id>
+    <cracaId>00 00 00</cracaId>
+    <crlSeries>0</crlSeries>
+    <validityPeriod>
+      <start><!--2022-01-01-->568080000</start>
+      <duration>
+        <hours><!--2023-01-01-->8760</hours>
+      </duration>
+    </validityPeriod>
+    <assuranceLevel>60</assuranceLevel>
+    <!--level=3 confidence=0-->
+    <appPermissions>
+      <PsidSsp>
+        <!--CAM-->
+        <psid>36</psid>
+        <ssp>
+          <bitmapSsp>01 FF FC</bitmapSsp>
+        </ssp>
+      </PsidSsp>
+      <PsidSsp>
+        <!--DENM-->
+        <psid>37</psid>
+        <ssp>
+          <bitmapSsp>01 FF FF FF</bitmapSsp>
+        </ssp>
+      </PsidSsp>
+      <PsidSsp>
+        <!--GN-MGMT-->
+        <psid>141</psid>
+      </PsidSsp>
+    </appPermissions>
+    <encryptionKey>
+      <supportedSymmAlg>
+        <aes128Ccm/>
+      </supportedSymmAlg>
+      <publicKey>
+        <eciesNistP256>
+          <compressed-y-0/>
+        </eciesNistP256>
+      </publicKey>
+    </encryptionKey>
+    <verifyKeyIndicator>
+      <verificationKey>
+        <ecdsaBrainpoolP256r1>
+          <uncompressedP256>
+            <x/>
+            <y/>
+          </uncompressedP256>
+        </ecdsaBrainpoolP256r1>
+      </verificationKey>
+    </verifyKeyIndicator>
+  </toBeSigned>
+  <signature>
+    <ecdsaBrainpoolP256r1Signature>
+      <rSig>
+        <x-only/>
+      </rSig>
+      <sSig/>
+    </ecdsaBrainpoolP256r1Signature>
+  </signature>
+</EtsiTs103097Certificate>

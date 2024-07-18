@@ -1,0 +1,224 @@
+[MODULE_PARAMETERS]
+# This section shall contain the values of all parameters that are defined in your TTCN-3 modules.
+
+# The GeoNetworking address of the IUT.
+LibItsGeoNetworking_Pics.PICS_GN_LOCAL_GN_ADDR := {
+  typeOfAddress := e_manual,
+  stationType := e_roadSideUnit,
+  reserved := 49,
+  mid := '001C6B0D0201'O
+}
+
+LibItsGeoNetworking_Pixits.PX_GN_UPPER_LAYER := e_btpB
+
+# Enable Security support
+LibItsGeoNetworking_Pics.PICS_GN_SECURITY := true
+# Root path to access certificate stored in files, identified by certficate ID
+LibItsSecurity_Pixits.PX_CERTIFICATE_POOL_PATH := "../data/certificates"
+# Configuration sub-directory to access certificate stored in files
+LibItsSecurity_Pixits.PX_IUT_SEC_CONFIG_NAME := "certificates"
+
+# Use this certificate if the RSU simulator act as IUT
+LibItsCommon_Pixits.PX_CERT_FOR_TS := "CERT_IUT_A_AT"
+
+LibItsHttp_Pics.PICS_HEADER_CONTENT_TYPE     := "application/x-its-request"
+LibItsHttp_Pics.PICS_HEADER_CTL_CONTENT_TYPE := "application/x-its-crl"
+
+LibItsHttp_Pics.PICS_HEADER_HOST := "192.168.1.43"
+
+LibItsPki_Pics.PICS_HTTP_POST_URI_EC := "/ea/enrolment"
+LibItsPki_Pics.PICS_HTTP_POST_URI_AT := "/aa/authorization"
+
+
+LibItsPki_Pics.PICS_IUT_ITS_S_ROLE     := true
+LibItsPki_Pics.PICS_SECPKI_ENROLMENT   := true
+
+LibItsPki_Pics.PICS_TS_EA_CERTIFICATE_ID                   := "CERT_TS_A_EA"
+LibItsPki_Pics.PICS_TS_AA_CERTIFICATE_ID                   := "CERT_TS_A_AA"
+
+LibItsPki_Pics.PICS_ITS_S_CANONICAL_ID                := '455453492D5465737453797374656D2D3031'O # Nist-P256
+#LibItsPki_Pics.PICS_ITS_S_CANONICAL_ID               := '455453492D5465737453797374656D2D3032'O # Brainpool-P256 r1
+#LibItsPki_Pics.PICS_ITS_S_CANONICAL_ID               := '455453492D5465737453797374656D2D3033'O # Brainpool-P384 r1
+
+# Technical keys
+# Private key
+#FE95786F01D7E1666CCDFAB7BAEE9BF9B30BBEA15A838A58994E65E684A8BB34
+# Public key 
+#048038F5490CD5A58FF5465D3B577EE830047336AC5DAC07036B798AAECAE7273FD91C4F60995494EA949E64EE0E3D768DBDEB8AFC345627211E3FC4DD8FD39EE5
+LibItsPki_Pics.PICS_ITS_S_SIGN_NITSP256_PRIVATE_KEY := 'FE95786F01D7E1666CCDFAB7BAEE9BF9B30BBEA15A838A58994E65E684A8BB34'O;
+LibItsPki_Pics.PICS_ITS_S_SIGN_NISTP256_PUBLIC_KEY := '038038f5490cd5a58ff5465d3b577ee830047336ac5dac07036b798aaecae7273f'O;
+
+# Set to true if the IUT support CertificateId shall be set to the choice name, false if it shall be omitted
+#LibItsPki_Pics.PICS_EC_SUBJECT_ATTRIBUT_ID := false # requestedSubjectAttributes.id is omitted
+# Set to true if the IUT support geographical region
+#LibItsPki_Pics.PICS_EC_SUBJECT_ATTRIBUT_REGION := false # requestedSubjectAttributes.region is omitted
+
+# Re-enrollment keys
+LibItsPki_Pics.PICS_SECPKI_REENROLMENT := true
+
+#ItsPki_Pixits.PX_TRIGGER_EC_BEFORE_AT                      := false;
+
+#LibItsPki_Pixits.PX_INCLUDE_ENCRYPTION_KEYS := false # No encryption key in Authorization request
+#LibItsPki_Pixits.PICS_PKI_AUTH_POP          := false # Do not use Signed for PoP in Authorization requet
+
+#LibItsPki_Pixits.PX_VE_ALG             := e_brainpool_p256_r1 # e_nist_p256, e_brainpool_p256_r1 or e_brainpool_p384_r1
+#LibItsPki_Pixits.PX_EC_ALG_FOR_EC      := e_brainpool_p256_r1 # e_nist_p256, e_brainpool_p256_r1
+#LibItsPki_Pixits.PX_EC_ALG_FOR_ATV     := e_brainpool_p256_r1 # e_nist_p256, e_brainpool_p256_r1
+#LibItsPki_Pixits.PX_EC_ALG_FOR_EC_SIGN := e_brainpool_p256_r1 # e_nist_p256, e_brainpool_p256_r1
+#LibItsPki_Pixits.PX_EC_ALG_FOR_AT       := e_brainpool_p256_r1 # e_nist_p256, e_brainpool_p256_r1
+
+LibItsSecurity_Pics.PICS_SEC_CIRCULAR_REGION    := false
+LibItsSecurity_Pics.PICS_SEC_RECTANGULAR_REGION := true
+
+[LOGGING]
+# In this section you can specify the name of the log file and the classes of events
+# you want to log into the file or display on console (standard error).
+
+LogFile := "../logs/AtsPki/%e.%h-%r.%s"
+FileMask := LOG_ALL | USER | DEBUG | MATCHING
+ConsoleMask := LOG_ALL | USER | DEBUG | MATCHING
+#FileMask := ERROR | WARNING | USER | MATCHING | EXECUTOR_RUNTIME | VERDICTOP
+#ConsoleMask := ERROR | WARNING | USER | MATCHING | EXECUTOR_RUNTIME | VERDICTOP
+LogSourceInfo := Stack
+LogEntityName:= Yes
+LogEventTypes:= Yes
+#TimeStampFormat := DateTime
+
+[TESTPORT_PARAMETERS]
+# In this section you can specify parameters that are passed to Test Ports.
+# CAM Layer
+#   next_header     : btpA|btpB (overwrite BTP.type)
+#   header_type     : tsb|gbc
+#   header_sub_type : sh (single hop)
+# DENM Layer
+#   next_header     : btpA|btpB (overwrite BTP.type)
+#   header_type     : tsb|gbc
+# BTP Layer
+#   type            : btpA|btpB
+#   destination port: dst_port
+#   source port     : src_port
+#   device_mode     : Set to 1 if the layer shall encapsulate upper layer PDU
+#   device_mode     : Set to 1 if the layer shall encapsulate upper layer PDU
+# GN Layer
+#   ll_address             : GeoNetworking address of the Test System
+#   latitude               : latitude of the Test System
+#   longitude              : longitude of the Test System
+#   beaconing              : Set to 1 if GnLayer shall start beaconing
+#   Beaconing timer expiry: expiry (ms)
+#   device_mode            : Set to 1 if the layer shall encapsulate upper layer PDU
+#   secured_mode           : Set to 1 if message exchanges shall be signed
+#   encrypted_mode         : Set to 1 if message exchanges shall be encrypted
+#                            NOTE: For signed & encrypted message exchanges, both secured_mode and encrypted_mode shall be set to 1
+#   sec_db_path            : Path to the certificates and keys storage location
+#   hash                   : Hash algorithm to be used when secured mode is set
+#                            Authorized values are SHA-256 or SHA-384
+#                            Default: SHA-256
+#   signature              : Signature algorithm to be used when secured mode is set
+#                            Authorized values are NISTP-256, NISTP-384, BP-256 and BP-384
+#                            Default: NISTP-256
+#   cypher                 : Cyphering algorithm to be used when secured mode is set
+#                            Authorized values are NISTP-256, BP-256 and BP-384
+#                            Default: NISTP-256
+# Pki layer
+#   certificate            : Certificate to be used by the Test System for signature and encryption. Default: CERT_TS_A_AT
+#   peer_certificate       : Certificate to be used by the IUT for signature and encryption. Default: CERT_IUT_A_AT
+# Ethernet layer
+#   mac_src  :Source MAC address
+#   mac_bc   :Broadcast address
+#   eth_type : Ethernet type
+# Commsignia layer
+#   mac_src     : Device MAC address, used to discard packets
+#                 To indicate no filering, use the value 000000000000
+#   mac_bc      : Broadcast address
+#   eth_type    : Ethernet type, used to discard packets
+#   target_host : Device address
+#   target_port : Device port
+#   source_port : Test System port
+#   interface_id: Interface id, used to discard packets
+#   tx_power    : TX power (dB)
+# UDP layer (IP/UDP based on Pcap)
+#   dst_ip  : destination IPv4 address (aa.bb.cc.dd)
+#   dst_port: destination port
+#   src_ip  : source IPv4 address (aa.bb.cc.dd)
+#   src_port: source port
+# Pcap layer
+#   mac_src    : Source MAC address, used to exclude from capture the acket sent by the Test System
+#   filter     : Pcap filter (compliant with tcpdump syntax) 
+#   Online mode:
+#     nic: Local NIC
+#          If set, online mode is used
+#   Offline mode (nic is present but not set):
+#     file        : File to read
+#     frame_offset: Frame offset, used to skip packets with frame number < frame_offset
+#     time_offset : Time offset, used to skip packets with time offset < time_offset
+#     save_mode   : 1 to save sent packet, 0 otherwise
+
+# Single GeoNetworking component port
+# its_aid = 36 CAM
+# its_aid = 37 DENM
+system.geoNetworkingPort.params := "GN(ll_address=4C5E0C14D2EB,latitude=515340240,longitude=139274330,distanceA=1500,distanceB=1500,angle=0,device_mode=0,secured_mode=1,its_aid=36)/ETH(mac_src=080027500f9b)/PCAP(mac_src=080027500f9b,nic=wlp0s20f3,filter=and ether proto 0x8947)"
+
+# Single HTTP component port
+system.httpPort.params := "HTTP(codecs=http_its:http_etsi_ieee1609dot2_codec)/TCP(debug=1,server_mode=1,server=192.168.1.43)"
+
+# GeoNetworking UpperTester port based on UDP
+system.utPort.params := "UT_PKI/UDP(dst_ip=192.168.1.43,dst_port=12345,src_port=12346,reuse_incoming_source_adddress=1)"
+
+[EXECUTE]
+
+# Check that IUT sends an enrolment request when triggered.
+#ItsPki_TestCases.TC_SECPKI_ITSS_ENR_01_BV
+# If the enrolment request of the IUT is an initial enrolment request, the itsId (contained in the InnerECRequest) shall be set to the canonical identifier, the signer (contained in the outer EtsiTs1030971Data-Signed) shall be set to self and the outer signature shall be computed using the canonical private key.
+#ItsPki_TestCases.TC_SECPKI_ITSS_ENR_02_BV
+# In presence of a valid EC, the enrolment request of the IUT is a rekeying enrolment request with the itsId (contained in the InnerECRequest) and the SignerIdentifier (contained in the outer EtsiTs1030971Data-Signed) both declared as digest containing the HashedId8 of the EC and the outer signature computed using the current valid EC private key corresponding to the verification public key.
+#ItsPki_TestCases.TC_SECPKI_ITSS_ENR_03_BV
+# If the EC is revoked, the IUT returns to the state 'initialized'.
+#ItsPki_TestCases.TC_SECPKI_ITSS_ENR_04_BV
+# If the EC expires, the IUT returns to the state 'initialized'
+#ItsPki_TestCases.TC_SECPKI_ITSS_ENR_05_BV
+#For each enrolment request, the ITS-S shall generate a new verification key pair corresponding to an approved signature algorithm as specified in TS 103 097
+#ItsPki_TestCases.TC_SECPKI_ITSS_ENR_06_BV
+# Within the InnerECRequest, the requestedSubjectAttributes shall not contain a certIssuePermissions field
+#ItsPki_TestCases.TC_SECPKI_ITSS_ENR_07_BV
+# In the headerInfo of the tbsData of the InnerECRequestSignedForPOP all other components of the component tbsdata.headerInfo except generationTime and psid are not used and absent. The psid shall be set to "secured certificate request" as assigned in ETSI TS 102 965 and the generationTime shall be present
+#ItsPki_TestCases.TC_SECPKI_ITSS_ENR_08_BV
+# In the headerInfo of the tbsData of the outer EtsiTs102941Data-Signed all other components of the component tbsdata.headerInfo except generationTime and psid are not used and absent. The psid shall be set to "secured certificate request" as assigned in ETSI TS 102 965 and the generationTime shall be present
+#ItsPki_TestCases.TC_SECPKI_ITSS_ENR_09_BV
+# The EtsiTs103097Data-Encrypted containing the correctly encrypted ciphertext and a recipients component containing one instance of RecipientInfo of choice certRecipInfo containing the hashedId8 of the EA certificate in recipientId and the encrypted data encryption key in encKey. The data encryption key is encrypted using the public key found in the EA certificate referenced in the recipientId
+#ItsPki_TestCases.TC_SECPKI_ITSS_ENR_10_BV
+# In the inner signed data structure (InnerECRequestSignedForPOP), the signature is computed on InnerECRequest with the private key corresponding to the new verificationKey to prove possession of the generated verification key pair
+#ItsPki_TestCases.TC_SECPKI_ITSS_ENR_11_BV
+# Check that signing of Enrolment HttpRequest message is permitted by the EC certificate
+#ItsPki_TestCases.TC_SECPKI_ITSS_ENR_12_BV
+# If an enrolment request fails, the IUT returns to the state 'initialized
+#ItsPki_TestCases.TC_SECPKI_ITSS_ENR_RECV_01_BV
+# The IUT is capable of parsing and handling of positive EnrolmentResponse messages containing the requested EC. In case of a successful enrolment, the IUT switches to the state 'enrolled'
+#ItsPki_TestCases.TC_SECPKI_ITSS_ENR_RECV_02_BV
+# Check that the ITS-S send the Authorization HttpRequest message to the Authorization Authority (AA) to request an authorization ticket
+#ItsPki_TestCases.TC_SECPKI_ITSS_AUTH_01_BV
+# Check that the AuthorizationRequest message is encrypted and sent to only one Authorization Authority
+#ItsPki_TestCases.TC_SECPKI_ITSS_AUTH_02_BV
+# Check that the AuthorizationRequest message is encrypted using the encryptionKey found in the AA certificate referenced in recipientId
+#ItsPki_TestCases.TC_SECPKI_ITSS_AUTH_03_BV
+# Check that the AuthorizationRequest message is never reused the same encryption key and nonce
+#ItsPki_TestCases.TC_SECPKI_ITSS_AUTH_04_BV
+# Check that the Authozation request protocol version is set to 1
+#ItsPki_TestCases.TC_SECPKI_ITSS_AUTH_05_BV
+# Check that IUT repeats an authorization request when response has not been received
+#ItsPki_TestCases.TC_SECPKI_ITSS_AUTH_REP_01_BV
+# Check that IUT uses the same message to perform authorization retry
+#ItsPki_TestCases.TC_SECPKI_ITSS_AUTH_REP_02_BV
+# Check that IUT stops sending the Authorization Request message if Authorization Response message has been received
+#ItsPki_TestCases.TC_SECPKI_ITSS_AUTH_REP_03_BV
+# Check that IUT stops sending the Authorization Request message if maximum number of retry has been reached
+#ItsPki_TestCases.TC_SECPKI_ITSS_AUTH_REP_04_BV
+# Check that the IUT trust the new RCA from the received ECTL
+#ItsPki_TestCases.TC_SECPKI_ITSS_CTL_01_BV
+
+[MAIN_CONTROLLER]
+# The options herein control the behavior of MC.
+KillTimer := 10.0
+LocalAddress := 127.0.0.1
+TCPPort := 12000
+NumHCs := 1
+

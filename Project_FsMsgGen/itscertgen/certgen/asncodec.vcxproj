@@ -1,0 +1,569 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="asncodec\AaEntry.c" />
+    <ClCompile Include="asncodec\AesCcmCiphertext.c" />
+    <ClCompile Include="asncodec\asn_application.c" />
+    <ClCompile Include="asncodec\asn_bit_data.c" />
+    <ClCompile Include="asncodec\asn_codecs_prim.c" />
+    <ClCompile Include="asncodec\asn_internal.c" />
+    <ClCompile Include="asncodec\asn_random_fill.c" />
+    <ClCompile Include="asncodec\asn_SEQUENCE_OF.c" />
+    <ClCompile Include="asncodec\asn_SET_OF.c" />
+    <ClCompile Include="asncodec\AuthorizationRequestMessage.c" />
+    <ClCompile Include="asncodec\AuthorizationRequestMessageWithPop.c" />
+    <ClCompile Include="asncodec\AuthorizationResponseCode.c" />
+    <ClCompile Include="asncodec\AuthorizationResponseMessage.c" />
+    <ClCompile Include="asncodec\AuthorizationValidationRequest.c" />
+    <ClCompile Include="asncodec\AuthorizationValidationRequestMessage.c" />
+    <ClCompile Include="asncodec\AuthorizationValidationResponse.c" />
+    <ClCompile Include="asncodec\AuthorizationValidationResponseCode.c" />
+    <ClCompile Include="asncodec\AuthorizationValidationResponseMessage.c" />
+    <ClCompile Include="asncodec\BasePublicEncryptionKey.c" />
+    <ClCompile Include="asncodec\ber_decoder.c" />
+    <ClCompile Include="asncodec\ber_tlv_length.c" />
+    <ClCompile Include="asncodec\ber_tlv_tag.c" />
+    <ClCompile Include="asncodec\BitmapSsp.c" />
+    <ClCompile Include="asncodec\BitmapSspRange.c" />
+    <ClCompile Include="asncodec\BIT_STRING.c" />
+    <ClCompile Include="asncodec\BIT_STRING_oer.c" />
+    <ClCompile Include="asncodec\BOOLEAN.c" />
+    <ClCompile Include="asncodec\CaCertificateRekeyingMessage.c" />
+    <ClCompile Include="asncodec\CaCertificateRequest.c" />
+    <ClCompile Include="asncodec\CaCertificateRequestMessage.c" />
+    <ClCompile Include="asncodec\Certificate.c" />
+    <ClCompile Include="asncodec\CertificateBase.c" />
+    <ClCompile Include="asncodec\CertificateFormat.c" />
+    <ClCompile Include="asncodec\CertificateId.c" />
+    <ClCompile Include="asncodec\CertificateRevocationListMessage.c" />
+    <ClCompile Include="asncodec\CertificateSubjectAttributes.c" />
+    <ClCompile Include="asncodec\CertificateType.c" />
+    <ClCompile Include="asncodec\CircularRegion.c" />
+    <ClCompile Include="asncodec\constraints.c" />
+    <ClCompile Include="asncodec\constr_CHOICE.c" />
+    <ClCompile Include="asncodec\constr_CHOICE_oer.c" />
+    <ClCompile Include="asncodec\constr_SEQUENCE.c" />
+    <ClCompile Include="asncodec\constr_SEQUENCE_oer.c" />
+    <ClCompile Include="asncodec\constr_SEQUENCE_OF.c" />
+    <ClCompile Include="asncodec\constr_SET_OF.c" />
+    <ClCompile Include="asncodec\constr_SET_OF_oer.c" />
+    <ClCompile Include="asncodec\constr_TYPE.c" />
+    <ClCompile Include="asncodec\Countersignature.c" />
+    <ClCompile Include="asncodec\CountryAndRegions.c" />
+    <ClCompile Include="asncodec\CountryAndSubregions.c" />
+    <ClCompile Include="asncodec\CountryOnly.c" />
+    <ClCompile Include="asncodec\CrlEntry.c" />
+    <ClCompile Include="asncodec\CrlSeries.c" />
+    <ClCompile Include="asncodec\CtlCommand.c" />
+    <ClCompile Include="asncodec\CtlDelete.c" />
+    <ClCompile Include="asncodec\CtlEntry.c" />
+    <ClCompile Include="asncodec\CtlFormat.c" />
+    <ClCompile Include="asncodec\DcDelete.c" />
+    <ClCompile Include="asncodec\DcEntry.c" />
+    <ClCompile Include="asncodec\DeltaCtl.c" />
+    <ClCompile Include="asncodec\der_encoder.c" />
+    <ClCompile Include="asncodec\Duration.c" />
+    <ClCompile Include="asncodec\EaEntry.c" />
+    <ClCompile Include="asncodec\EccP256CurvePoint.c" />
+    <ClCompile Include="asncodec\EccP384CurvePoint.c" />
+    <ClCompile Include="asncodec\EcdsaP256Signature.c" />
+    <ClCompile Include="asncodec\EcdsaP384Signature.c" />
+    <ClCompile Include="asncodec\EciesP256EncryptedKey.c" />
+    <ClCompile Include="asncodec\EcSignature.c" />
+    <ClCompile Include="asncodec\Elevation.c" />
+    <ClCompile Include="asncodec\ElevInt.c" />
+    <ClCompile Include="asncodec\EncryptedData.c" />
+    <ClCompile Include="asncodec\EncryptedDataEncryptionKey.c" />
+    <ClCompile Include="asncodec\EncryptionKey.c" />
+    <ClCompile Include="asncodec\EndEntityType.c" />
+    <ClCompile Include="asncodec\EnrolmentRequestMessage.c" />
+    <ClCompile Include="asncodec\EnrolmentResponseCode.c" />
+    <ClCompile Include="asncodec\EnrolmentResponseMessage.c" />
+    <ClCompile Include="asncodec\EtsiTs102941Data.c" />
+    <ClCompile Include="asncodec\EtsiTs102941DataContent.c" />
+    <ClCompile Include="asncodec\EtsiTs103097Certificate.c" />
+    <ClCompile Include="asncodec\EtsiTs103097Data-Encrypted-Unicast.c" />
+    <ClCompile Include="asncodec\EtsiTs103097Data-Encrypted.c" />
+    <ClCompile Include="asncodec\EtsiTs103097Data-Signed.c" />
+    <ClCompile Include="asncodec\EtsiTs103097Data-SignedAndEncrypted-Unicast.c" />
+    <ClCompile Include="asncodec\EtsiTs103097Data-SignedAndEncrypted.c" />
+    <ClCompile Include="asncodec\EtsiTs103097Data-SignedExternalPayload.c" />
+    <ClCompile Include="asncodec\EtsiTs103097Data.c" />
+    <ClCompile Include="asncodec\ExplicitCertificate.c" />
+    <ClCompile Include="asncodec\FullCtl.c" />
+    <ClCompile Include="asncodec\GeographicRegion.c" />
+    <ClCompile Include="asncodec\GroupLinkageValue.c" />
+    <ClCompile Include="asncodec\HashAlgorithm.c" />
+    <ClCompile Include="asncodec\HashedData.c" />
+    <ClCompile Include="asncodec\HashedId10.c" />
+    <ClCompile Include="asncodec\HashedId3.c" />
+    <ClCompile Include="asncodec\HashedId8.c" />
+    <ClCompile Include="asncodec\HeaderInfo.c" />
+    <ClCompile Include="asncodec\Hostname.c" />
+    <ClCompile Include="asncodec\IA5String.c" />
+    <ClCompile Include="asncodec\IdentifiedRegion.c" />
+    <ClCompile Include="asncodec\Ieee1609Dot2Content.c" />
+    <ClCompile Include="asncodec\Ieee1609Dot2Data.c" />
+    <ClCompile Include="asncodec\ImplicitCertificate.c" />
+    <ClCompile Include="asncodec\InnerAtRequest.c" />
+    <ClCompile Include="asncodec\InnerAtResponse.c" />
+    <ClCompile Include="asncodec\InnerEcRequest.c" />
+    <ClCompile Include="asncodec\InnerEcRequestSignedForPop.c" />
+    <ClCompile Include="asncodec\InnerEcResponse.c" />
+    <ClCompile Include="asncodec\INTEGER.c" />
+    <ClCompile Include="asncodec\INTEGER_oer.c" />
+    <ClCompile Include="asncodec\IssuerIdentifier.c" />
+    <ClCompile Include="asncodec\IValue.c" />
+    <ClCompile Include="asncodec\KnownLatitude.c" />
+    <ClCompile Include="asncodec\KnownLongitude.c" />
+    <ClCompile Include="asncodec\LaId.c" />
+    <ClCompile Include="asncodec\Latitude.c" />
+    <ClCompile Include="asncodec\LinkageData.c" />
+    <ClCompile Include="asncodec\LinkageSeed.c" />
+    <ClCompile Include="asncodec\LinkageValue.c" />
+    <ClCompile Include="asncodec\Longitude.c" />
+    <ClCompile Include="asncodec\MissingCrlIdentifier.c" />
+    <ClCompile Include="asncodec\NativeEnumerated.c" />
+    <ClCompile Include="asncodec\NativeEnumerated_oer.c" />
+    <ClCompile Include="asncodec\NativeInteger.c" />
+    <ClCompile Include="asncodec\NativeInteger_oer.c" />
+    <ClCompile Include="asncodec\NinetyDegreeInt.c" />
+    <ClCompile Include="asncodec\NULL.c" />
+    <ClCompile Include="asncodec\OCTET_STRING.c" />
+    <ClCompile Include="asncodec\OCTET_STRING_oer.c" />
+    <ClCompile Include="asncodec\oer_decoder.c" />
+    <ClCompile Include="asncodec\oer_encoder.c" />
+    <ClCompile Include="asncodec\oer_support.c" />
+    <ClCompile Include="asncodec\OneEightyDegreeInt.c" />
+    <ClCompile Include="asncodec\Opaque.c" />
+    <ClCompile Include="asncodec\OPEN_TYPE.c" />
+    <ClCompile Include="asncodec\OPEN_TYPE_oer.c" />
+    <ClCompile Include="asncodec\per_decoder.c" />
+    <ClCompile Include="asncodec\per_encoder.c" />
+    <ClCompile Include="asncodec\per_opentype.c" />
+    <ClCompile Include="asncodec\per_support.c" />
+    <ClCompile Include="asncodec\PKRecipientInfo.c" />
+    <ClCompile Include="asncodec\PolygonalRegion.c" />
+    <ClCompile Include="asncodec\PreSharedKeyRecipientInfo.c" />
+    <ClCompile Include="asncodec\Psid.c" />
+    <ClCompile Include="asncodec\PsidGroupPermissions.c" />
+    <ClCompile Include="asncodec\PsidSsp.c" />
+    <ClCompile Include="asncodec\PsidSspRange.c" />
+    <ClCompile Include="asncodec\PublicEncryptionKey.c" />
+    <ClCompile Include="asncodec\PublicKeys.c" />
+    <ClCompile Include="asncodec\PublicVerificationKey.c" />
+    <ClCompile Include="asncodec\RcaCertificateTrustListMessage.c" />
+    <ClCompile Include="asncodec\RecipientInfo.c" />
+    <ClCompile Include="asncodec\RectangularRegion.c" />
+    <ClCompile Include="asncodec\RegionAndSubregions.c" />
+    <ClCompile Include="asncodec\RootCaEntry.c" />
+    <ClCompile Include="asncodec\SequenceOfCertificate.c" />
+    <ClCompile Include="asncodec\SequenceOfHashedId3.c" />
+    <ClCompile Include="asncodec\SequenceOfIdentifiedRegion.c" />
+    <ClCompile Include="asncodec\SequenceOfOctetString.c" />
+    <ClCompile Include="asncodec\SequenceOfPsid.c" />
+    <ClCompile Include="asncodec\SequenceOfPsidGroupPermissions.c" />
+    <ClCompile Include="asncodec\SequenceOfPsidSsp.c" />
+    <ClCompile Include="asncodec\SequenceOfPsidSspRange.c" />
+    <ClCompile Include="asncodec\SequenceOfRecipientInfo.c" />
+    <ClCompile Include="asncodec\SequenceOfRectangularRegion.c" />
+    <ClCompile Include="asncodec\SequenceOfRegionAndSubregions.c" />
+    <ClCompile Include="asncodec\SequenceOfUint16.c" />
+    <ClCompile Include="asncodec\SequenceOfUint8.c" />
+    <ClCompile Include="asncodec\ServiceSpecificPermissions.c" />
+    <ClCompile Include="asncodec\SharedAtRequest.c" />
+    <ClCompile Include="asncodec\Signature.c" />
+    <ClCompile Include="asncodec\SignedData.c" />
+    <ClCompile Include="asncodec\SignedDataPayload.c" />
+    <ClCompile Include="asncodec\SignerIdentifier.c" />
+    <ClCompile Include="asncodec\SingleEtsiTs103097Certificate.c" />
+    <ClCompile Include="asncodec\SspRange.c" />
+    <ClCompile Include="asncodec\SubjectAssurance.c" />
+    <ClCompile Include="asncodec\SubjectPermissions.c" />
+    <ClCompile Include="asncodec\SymmAlgorithm.c" />
+    <ClCompile Include="asncodec\SymmetricCiphertext.c" />
+    <ClCompile Include="asncodec\SymmetricEncryptionKey.c" />
+    <ClCompile Include="asncodec\SymmRecipientInfo.c" />
+    <ClCompile Include="asncodec\ThreeDLocation.c" />
+    <ClCompile Include="asncodec\Time32.c" />
+    <ClCompile Include="asncodec\Time64.c" />
+    <ClCompile Include="asncodec\TlmCertificateTrustListMessage.c" />
+    <ClCompile Include="asncodec\TlmEntry.c" />
+    <ClCompile Include="asncodec\ToBeSignedCertificate.c" />
+    <ClCompile Include="asncodec\ToBeSignedCrl.c" />
+    <ClCompile Include="asncodec\ToBeSignedData.c" />
+    <ClCompile Include="asncodec\ToBeSignedRcaCtl.c" />
+    <ClCompile Include="asncodec\ToBeSignedTlmCtl.c" />
+    <ClCompile Include="asncodec\TwoDLocation.c" />
+    <ClCompile Include="asncodec\Uint16.c" />
+    <ClCompile Include="asncodec\Uint3.c" />
+    <ClCompile Include="asncodec\Uint32.c" />
+    <ClCompile Include="asncodec\Uint64.c" />
+    <ClCompile Include="asncodec\Uint8.c" />
+    <ClCompile Include="asncodec\UnknownLatitude.c" />
+    <ClCompile Include="asncodec\UnknownLongitude.c" />
+    <ClCompile Include="asncodec\Url.c" />
+    <ClCompile Include="asncodec\UTF8String.c" />
+    <ClCompile Include="asncodec\ValidityPeriod.c" />
+    <ClCompile Include="asncodec\VerificationKeyIndicator.c" />
+    <ClCompile Include="asncodec\Version.c" />
+    <ClCompile Include="asncodec\xer_decoder.c" />
+    <ClCompile Include="asncodec\xer_encoder.c" />
+    <ClCompile Include="asncodec\xer_support.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="asncodec\AaEntry.h" />
+    <ClInclude Include="asncodec\AesCcmCiphertext.h" />
+    <ClInclude Include="asncodec\asn_application.h" />
+    <ClInclude Include="asncodec\asn_bit_data.h" />
+    <ClInclude Include="asncodec\asn_codecs.h" />
+    <ClInclude Include="asncodec\asn_codecs_prim.h" />
+    <ClInclude Include="asncodec\asn_internal.h" />
+    <ClInclude Include="asncodec\asn_ioc.h" />
+    <ClInclude Include="asncodec\asn_random_fill.h" />
+    <ClInclude Include="asncodec\asn_SEQUENCE_OF.h" />
+    <ClInclude Include="asncodec\asn_SET_OF.h" />
+    <ClInclude Include="asncodec\asn_system.h" />
+    <ClInclude Include="asncodec\AuthorizationRequestMessage.h" />
+    <ClInclude Include="asncodec\AuthorizationRequestMessageWithPop.h" />
+    <ClInclude Include="asncodec\AuthorizationResponseCode.h" />
+    <ClInclude Include="asncodec\AuthorizationResponseMessage.h" />
+    <ClInclude Include="asncodec\AuthorizationValidationRequest.h" />
+    <ClInclude Include="asncodec\AuthorizationValidationRequestMessage.h" />
+    <ClInclude Include="asncodec\AuthorizationValidationResponse.h" />
+    <ClInclude Include="asncodec\AuthorizationValidationResponseCode.h" />
+    <ClInclude Include="asncodec\AuthorizationValidationResponseMessage.h" />
+    <ClInclude Include="asncodec\BasePublicEncryptionKey.h" />
+    <ClInclude Include="asncodec\ber_decoder.h" />
+    <ClInclude Include="asncodec\ber_tlv_length.h" />
+    <ClInclude Include="asncodec\ber_tlv_tag.h" />
+    <ClInclude Include="asncodec\BitmapSsp.h" />
+    <ClInclude Include="asncodec\BitmapSspRange.h" />
+    <ClInclude Include="asncodec\BIT_STRING.h" />
+    <ClInclude Include="asncodec\BOOLEAN.h" />
+    <ClInclude Include="asncodec\CaCertificateRekeyingMessage.h" />
+    <ClInclude Include="asncodec\CaCertificateRequest.h" />
+    <ClInclude Include="asncodec\CaCertificateRequestMessage.h" />
+    <ClInclude Include="asncodec\Certificate.h" />
+    <ClInclude Include="asncodec\CertificateBase.h" />
+    <ClInclude Include="asncodec\CertificateFormat.h" />
+    <ClInclude Include="asncodec\CertificateId.h" />
+    <ClInclude Include="asncodec\CertificateRevocationListMessage.h" />
+    <ClInclude Include="asncodec\CertificateSubjectAttributes.h" />
+    <ClInclude Include="asncodec\CertificateType.h" />
+    <ClInclude Include="asncodec\CircularRegion.h" />
+    <ClInclude Include="asncodec\constraints.h" />
+    <ClInclude Include="asncodec\constr_CHOICE.h" />
+    <ClInclude Include="asncodec\constr_SEQUENCE.h" />
+    <ClInclude Include="asncodec\constr_SEQUENCE_OF.h" />
+    <ClInclude Include="asncodec\constr_SET_OF.h" />
+    <ClInclude Include="asncodec\constr_TYPE.h" />
+    <ClInclude Include="asncodec\Countersignature.h" />
+    <ClInclude Include="asncodec\CountryAndRegions.h" />
+    <ClInclude Include="asncodec\CountryAndSubregions.h" />
+    <ClInclude Include="asncodec\CountryOnly.h" />
+    <ClInclude Include="asncodec\CrlEntry.h" />
+    <ClInclude Include="asncodec\CrlSeries.h" />
+    <ClInclude Include="asncodec\CtlCommand.h" />
+    <ClInclude Include="asncodec\CtlDelete.h" />
+    <ClInclude Include="asncodec\CtlEntry.h" />
+    <ClInclude Include="asncodec\CtlFormat.h" />
+    <ClInclude Include="asncodec\DcDelete.h" />
+    <ClInclude Include="asncodec\DcEntry.h" />
+    <ClInclude Include="asncodec\DeltaCtl.h" />
+    <ClInclude Include="asncodec\der_encoder.h" />
+    <ClInclude Include="asncodec\Duration.h" />
+    <ClInclude Include="asncodec\EaEntry.h" />
+    <ClInclude Include="asncodec\EccP256CurvePoint.h" />
+    <ClInclude Include="asncodec\EccP384CurvePoint.h" />
+    <ClInclude Include="asncodec\EcdsaP256Signature.h" />
+    <ClInclude Include="asncodec\EcdsaP384Signature.h" />
+    <ClInclude Include="asncodec\EciesP256EncryptedKey.h" />
+    <ClInclude Include="asncodec\EcSignature.h" />
+    <ClInclude Include="asncodec\Elevation.h" />
+    <ClInclude Include="asncodec\ElevInt.h" />
+    <ClInclude Include="asncodec\EncryptedData.h" />
+    <ClInclude Include="asncodec\EncryptedDataEncryptionKey.h" />
+    <ClInclude Include="asncodec\EncryptionKey.h" />
+    <ClInclude Include="asncodec\EndEntityType.h" />
+    <ClInclude Include="asncodec\EnrolmentRequestMessage.h" />
+    <ClInclude Include="asncodec\EnrolmentResponseCode.h" />
+    <ClInclude Include="asncodec\EnrolmentResponseMessage.h" />
+    <ClInclude Include="asncodec\EtsiTs102941Data.h" />
+    <ClInclude Include="asncodec\EtsiTs102941DataContent.h" />
+    <ClInclude Include="asncodec\EtsiTs103097Certificate.h" />
+    <ClInclude Include="asncodec\EtsiTs103097Data-Encrypted-Unicast.h" />
+    <ClInclude Include="asncodec\EtsiTs103097Data-Encrypted.h" />
+    <ClInclude Include="asncodec\EtsiTs103097Data-Signed.h" />
+    <ClInclude Include="asncodec\EtsiTs103097Data-SignedAndEncrypted-Unicast.h" />
+    <ClInclude Include="asncodec\EtsiTs103097Data-SignedAndEncrypted.h" />
+    <ClInclude Include="asncodec\EtsiTs103097Data-SignedExternalPayload.h" />
+    <ClInclude Include="asncodec\EtsiTs103097Data.h" />
+    <ClInclude Include="asncodec\ExplicitCertificate.h" />
+    <ClInclude Include="asncodec\FullCtl.h" />
+    <ClInclude Include="asncodec\GeographicRegion.h" />
+    <ClInclude Include="asncodec\GroupLinkageValue.h" />
+    <ClInclude Include="asncodec\HashAlgorithm.h" />
+    <ClInclude Include="asncodec\HashedData.h" />
+    <ClInclude Include="asncodec\HashedId10.h" />
+    <ClInclude Include="asncodec\HashedId3.h" />
+    <ClInclude Include="asncodec\HashedId8.h" />
+    <ClInclude Include="asncodec\HeaderInfo.h" />
+    <ClInclude Include="asncodec\Hostname.h" />
+    <ClInclude Include="asncodec\IA5String.h" />
+    <ClInclude Include="asncodec\IdentifiedRegion.h" />
+    <ClInclude Include="asncodec\Ieee1609Dot2Content.h" />
+    <ClInclude Include="asncodec\Ieee1609Dot2Data.h" />
+    <ClInclude Include="asncodec\ImplicitCertificate.h" />
+    <ClInclude Include="asncodec\InnerAtRequest.h" />
+    <ClInclude Include="asncodec\InnerAtResponse.h" />
+    <ClInclude Include="asncodec\InnerEcRequest.h" />
+    <ClInclude Include="asncodec\InnerEcRequestSignedForPop.h" />
+    <ClInclude Include="asncodec\InnerEcResponse.h" />
+    <ClInclude Include="asncodec\INTEGER.h" />
+    <ClInclude Include="asncodec\IssuerIdentifier.h" />
+    <ClInclude Include="asncodec\IValue.h" />
+    <ClInclude Include="asncodec\KnownLatitude.h" />
+    <ClInclude Include="asncodec\KnownLongitude.h" />
+    <ClInclude Include="asncodec\LaId.h" />
+    <ClInclude Include="asncodec\Latitude.h" />
+    <ClInclude Include="asncodec\LinkageData.h" />
+    <ClInclude Include="asncodec\LinkageSeed.h" />
+    <ClInclude Include="asncodec\LinkageValue.h" />
+    <ClInclude Include="asncodec\Longitude.h" />
+    <ClInclude Include="asncodec\MissingCrlIdentifier.h" />
+    <ClInclude Include="asncodec\NativeEnumerated.h" />
+    <ClInclude Include="asncodec\NativeInteger.h" />
+    <ClInclude Include="asncodec\NinetyDegreeInt.h" />
+    <ClInclude Include="asncodec\NULL.h" />
+    <ClInclude Include="asncodec\OCTET_STRING.h" />
+    <ClInclude Include="asncodec\oer_decoder.h" />
+    <ClInclude Include="asncodec\oer_encoder.h" />
+    <ClInclude Include="asncodec\oer_support.h" />
+    <ClInclude Include="asncodec\OneEightyDegreeInt.h" />
+    <ClInclude Include="asncodec\Opaque.h" />
+    <ClInclude Include="asncodec\OPEN_TYPE.h" />
+    <ClInclude Include="asncodec\per_decoder.h" />
+    <ClInclude Include="asncodec\per_encoder.h" />
+    <ClInclude Include="asncodec\per_opentype.h" />
+    <ClInclude Include="asncodec\per_support.h" />
+    <ClInclude Include="asncodec\PKRecipientInfo.h" />
+    <ClInclude Include="asncodec\PolygonalRegion.h" />
+    <ClInclude Include="asncodec\PreSharedKeyRecipientInfo.h" />
+    <ClInclude Include="asncodec\Psid.h" />
+    <ClInclude Include="asncodec\PsidGroupPermissions.h" />
+    <ClInclude Include="asncodec\PsidSsp.h" />
+    <ClInclude Include="asncodec\PsidSspRange.h" />
+    <ClInclude Include="asncodec\PublicEncryptionKey.h" />
+    <ClInclude Include="asncodec\PublicKeys.h" />
+    <ClInclude Include="asncodec\PublicVerificationKey.h" />
+    <ClInclude Include="asncodec\RcaCertificateTrustListMessage.h" />
+    <ClInclude Include="asncodec\RecipientInfo.h" />
+    <ClInclude Include="asncodec\RectangularRegion.h" />
+    <ClInclude Include="asncodec\RegionAndSubregions.h" />
+    <ClInclude Include="asncodec\RootCaEntry.h" />
+    <ClInclude Include="asncodec\SequenceOfCertificate.h" />
+    <ClInclude Include="asncodec\SequenceOfHashedId3.h" />
+    <ClInclude Include="asncodec\SequenceOfIdentifiedRegion.h" />
+    <ClInclude Include="asncodec\SequenceOfOctetString.h" />
+    <ClInclude Include="asncodec\SequenceOfPsid.h" />
+    <ClInclude Include="asncodec\SequenceOfPsidGroupPermissions.h" />
+    <ClInclude Include="asncodec\SequenceOfPsidSsp.h" />
+    <ClInclude Include="asncodec\SequenceOfPsidSspRange.h" />
+    <ClInclude Include="asncodec\SequenceOfRecipientInfo.h" />
+    <ClInclude Include="asncodec\SequenceOfRectangularRegion.h" />
+    <ClInclude Include="asncodec\SequenceOfRegionAndSubregions.h" />
+    <ClInclude Include="asncodec\SequenceOfUint16.h" />
+    <ClInclude Include="asncodec\SequenceOfUint8.h" />
+    <ClInclude Include="asncodec\ServiceSpecificPermissions.h" />
+    <ClInclude Include="asncodec\SharedAtRequest.h" />
+    <ClInclude Include="asncodec\Signature.h" />
+    <ClInclude Include="asncodec\SignedData.h" />
+    <ClInclude Include="asncodec\SignedDataPayload.h" />
+    <ClInclude Include="asncodec\SignerIdentifier.h" />
+    <ClInclude Include="asncodec\SingleEtsiTs103097Certificate.h" />
+    <ClInclude Include="asncodec\SspRange.h" />
+    <ClInclude Include="asncodec\SubjectAssurance.h" />
+    <ClInclude Include="asncodec\SubjectPermissions.h" />
+    <ClInclude Include="asncodec\SymmAlgorithm.h" />
+    <ClInclude Include="asncodec\SymmetricCiphertext.h" />
+    <ClInclude Include="asncodec\SymmetricEncryptionKey.h" />
+    <ClInclude Include="asncodec\SymmRecipientInfo.h" />
+    <ClInclude Include="asncodec\ThreeDLocation.h" />
+    <ClInclude Include="asncodec\Time32.h" />
+    <ClInclude Include="asncodec\Time64.h" />
+    <ClInclude Include="asncodec\TlmCertificateTrustListMessage.h" />
+    <ClInclude Include="asncodec\TlmEntry.h" />
+    <ClInclude Include="asncodec\ToBeSignedCertificate.h" />
+    <ClInclude Include="asncodec\ToBeSignedCrl.h" />
+    <ClInclude Include="asncodec\ToBeSignedData.h" />
+    <ClInclude Include="asncodec\ToBeSignedRcaCtl.h" />
+    <ClInclude Include="asncodec\ToBeSignedTlmCtl.h" />
+    <ClInclude Include="asncodec\TwoDLocation.h" />
+    <ClInclude Include="asncodec\Uint16.h" />
+    <ClInclude Include="asncodec\Uint3.h" />
+    <ClInclude Include="asncodec\Uint32.h" />
+    <ClInclude Include="asncodec\Uint64.h" />
+    <ClInclude Include="asncodec\Uint8.h" />
+    <ClInclude Include="asncodec\UnknownLatitude.h" />
+    <ClInclude Include="asncodec\UnknownLongitude.h" />
+    <ClInclude Include="asncodec\Url.h" />
+    <ClInclude Include="asncodec\UTF8String.h" />
+    <ClInclude Include="asncodec\ValidityPeriod.h" />
+    <ClInclude Include="asncodec\VerificationKeyIndicator.h" />
+    <ClInclude Include="asncodec\Version.h" />
+    <ClInclude Include="asncodec\xer_decoder.h" />
+    <ClInclude Include="asncodec\xer_encoder.h" />
+    <ClInclude Include="asncodec\xer_support.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D5918B85-FA45-4F75-9B50-C2D39FA45A17}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>asncodec</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)build\MSVC-$(PlatformName)-$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\MSVC-$(PlatformName)-$(Configuration)\obj\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)build\MSVC-$(PlatformName)-$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\MSVC-$(PlatformName)-$(Configuration)\obj\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)build\MSVC-$(PlatformName)-$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\MSVC-$(PlatformName)-$(Configuration)\obj\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)build\MSVC-$(PlatformName)-$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\MSVC-$(PlatformName)-$(Configuration)\obj\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_LIB;random=rand;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>asncodec</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_LIB;random=rand;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>asncodec</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_LIB;random=rand;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>asncodec</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_LIB;random=rand;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>asncodec</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

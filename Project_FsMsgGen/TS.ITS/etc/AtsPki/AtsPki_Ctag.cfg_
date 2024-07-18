@@ -1,0 +1,217 @@
+
+[MODULE_PARAMETERS]
+# This section shall contain the values of all parameters that are defined in your TTCN-3 modules.
+
+# Enable Security support
+LibItsGeoNetworking_Pics.PICS_GN_SECURITY := true
+# Root path to access certificate stored in files, identified by certficate ID
+LibItsSecurity_Pixits.PX_CERTIFICATE_POOL_PATH := "../data/certificates"
+# Configuration sub-directory to access certificate stored in files
+LibItsSecurity_Pixits.PX_IUT_SEC_CONFIG_NAME := "certificates"
+
+# Use this certificate if the RSU simulator act as IUT
+LibItsCommon_Pixits.PX_CERT_FOR_TS := "CERT_IUT_A_AT"
+
+LibItsHttp_Pics.PICS_HEADER_CONTENT_TYPE     := "application/x-its-request"
+LibItsHttp_Pics.PICS_HEADER_CTL_CONTENT_TYPE := "application/x-its-crl"
+
+LibItsPki_Pics.PICS_MULTIPLE_END_POINT := true
+LibItsPki_Pics.PICS_HEADER_HOST_EC     := "pki-spain-test.siscoga4cad.com:33080"
+LibItsPki_Pics.PICS_HEADER_HOST_ATV    := "pki-spain-test.siscoga4cad.com:33080"
+LibItsPki_Pics.PICS_HEADER_HOST_AT     := "pki-spain-test.siscoga4cad.com:33080"
+LibItsPki_Pics.PICS_HEADER_HOST_CA     := "pki-spain-test.siscoga4cad.com:33080"
+LibItsPki_Pics.PICS_HEADER_HOST_TLM    := "pki-spain-test.siscoga4cad.com:33080"
+
+LibItsPki_Pics.PICS_HTTP_POST_URI_EC   := "/EA/ec"
+LibItsPki_Pics.PICS_HTTP_POST_URI_AT   := "/AA/at"
+LibItsPki_Pics.PICS_HTTP_POST_URI_ATV  := "/EA/av"
+LibItsPki_Pics.PICS_HTTP_GET_URI_CTL   := "/DC/getctl/74c997bd5cc4562a"
+LibItsPki_Pics.PICS_HTTP_GET_URI_CRL   := "/DC/getcrl/74c997bd5cc4562a"
+LibItsPki_Pics.PICS_HTTP_GET_URI_ECTL  := ""
+
+#LibItsPki_Pics.PICS_SIMULATE_EA_ENTITY    := true # CERT_TS_A_EA shall be trusted by the PKI
+LibItsPki_Pics.PICS_TS_EA_CERTIFICATE_ID  := "CERT_TS_A_EA" #"MICROSEC_EA_77C0DE13A375774D"  # Use CERT_TS_A_EA when the TS simulate the EA (TC_SECPKI_AA_AUTHVAL_01_BV) with PICS_SIMULATE_EA_ENTITY set
+LibItsPki_Pics.PICS_TS_AA_CERTIFICATE_ID  := "CERT_TS_A_AA" # CERT_TS_A_AA & CERT_IUT_A_RCA shall be trusted by the PKI
+LibItsPki_Pics.PICS_IUT_AA_CERTIFICATE_ID := "MICROSEC_AA_43166B9022583C61"
+LibItsPki_Pics.PICS_TS_CA_CERTIFICATE_ID  := "MICROSEC_RCA_B65E3B8FBBEC3910"
+
+LibItsPki_Pics.PICS_ITS_S_CANONICAL_ID    := '455453492D5465737453797374656D2D3031'O # Nist-P256
+#LibItsPki_Pics.PICS_ITS_S_CANONICAL_ID   := '455453492D5465737453797374656D2D3032'O # Brainpool-P256 r1
+#LibItsPki_Pics.PICS_ITS_S_CANONICAL_ID   := '455453492D5465737453797374656D2D3033'O # Brainpool-P384 r1
+
+# Technical keys
+# Private key
+#FE95786F01D7E1666CCDFAB7BAEE9BF9B30BBEA15A838A58994E65E684A8BB34
+# Public key 
+#048038F5490CD5A58FF5465D3B577EE830047336AC5DAC07036B798AAECAE7273FD91C4F60995494EA949E64EE0E3D768DBDEB8AFC345627211E3FC4DD8FD39EE5
+LibItsPki_Pics.PICS_ITS_S_SIGN_NITSP256_PRIVATE_KEY := 'FE95786F01D7E1666CCDFAB7BAEE9BF9B30BBEA15A838A58994E65E684A8BB34'O;
+LibItsPki_Pics.PICS_ITS_S_SIGN_NISTP256_PUBLIC_KEY := '038038f5490cd5a58ff5465d3b577ee830047336ac5dac07036b798aaecae7273f'O;
+
+# Set to true if the IUT support CertificateId shall be set to the choice name, false if it shall be omitted
+#LibItsPki_Pics.PICS_EC_SUBJECT_ATTRIBUT_ID := false # requestedSubjectAttributes.id is omitted
+# Set to true if the IUT support geographical region
+#LibItsPki_Pics.PICS_EC_SUBJECT_ATTRIBUT_REGION := false # requestedSubjectAttributes.region is omitted
+
+#LibItsPki_Pics.PICS_PKI_AUTH_POP                     := false # Do not use Signed for PoP in Authorization requet
+                                                               # Required for SECPKI_AA_AUTH_RCV_02_BV
+#LibItsPki_Pics.PICS_SECPKI_REENROLMENT := false # Check in logs the pattern '==> EC ' to find the required information for re-enrolment
+
+#LibItsPki_Pixits.PX_INCLUDE_ENCRYPTION_KEYS := false # No encryption key in Authorization request
+
+#LibItsPki_Pixits.PX_VE_ALG             := e_brainpool_p256_r1 # e_nist_p256 or e_brainpool_p384_r1
+
+#LibItsPki_Pixits.PX_EC_ALG_FOR_EC      := e_brainpool_p256_r1 # e_nist_p256 or e_brainpool_p256_r1
+#LibItsPki_Pixits.PX_EC_ALG_FOR_AT      := e_brainpool_p256_r1 # e_nist_p256 or e_brainpool_p256_r1
+#LibItsPki_Pixits.PX_EC_ALG_FOR_EC_SIGN := e_brainpool_p256_r1 # e_nist_p256 or e_brainpool_p256_r1
+#LibItsPki_Pixits.PX_EC_ALG_FOR_ATV     := e_brainpool_p256_r1 # e_nist_p256 or e_brainpool_p256_r1
+
+LibItsSecurity_Pics.PICS_SEC_CIRCULAR_REGION    := false
+LibItsSecurity_Pics.PICS_SEC_RECTANGULAR_REGION := true
+
+[LOGGING]
+# In this section you can specify the name of the log file and the classes of events
+# you want to log into the file or display on console (standard error).
+
+LogFile := "../logs/%e.%h-%r.%s"
+FileMask := LOG_ALL | USER | DEBUG | MATCHING
+ConsoleMask := LOG_ALL | USER | DEBUG | MATCHING
+#FileMask := ERROR | WARNING | USER | MATCHING | EXECUTOR_RUNTIME | VERDICTOP
+#ConsoleMask := ERROR | WARNING | USER | MATCHING | EXECUTOR_RUNTIME | VERDICTOP
+LogSourceInfo := Stack
+LogEntityName:= Yes
+LogEventTypes:= Yes
+#TimeStampFormat := DateTime
+
+[TESTPORT_PARAMETERS]
+# Multiple HTTP component ports
+system.httpEcPort.params := "HTTP(codecs=http_its:http_etsi_ieee1609dot2_codec)/TCP(server=178.60.200.41,port=33080)"
+system.httpAtVPort.params := "HTTP(codecs=http_its:http_etsi_ieee1609dot2_codec)/TCP(server=178.60.200.41,port=33080)"
+system.httpAtVPort.params := "HTTP(codecs=http_its:http_etsi_ieee1609dot2_codec)/TCP(debug=1,server_mode=1,server=192.168.1.25,local_port=80)" # Multiple HTTP component ports specific to TC_SECPKI_AA_AUTHVAL_xx
+system.httpAtPort.params := "HTTP(codecs=http_its:http_etsi_ieee1609dot2_codec)/TCP(server=178.60.200.41,port=33080)"
+system.httpCaPort.params := "HTTP(codecs=http_its:http_etsi_ieee1609dot2_codec)/TCP(debug=1,server=178.60.200.41,port=33080)"
+system.httpTlmPort.params := "HTTP(codecs=http_its:http_etsi_ieee1609dot2_codec)/TCP(debug=1,server=178.60.200.41,port=33080)"
+
+[EXECUTE]
+# The EnrolmentResponse message shall be sent by the EA to the ITS-S across the interface at reference point S3 in response to a received EnrolmentRequest message
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_RCV_01_BV
+
+# Check that EA doesn't accept Enrolment rekeying request when enrolment is not permitted by signing certificate (not containing an item of type PsidSsp)
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_RCV_02_BI_01
+# Check that EA doesn't accept Enrolment rekeying request when enrolment is not permitted by signing certificate (containing opaque[0] (version) indicating other value than 1)
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_RCV_02_BI_02
+# Check that EA doesn't accept Enrolment rekeying request when enrolment is not permitted by signing certificate (containing opaque[1] (value) indicating "Enrolment Request" (bit 1) set to 0)
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_RCV_02_BI_03
+
+# Enroll an ITS-Station, but with a canonical-ID, that is not registered.
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_RCV_05_BI
+# Enroll the ITS-Station, but the CSR re-quests more permissions than the issuer allows, i.e. request for security management SSP bit which is not set in the EA SSP
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_RCV_06_BI
+# Enroll the ITS-Station, but the CSR requests a AID permission that the issuer does not allow, i.e. request for CAM AID
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_RCV_07_BI
+# Enroll the ITS-Station, but the expiring date of the CSR is before the start date of the EA
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_RCV_08_BI
+# Enroll the ITS-Station, but the start date of the CSR is before the start date of the EA
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_RCV_09_BI
+# Enroll the ITS-Station, but the expiring date of the CSR is after the expiring date of the EA
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_RCV_10_BI
+# Enroll the ITS-Station, but the start date of the CSR is after the expiring date of the EA
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_RCV_11_BI
+# Enroll the ITS-Station, but the lifetime of the EC would be grater than allowed (considering values in C-ITS CP)
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_RCV_12_BI
+# Enroll the ITS-Station, but the inner PoP signature in the CSR, created with the EC private key, can not be verified with the provided public key
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_RCV_13_BI
+
+# The EnrolmentResponse message shall be encrypted using an ETSI TS 103 097 approved algorithm and the encryption shall be done with the same AES key as the one used by the ITS-S requestor for the encryption of the EnrolmentRequest message.
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_01_BV
+# The EnrolmentResponse message shall be encrypted using an ETSI TS 103 097 approved algorithm and the encryption shall be done with the same AES key as the one used by the ITS-S requestor for the encryption of the EnrolmentRequest message.
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_02_BV
+# The outermost structure is an EtsiTs103097Data-Encrypted structure containing the component recipients containing one instance of RecipientInfo of choice pskRecipInfo, which contains the HashedId8 of the symmetric key used by the ITS-S to encrypt the EnrolmentRequest message to which the response is built and containing the component ciphertext, once decrypted, contains an EtsiTs103097Data-Signed structure
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_03_BV
+# If the ITS-S has been able to decrypt the content, this expected EtsiTs103097Data-Signed structure shall contain hashId, tbsData, signer and signature. The hashId shall indicate the hash algorithm to be used as specified in ETSI TS 103 097, the signer shall be declared as a digest, containing the HashedId8 of the EA certificate and the signature over tbsData shall be computed using the EA private key corresponding to its publicVerificationKey found in the referenced EA certificate
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_04_BV
+# Within the headerInfo of the tbsData, the psid shall be set to secured certificate request as assigned in ETSI TS 102 965 and the generationTime shall be present
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_05_BV
+# Within the headerInfo of the tbsData, aside from psid and generationTime, all other components of the component tbsData.headerInfo not used and absent
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_06_BV
+# The EtsiTS102941Data shall contain the version set to v1 (integer value set to 1) and the content set to InnerECResponse
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_07_BV
+# The InnerECResponse shall contain the requestHash, which is the left-most 16 octets of the SHA256 digest of the EtsiTs103097Data - Signed structure received in the request and a responseCode indicating the result of the request
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_08_BV
+# If the responseCode is 0, the InnerECResponse shall also contain an (enrolment) certificate
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_09_BV
+# If the responseCode is different than 0, the InnerECResponse shall not contain a certificate
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_10_BV
+# Check that signing of Enrolment response message is permitted by the EA certificate
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_11_BV
+# Check that generated EC certificate contains only allowed permissions
+#ItsPki_TestCases.TC_SECPKI_EA_ENR_12_BV
+
+# The AuthorizationValidationResponse message shall be sent by the EA to the AA across the interface at reference point S4 in response to a received AuthorizationValidationRequest message
+#ItsPki_TestCases.TC_SECPKI_EA_AUTHVAL_RCV_01_BV
+# Check that EA doesn't accept Authorization Validation Request when SharedAtRequest is signed with certificate without appropriate permissions
+#ItsPki_TestCases.TC_SECPKI_EA_AUTHVAL_RCV_02_BI
+
+# The EtsiTs103097Data-Encrypted is build with the component recipients containing one instance of RecipientInfo of choice pskRecipInfo, which contains the HashedId8 of the symmetric key used by the ITS-S to encrypt the AuthorizationRequest message to which the response is built and the component ciphertext containing the encrypted representation of the EtsiTs103097Data-Signed. The encryption uses a ETSI TS 103 097 [3] approved algorithm
+#ItsPki_TestCases.TC_SECPKI_EA_AUTHVAL_01_BV
+# To read an authorization validation response, the AA shall receive an EtsiTs103097Data-Encrypted structure, containing a EtsiTs103097Data-Signed structure, containing a EtsiTs102941Data structure, containing an AuthorizationValidationResponse structure
+#ItsPki_TestCases.TC_SECPKI_EA_AUTHVAL_02_BV
+# The AuthorizationValidationResponse structure contains the requestHash being the left-most 16 octets of the SHA256 digest of the EtsiTs103097Data-Signed structure received in the AuthorizationValidationRequest and a responseCode
+#ItsPki_TestCases.TC_SECPKI_EA_AUTHVAL_03_BV
+# If the responseCode is 0, the AuthorizationValidationResponse structure contains the component confirmedSubjectAttributes with the attributes the EA wishes to confirm, except for certIssuePermissions which is not allowed to be present
+#ItsPki_TestCases.TC_SECPKI_EA_AUTHVAL_04_BV
+# If the responseCode is different than 0, the AuthorizationValidationResponse structure does not contain the component confirmedSubjectAttributes
+#ItsPki_TestCases.TC_SECPKI_EA_AUTHVAL_05_BV
+# The component version of the EtsiTs102941Data structure is set to v1 (integer value set to 1)
+#ItsPki_TestCases.TC_SECPKI_EA_AUTHVAL_06_BV
+
+# Check that the EA/AA is able to decrypt the AuthorizationRequest message using the encryption private key corresponding to the recipient certificate...
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_01_BV
+# Check that the AA is able to decrypt the AuthorizationRequest message using the encryption private key corresponding to the recipient certificate...
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_02_BV
+# Check that the AA skips the AuthorizationRequest message if it is not addressed to this AA
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_03_BI
+# Check that the AA skips the AuthorizationRequest message if it unable to decrypt the encKey
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_04_BI
+# Check that the AA skips the AuthorizationRequest message if it unable to decrypt the cyphertext
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_05_BI
+# Check that the AA rejects  the AuthorizationRequest message if it unable to verify the POP signature
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_06_BI
+# Check that the AA rejects the AuthorizationRequest message if it unable to verify the integrity of the request using hmacKey
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_07_BI
+# Send a correctly encoded AT request, but the ITS-Station is not enrolled at the EA
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_08_BI
+# Send an AT request, but the inner signer (valid EC) is not issued by the EA which is known / trusted by the AA. The AA trusts only EAs listet on the RCA-CTL
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_09_BI
+# Send an AT request, but the generation time of the CSR is in the past
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_10_BI
+# Send an AT request, but the generation time of the CSR is in the future
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_11_BI
+# Send an AT request, but the expiry date of the CSR is before the start date of the EC
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_12_BI
+# Send an AT request, but the start date of the CSR is before the start date of the EC
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_13_BI
+# Send an AT request, but the expiry date of the CSR is after the expiry date of the EC
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_14_BI
+# Send an AT request, but the start date of the CSR is after the expiring date of the EC
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_15_BI
+# Send an AT request, but the expiry date of the CSR is after now + maximum pre-loading period (considering values in C-ITS CP)
+#ItsPki_TestCases.TC_SECPKI_AA_AUTH_RCV_16_BI
+
+# Check that the AA sends AuthorizationValidationRequest after receiving of the AuthorizationRequest
+#ItsPki_TestCases.TC_SECPKI_AA_AUTHVAL_01_BV
+
+# Check that the RootCA generates the Full CTL when new EA is about to be added to the Root CTL
+ItsPki_TestCases.TC_RCA_CTLGEN_01_BV
+# Check that the RootCA generates the CRL signed with appropriate certificate.
+ItsPki_TestCases.TC_RCA_CRLGEN_01_BV
+
+# Check that the TLM generates the ECTL when new RootCA is about to be added
+#ItsPki_TestCases.TC_TLM_ECTLGEN_01_BV
+
+[MAIN_CONTROLLER]
+# The options herein control the behavior of MC.
+KillTimer := 10.0
+LocalAddress := 127.0.0.1
+TCPPort := 12000
+NumHCs := 1
+

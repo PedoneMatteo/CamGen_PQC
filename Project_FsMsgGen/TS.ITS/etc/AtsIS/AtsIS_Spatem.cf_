@@ -1,0 +1,200 @@
+
+[MODULE_PARAMETERS]
+# This section shall contain the values of all parameters that are defined in your TTCN-3 modules.
+
+# IUT Station ID
+LibItsCommon_Pixits.PX_IUT_STATION_ID := 2533729309
+
+LibItsGeoNetworking_Pixits.PX_GN_UPPER_LAYER := e_btpB
+
+[LOGGING]
+# In this section you can specify the name of the log file and the classes of events
+# you want to log into the file or display on console (standard error).
+
+LogFile := "../logs/AtsIS/%e.%h-%r.%s"
+FileMask := LOG_ALL | USER | DEBUG | MATCHING
+ConsoleMask := LOG_ALL | USER | DEBUG | MATCHING
+#FileMask := ERROR | USER | MATCHING | EXECUTOR_RUNTIME | VERDICTOP
+#ConsoleMask := ERROR | USER | MATCHING | EXECUTOR_RUNTIME | VERDICTOP
+LogSourceInfo := Stack
+LogEntityName:= Yes
+LogEventTypes:= Yes
+#TimeStampFormat := DateTime
+
+[TESTPORT_PARAMETERS]
+# In this section you can specify parameters that are passed to Test Ports.
+# SPATEM Layer
+#   next_header     : btpA|btpB (overwrite BTP.type)
+#   header_type     : tsb|gbc|uni
+#   header_sub_type : sh (single hop)
+# SPATEM Layer
+#   next_header     : btpA|btpB (overwrite BTP.type)
+# BTP Layer
+#   type            : btpA|btpB
+#   destination port: dst_port
+#   source port     : src_port
+#   device_mode     : Set to 1 if the layer shall encapsulate upper layer PDU
+#   device_mode     : Set to 1 if the layer shall encapsulate upper layer PDU
+# GN Layer
+#   ll_address             : GeoNetworking address of the Test System
+#   latitude               : latitude of the Test System
+#   longitude              : longitude of the Test System
+#   beaconing              : Set to 1 if GnLayer shall start beaconing
+#   Beaconning timer expiry: expiry (ms)
+#   device_mode            : Set to 1 if the layer shall encapsulate upper layer PDU
+#   secured_mode           : Set to 1 if message exchanges shall be signed
+#   encrypted_mode         : Set to 1 if message exchanges shall be encrypted
+#                            NOTE: For signed & encrypted message exchanges, both secured_mode and encrypted_mode shall be set to 1
+#   secure_db_path         : Path to the certificates and keys storage location
+#   hash                   : Hash algorithm to be used when secured mode is set
+#                            Authorized values are SHA-256 or SHA-384
+#                            Default: SHA-256
+#   cypher                 : Cyphering algorithm to be used when secured mode is set
+#                            Authorized values are NISTP-256 and BP-256
+#                            Default: NISTP-256
+# Ethernet layer
+#   mac_src  :Source MAC address
+#   mac_bc   :Broadcast address
+#   eth_type : Ethernet type
+# Commsignia layer
+#   mac_src     : Device MAC address, used to discard packets
+#                 To indicate no filering, use the value 000000000000
+#   mac_bc      : Broadcast address
+#   eth_type    : Ethernet type, used to discard packets
+#   target_host : Device address
+#   target_port : Device port
+#   source_port : Test System port
+#   interface_id: Interface id, used to discard packets
+#   tx_power    : TX power (dB)
+# UDP layer (IP/UDP based on Pcap)
+#   dst_ip  : destination IPv4 address (aa.bb.cc.dd)
+#   dst_port: destination port
+#   src_ip  : source IPv4 address (aa.bb.cc.dd)
+#   src_port: source port
+# Pcap layer
+#   mac_src    : Source MAC address, used to exclude from capture the acket sent by the Test System
+#   filter     : Pcap filter (compliant with tcpdump syntax) 
+#   Online mode:
+#     nic: Local NIC
+#          If set, online mode is used
+#   Offline mode (nic is present but not set):
+#     file        : File to read
+#     frame_offset: Frame offset, used to skip packets with frame number < frame_offset
+#     time_offset : Time offset, used to skip packets with time offset < time_offset
+#     save_mode   : 1 to save sent packet, 0 otherwise
+
+#Cygwin
+#system.mapemSpatemPort.params := "SPATEM(next_header=btpB,header_type=uni)/BTP(dst_port=2006)/GN(ll_address=4C5E0C14D2EA,latitude=43551050,longitude=10298730,distanceA=1500,distanceB=1500,angle=0,device_mode=1,secured_mode=0,sec_db_path=/home/yanng/tmp/certificates)/ETH(mac_src=e2b7b30429eb)/PCAP(mac_src=e2b7b30429eb,nic=CEBB111F-D749-4B40-8B4D-DBB060E90987,filter=and ether proto 0x8947)"
+# Linux
+#system.mapemSpatemPort.params := "SPATEM(next_header=btpB,header_type=gbc)/BTP(dst_port=2006)/GN(ll_address=4C5E0C14D2EA,latitude=43551050,longitude=10298730,distanceA=1500,distanceB=1500,angle=0,device_mode=1,secured_mode=0,sec_db_path=../data/certificates/certificates)/ETH(mac_src=dc536045af7f)/PCAP(mac_src=dc536045af7f,nic=wlp2s0,filter=and ether proto 0x8947)"
+system.mapemSpatemPort.params := "SPATEM(next_header=btpB,header_type=gbc)/BTP(dst_port=2006)/GN(ll_address=4C5E0C14D2EA,latitude=43551050,longitude=10298730,distanceA=1500,distanceB=1500,angle=0,device_mode=1,secured_mode=0,sec_db_path=../data/certificates/certificates)/ETH(mac_src=dc536045af7e)/PCAP(mac_src=dc536045af7e,nic=wlp0s20f3,filter=and ether proto 0x8947)"
+# Linux over UDP
+#system.mapemSpatemPort.params := "SPATEM(next_header=btpB,header_type=gbc)/BTP(dst_port=2006)/GN(ll_address=4C5E0C14D2EA,latitude=43551050,longitude=10298730,distanceA=1500,distanceB=1500,angle=0,device_mode=1,secured_mode=0,sec_db_path=../data/certificates/certificates)/ETH(mac_src=dc536045af7f)/UDP(dst_ip=192.168.146.26,src_port=4041,dst_port=50544)"
+
+# SPATEM UpperTester port based on UDP
+system.utPort.params := "UT_SPATEM/UDP(dst_ip=127.0.0.1,dst_port=12345,src_port=12346)"
+#system.utPort.params := "UT_SPATEM/UDP(dst_ip=192.168.146.26,dst_port=44100,src_port=12345)"
+#system.utPort.params := "UT_SPATEM/UDP(dst_ip=172.16.35.1)"
+
+[EXECUTE]
+
+ItsSpatem_TestCases.TC_IS_TLM_xxx_BV_01
+
+# Check that protocolVersion is set to 1 and messageID is set to 4
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_MSGF_BV_01
+# An IUT shall include the unique identifier for the intersection as part of the signal phase and timing message broadcast
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_MSGF_BV_02
+# Check that TLM service generates a SPAT message with the revision data element synchronized with the revision data element in the intersection configuration of the roadway geometric information (MAP)
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_MSGF_BV_03
+# An IUT shall include a timestamp as part of the signal phase and timing message broadcast.
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_MSGF_BV_04
+# An IUT shall include signalGroupe for each intersection if this signalGroup is defined in the intersection configuration of the roadway geometric information (MAP)
+# For each vehicular manoeuvre at a signalized intersection, an IUT shall include the current movement state. 
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_MSGF_BV_06
+# For each pedestrian manoeuvre at a signalized intersection, an IUT shall include the current movement state. 
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_MSGF_BV_07
+# For each active manoeuvre an IUT shall include the earliest time point when the manoeuvre state is predicted to change
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_MSGF_BV_08
+# For each manoeuvre at a signalized intersection, an IUT shall include:
+#       - the next expected movement states pertaining to that manoeuvre
+#       - the time point for when the succeeding manoeuvre state is predicted to change
+#       - the start time for each pending manoeuvre
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_MSGF_BV_09
+# Check that SPAT message prioritization is encoded using regional extension.
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_MSGF_BV_10
+# For each manoeuvre at a signalized intersection, an IUT shall indicate if one or more pedestrians have been detected in the pedestrian crossing.
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_MSGF_BV_11
+# An IUT shall transmit information about the optimal speed for vehicles on each lane
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_MSGF_BV_12
+# An IUT shall transmit information about the signal timing progression speed along the roadway.
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_MSGF_BV_13
+# An IUT shall transmit the length of the queue and the length of available vehicular storage on each egress lane.
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_MSGF_BV_14
+
+# Check that TLM Service generates a new SPATEM on reception of a valid AppSPATEM _Start request
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_EVGN_BV_01
+# Check that TLM Service generates SPATEM are time ordered
+# Check that TLM Service terminates on reception of a valid AppSPATEM _Stop request
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_EVGN_BV_03
+# Check that TLM Service generates a new SPATEM on reception of a valid AppSPATEM_Trigger request
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_EVGN_BV_04
+
+# Check that TLM Service provides the destination area in SPATEM
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_COM_BV_01
+# Check that SPATEM uses BTP_B packet. Check that the destination port for SPATEM is set to 2004
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_COM_BV_02
+
+# Check that TLM service encapsulates SPATEM in a GBC with the HeaderType field set to the value of 4
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_COMM_BV_03
+# Check that TLM service uses certificate containing valid ITS AID to sign SPATEM messages.
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_SEC_BV_01
+# Check that TLM service uses generic security profile to sign SPATEM message and does not include additional security header elements 
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_SEC_BV_02
+# Check that TLM service uses certificate containing valid Service Specific Permissions of type BitmapSsp to sign SPATEM messages and the SSP version is set to 1 
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_SSP_BV_01
+# Check that TLM service sends a SPAT message containing IntersectionState without prioritization and manoeuvre assist information when it is permitted by the signing certificate 
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_SSP_BV_02
+# Check that TLM service does not send a SPAT message containing IntersectionState if it is not permitted by the certificate 
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_SSP_BO_03
+# Check that TLM service sends a SPAT message containing public transport prioritization response when it is permitted by the signing certificate .
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_SSP_BV_04
+# Check that TLM service does not send a SPAT message containing IntersectionState if it is not permitted by the certificate.
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_SSP_BO_05
+# Check that TLM service sends a SPAT message containing Intersection maneuver assisting information when it is permitted by the signing certificate 
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_SSP_BV_06
+# Check that TLM service sends a SPAT message containing movement state maneuver assisting information when it is permitted by the signing certificate.
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_SSP_BV_07
+# Check that TLM service does not send a SPAT message containing intersection maneuver assisting information if it is not permitted by the certificate.
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_SSP_BO_08
+# Check that TLM service does not send a SPAT message containing movement state maneuver assisting information if it is not permitted by the certificate.
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_SSP_BO_09
+
+# Check that the IUT transmits SPATEM with valid transmission rate.
+#ItsSpatem_TestCases.TC_IS_TLM_GEN_RATE_BV_01
+
+# Check that the IUT can successfully process all mandatory fields of SPATEM received
+#ItsSpatem_TestCases.TC_IS_TLM_RCV_MSGF_BV_01
+# Check that the IUT accepts the SPATEM message permitted by the signing certificate.
+#ItsSpatem_TestCases.TC_IS_TLM_RCV_SEC_BV_01
+# Check that the IUT discards the SPATEM message not permitted by the signing certificate.
+#ItsSpatem_TestCases.TC_IS_TLM_RCV_SEC_BO_01
+# Check that the IUT accepts the SPATEM message containing IntersectionState without additional information permitted by the signing certificate.
+#ItsSpatem_TestCases.TC_IS_TLM_RCV_SSP_BV_01
+# Check that the IUT skips the SPATEM message containing IntersectionState without additional information not permitted by the signing certificate.
+#ItsSpatem_TestCases.TC_IS_TLM_RCV_SSP_BO_02
+# Check that the IUT accepts the SPATEM message containing IntersectionState with public transport prioritization response permitted by the signing certificate.
+#ItsSpatem_TestCases.TC_IS_TLM_RCV_SSP_BV_03
+# Check that the IUT skips the SPATEM message containing IntersectionState with public transport prioritization response not permitted by the signing certificate.
+#ItsSpatem_TestCases.TC_IS_TLM_RCV_SSP_BO_04
+# Check that the IUT accepts the SPATEM message containing IntersectionState with manoeuvre assist information permitted by the signing certificate.
+#ItsSpatem_TestCases.TC_IS_TLM_RCV_SSP_BV_05
+# Check that the IUT skips the SPATEM message containing IntersectionState with manoeuvre assist information permitted by the signing certificate     
+#ItsSpatem_TestCases.TC_IS_TLM_RCV_SSP_BO_06
+
+
+[MAIN_CONTROLLER]
+# The options herein control the behavior of MC.
+KillTimer := 10.0
+LocalAddress := 127.0.0.1
+TCPPort := 12000
+NumHCs := 1

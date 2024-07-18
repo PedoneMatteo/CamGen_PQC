@@ -1,0 +1,30 @@
+<!-- Authorization ticket certificate for CAM testing
+     with NO Special Transport SSP
+-->
+<certificate name="CERT_IUT_CAM_BO_03_AT">
+	<version>2</version>
+	<signer type="digest" name="CERT_TS_A_AA"/>
+	<subject type="AT" name="">
+		<!-- verification_key -->
+		<attribute type="verification_key">
+			<public_key algorythm="0">
+				<ecc_point type="uncompressed"/>
+			</public_key>
+		</attribute>
+		<!-- assurance_level -->
+		<attribute type="assurance_level">
+			<assurance level="3"/>
+		</attribute>
+		<!-- its_aid_ssp_list -->
+		<attribute type="its_aid_ssp_list">
+			<ssp aid="CAM">01 DF FC</ssp>  <!-- CAM: no specialTransport   -->
+		</attribute>
+	</subject>
+	<validity>
+		<restriction type="time" start="+0d" end="+365d"/>
+		<restriction type="region">
+			<none/>
+		</restriction>
+	</validity>
+	<signature algorithm="0"/>
+</certificate>

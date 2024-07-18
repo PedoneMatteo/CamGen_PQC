@@ -1,0 +1,1 @@
+$(outdir)/CERT_TS_A_EA_AA_AUTHVAL_RCV_02_BI_02.oer : $(outdir)/CERT_IUT_A_RCA.oer

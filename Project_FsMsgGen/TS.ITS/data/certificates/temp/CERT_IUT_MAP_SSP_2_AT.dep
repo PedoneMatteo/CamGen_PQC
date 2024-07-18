@@ -1,0 +1,1 @@
+$(outdir)/CERT_IUT_MAP_SSP_2_AT.oer : $(outdir)/CERT_IUT_A_AA.oer

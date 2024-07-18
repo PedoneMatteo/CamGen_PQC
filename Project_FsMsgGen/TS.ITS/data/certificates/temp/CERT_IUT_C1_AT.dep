@@ -1,0 +1,1 @@
+$(outdir)/CERT_IUT_C1_AT.oer : $(outdir)/CERT_IUT_CC_AA.oer

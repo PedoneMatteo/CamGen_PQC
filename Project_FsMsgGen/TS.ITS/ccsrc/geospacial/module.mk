@@ -1,0 +1,3 @@
+sources := geospacial.cc
+includes := .
+

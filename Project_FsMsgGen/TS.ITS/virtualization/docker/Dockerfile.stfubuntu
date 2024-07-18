@@ -1,0 +1,86 @@
+FROM ubuntu:20.04
+
+LABEL ETSI CTI
+LABEL description="STF Docker Ubuntu image"
+
+ENV TERM=linux \
+    HOSTNAME=docker-STF
+
+RUN echo "docker-STF-dev" > /etc/hostname \
+    && DEBIAN_FRONTEND=noninteractive apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+      autoconf \
+      bison \
+      build-essential \
+      cmake \
+      curl \
+      dos2unix \
+      doxygen \
+      emacs \
+      expect \
+      flex \
+      g++-9 \
+      gcc-9 \
+      git \
+      gnutls-bin \
+      graphviz \
+      iputils-ping \
+      libedit2 \
+      libedit-dev \
+      libffi-dev \
+      libglib2.0-dev \
+      libgcrypt-dev \
+      libjsoncpp-dev \
+      libncurses5-dev \
+      libpcap-dev \
+      libssl-dev \
+      libtool-bin \
+      libtool \
+      libxml2-dev \
+      libxml2-utils \
+      libyaml-dev \
+      lsof \
+      ntp \
+      openssh-server \
+      pkg-config \
+      python3-dev \
+      python3-pip \
+      python3-setuptools \
+      sudo \
+      sshpass \
+      tcpdump \
+      texlive-font-utils \
+      texlive-latex-extra \
+      tzdata \
+      valgrind \
+      xutils-dev \
+      xsltproc \
+    && DEBIAN_FRONTEND=noninteractive apt-get autoremove --purge -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get autoclean \
+    && pip3 install --upgrade setuptools pip \
+    && useradd --create-home --shell /bin/bash etsi \
+    && echo "etsi:etsi" | chpasswd \
+    && adduser etsi sudo \
+    && echo "" >> /etc/profile \
+    && echo 'export HOME=/home/etsi' >> /etc/profile \
+    && echo 'export LD_LIBRARY_PATH=${HOME}/lib:$LD_LIBRARY_PATH' >> /etc/profile \
+    && echo 'export PATH=${HOME}/bin:$PATH' >> /etc/profile \
+    && echo 'cd ${HOME}' >> /etc/profile \
+    && echo ". ./devenv.bash" >> /etc/profile \
+    && cd /home/etsi \
+    && echo "" >> ./.profile \
+    && echo 'export HOME=/home/etsi' >> ./.profile \
+    && echo 'export LD_LIBRARY_PATH=${HOME}/lib:$LD_LIBRARY_PATH' >> ./.profile \
+    && echo 'export PATH=${HOME}/bin:$PATH' >> ./.profile \
+    && echo 'cd ${HOME}' >> ./.profile \
+    && echo ". ./devenv.bash" >> ./.profile \
+    && mkdir -p bin lib include tmp frameworks docs man dev \
+    && chown -R etsi:etsi *
+
+EXPOSE 22
+
+CMD ["/bin/bash"]
+
+# That's all Floks

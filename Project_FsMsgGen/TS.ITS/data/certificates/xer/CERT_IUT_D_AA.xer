@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<EtsiTs103097Certificate>
+  <version>3</version>
+  <type>
+    <explicit/>
+  </type>
+  <issuer name="CERT_IUT_A_RCA">
+    <!--CERT_IUT_A_RCA-->
+    <sha256AndDigest/>
+  </issuer>
+  <toBeSigned>
+    <id>
+      <none/>
+    </id>
+    <cracaId>00 00 00</cracaId>
+    <crlSeries>0</crlSeries>
+    <validityPeriod>
+      <start><!--2021-01-01-->536544000</start>
+      <duration>
+        <hours><!--2024-01-01-->26280</hours>
+      </duration>
+    </validityPeriod>
+    <region>
+      <polygonalRegion>
+        <TwoDLocation>
+          <latitude>436618657</latitude>
+          <longitude>70083912</longitude>
+        </TwoDLocation>
+        <TwoDLocation>
+          <latitude>436618657</latitude>
+          <longitude>70982247</longitude>
+        </TwoDLocation>
+        <TwoDLocation>
+          <latitude>435720322</latitude>
+          <longitude>70982247</longitude>
+        </TwoDLocation>
+        <TwoDLocation>
+          <latitude>435720322</latitude>
+          <longitude>70083912</longitude>
+        </TwoDLocation>
+      </polygonalRegion>
+    </region>
+    <assuranceLevel>80</assuranceLevel>
+    <!--level=4 confidence=0-->
+    <appPermissions>
+      <PsidSsp>
+        <!--CRT-REQ-->
+        <psid>623</psid>
+        <ssp>
+          <bitmapSsp>01 32</bitmapSsp>
+        </ssp>
+      </PsidSsp>
+    </appPermissions>
+    <certIssuePermissions>
+      <PsidGroupPermissions>
+        <subjectPermissions>
+          <explicit>
+            <PsidSspRange>
+              <!--CAM-->
+              <psid>36</psid>
+              <sspRange>
+                <bitmapSspRange>
+                  <sspValue>01 FF FC</sspValue>
+                  <sspBitmask>FF 00 03</sspBitmask>
+                </bitmapSspRange>
+              </sspRange>
+            </PsidSspRange>
+            <PsidSspRange>
+              <!--DENM-->
+              <psid>37</psid>
+              <sspRange>
+                <bitmapSspRange>
+                  <sspValue>01 FF FF FF</sspValue>
+                  <sspBitmask>FF 00 00 00</sspBitmask>
+                </bitmapSspRange>
+              </sspRange>
+            </PsidSspRange>
+            <PsidSspRange>
+              <!--SPAT-->
+              <psid>137</psid>
+              <sspRange>
+                <bitmapSspRange>
+                  <sspValue>01 E0</sspValue>
+                  <sspBitmask>FF 1F</sspBitmask>
+                </bitmapSspRange>
+              </sspRange>
+            </PsidSspRange>
+            <PsidSspRange>
+              <!--MAP-->
+              <psid>138</psid>
+              <sspRange>
+                <bitmapSspRange>
+                  <sspValue>01 C0</sspValue>
+                  <sspBitmask>FF 3F</sspBitmask>
+                </bitmapSspRange>
+              </sspRange>
+            </PsidSspRange>
+            <PsidSspRange>
+              <!--IVI-->
+              <psid>139</psid>
+              <sspRange>
+                <bitmapSspRange>
+                  <sspValue>01 00 00 00 FF F8</sspValue>
+                  <sspBitmask>FF 00 00 00 00 07</sspBitmask>
+                </bitmapSspRange>
+              </sspRange>
+            </PsidSspRange>
+            <PsidSspRange>
+              <!--SREM-->
+              <psid>140</psid>
+              <sspRange>
+                <bitmapSspRange>
+                  <sspValue>02 FF FF E0</sspValue>
+                  <sspBitmask>FF 00 00 1F</sspBitmask>
+                </bitmapSspRange>
+              </sspRange>
+            </PsidSspRange>
+            <PsidSspRange>
+              <!--SSEM-->
+              <psid>637</psid>
+              <sspRange>
+                <bitmapSspRange>
+                  <sspValue>01</sspValue>
+                  <sspBitmask>FF</sspBitmask>
+                </bitmapSspRange>
+              </sspRange>
+            </PsidSspRange>
+            <PsidSspRange>
+              <!--GN-MGMT-->
+              <psid>141</psid>
+            </PsidSspRange>
+          </explicit>
+        </subjectPermissions>
+        <minChainLength>1</minChainLength>
+        <chainLengthRange>0</chainLengthRange>
+        <eeType>11000000</eeType>
+      </PsidGroupPermissions>
+    </certIssuePermissions>
+    <encryptionKey>
+      <supportedSymmAlg>
+        <aes128Ccm/>
+      </supportedSymmAlg>
+      <publicKey>
+        <eciesNistP256>
+          <compressed-y-0/>
+        </eciesNistP256>
+      </publicKey>
+    </encryptionKey>
+    <verifyKeyIndicator>
+      <verificationKey>
+        <ecdsaNistP256>
+          <compressed-y-0/>
+        </ecdsaNistP256>
+      </verificationKey>
+    </verifyKeyIndicator>
+  </toBeSigned>
+  <signature>
+    <ecdsaNistP256Signature>
+      <rSig>
+        <x-only/>
+      </rSig>
+      <sSig/>
+    </ecdsaNistP256Signature>
+  </signature>
+</EtsiTs103097Certificate>

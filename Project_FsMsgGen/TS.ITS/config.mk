@@ -1,0 +1,9 @@
+#TTCN3_DIR      := /cygdrive/c/Tools/Titan
+#ASN1C_PATH     := /home/yann/frameworks/asn1c.denis
+#WPCAP_DLL_PATH := /cygdrive/c/windows/system32/npcap/wpcap.dll
+#NPCAP_INCLUDE  := /cygdrive/c/PROGRA~1/Npcap/sdk/include
+#T3Q_PATH=./tools/t3q-v2.0.0b30
+#T3Q_CONFIG=t3q.cfg
+#T3D_PATH=./tools/t3d-v2.0.0b30
+#T3D_CONFIG=t3d.cfg
+#ITS_CONTAINER=../../../AtsDENM/lib/asn1/cdd/ITS_Container.asn

@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# Turn on debug mode
+#set -vx
+#set -e
+
+# Colors and Prompt
+export PS1="\w\$ "
+export PS1="\D{%Y-%m-%d %H:%M:%S} \w\n\$ "
+
+export EDITOR=emacs
+set -o emacs
+
+# Home working directories
+export HOME_FRAMEWORKS=${HOME}/frameworks
+export HOME_LIB=${HOME}/lib
+export HOME_BIN=${HOME}/bin
+export HOME_ETC=${HOME}/etc
+export HOME_TMP=${HOME}/tmp
+export HOME_DOCS=${HOME}/docs
+
+# Home common include directory
+export HOME_INC=${HOME}/include
+
+# Update PATH environment variable
+export PATH=${HOME_BIN}:${PATH}
+
+# Update LD_LIBRARY_PATH environment variable
+if [ -z "${LD_LIBRARY_PATH}" ]
+then
+    export LD_LIBRARY_PATH=${HOME_LIB}:/usr/local/lib:${HOME}/dev/etsi_its/lib
+else 
+    export LD_LIBRARY_PATH=${HOME_LIB}:/usr/local/lib:${HOME}/dev/etsi_its/lib:${LD_LIBRARY_PATH}
+fi
+
+
+# Add JAVA support
+#export JAVA_VERSION=1.8.0_92
+#export JAVA_JDK=jdk${JAVA_VERSION}
+#if [ -d "${HOME_FRAMEWORKS}/${JAVA_JDK}" ]
+#then
+#    export JAVA_HOME=${HOME_FRAMEWORKS}/${JAVA_JDK}/bin
+#else
+#    unset JAVA_VERSION
+#    unset JAVA_JDK
+#fi
+
+# Add TITAN support
+export TOP=${HOME_FRAMEWORKS}/titan/titan.core
+export TTCN3_DIR=${TOP}/Install
+if [ -d ${TTCN3_DIR} ]
+then
+    export TTCN3_BROWSER=mozilla
+    export PATH=${TTCN3_DIR}/bin:${PATH}
+    export LD_LIBRARY_PATH=${TTCN3_DIR}/lib:${LD_LIBRARY_PATH}
+    export MANPATH=${TTCN3_DIR}/man:${MANPATH}
+    export TTCN3_LICENSE_FILE=${TTCN3_DIR}/etc/license/license.dat
+    export PATH_DEV_TTCN=${HOME}/dev/ttcn3
+    # ITS support
+    export PATH_DEV_ITS=${HOME}/dev/etsi_its
+    # Emergency Communication support
+    export PATH_DEV_EMCOM=${HOME}/dev/etsi_emcom
+    # Mobile-Edge Computing support
+    export PATH_DEV_MEC=${HOME}/dev/etsi_mec
+    # Validation folder
+    export VALIDATION_DIR=${HOME}
+fi
+
+# Start ssh-agent at login
+#if [ -f "/usr/bin/ssh-agent" ]
+#then
+#    eval `/usr/bin/ssh-agent -s`
+#    ssh-add -l
+#    ssh-add ${HOME}/.ssh/git_server_ssh_key_name
+#fi

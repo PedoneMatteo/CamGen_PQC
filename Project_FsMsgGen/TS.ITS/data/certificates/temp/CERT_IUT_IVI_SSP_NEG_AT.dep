@@ -1,0 +1,1 @@
+$(outdir)/CERT_IUT_IVI_SSP_NEG_AT.oer : $(outdir)/CERT_IUT_A_AA.oer

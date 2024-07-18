@@ -1,0 +1,7 @@
+prendere i file .xer di un RCA, un AA, un AT
+lanciare prima il comando: ./certgen -o outputcertificates CERT_IUT_A_RCA.xer
+poi lanciare il comando: ./certgen -o outputcertificates CERT_IUT_A_AA.xer
+poi lanciare il comando: ./certgen -o outputcertificates CERT_IUT_A_AT.xer
+
+Tutto il contenuto che viene generato e messo nella directory outputcertificates copiarli in POOL_CAM presente in 
+fsmsggen

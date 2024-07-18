@@ -1,0 +1,1 @@
+$(outdir)/CERT_TS_EC_ENR_RCV_02_BI_03.oer : $(outdir)/CERT_TS_A_EA.oer

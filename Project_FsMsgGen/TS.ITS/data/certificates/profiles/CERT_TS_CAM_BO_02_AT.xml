@@ -1,0 +1,31 @@
+<!-- Authorization ticket certificate
+     not permitting to send publicTransport container
+-->
+
+<certificate name="CERT_TS_CAM_BO_02_AT">
+	<version>2</version>
+	<signer type="digest" name="CERT_TS_A_AA"/>
+	<subject type="AT" name="">
+		<!-- verification_key -->
+		<attribute type="verification_key">
+			<public_key algorythm="0">
+				<ecc_point type="uncompressed"/>
+			</public_key>
+		</attribute>
+		<!-- assurance_level -->
+		<attribute type="assurance_level">
+			<assurance level="3"/>
+		</attribute>
+		<!-- its_aid_ssp_list -->
+		<attribute type="its_aid_ssp_list">
+			<ssp aid="CAM">01 BF FC</ssp>  <!-- CAM: no publicTransport  -->
+		</attribute>
+	</subject>
+	<validity>
+		<restriction type="time" start="+0d" end="+365d"/>
+		<restriction type="region">
+			<none/>
+		</restriction>
+	</validity>
+	<signature algorithm="0"/>
+</certificate>
