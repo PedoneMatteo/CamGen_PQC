@@ -541,6 +541,14 @@ int main(int argc, char** argv)
     return 0;
 }
 
+void printfCertificate(unsigned char *data){
+	printf("\n	CERTIFICATE: \n");
+	for(int i=0; i<187; i++){
+		printf("%02x ", data[i]);
+	}
+	printf("\n");
+}
+
 void MsgGenApp_Send(FitSec * e, MsgGenApp * a) 
 {
     //printBuf(buf);
@@ -562,8 +570,11 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
     size_t len = a->fill(a, e, &m); 
     if (len > 0) {
         // fill the src addr
-        if (!_gn_src && m.sign.cert) {
+        printfCertificate(m.sign.cert);
+        if (!_gn_src && m.sign.cert) { //typedef uint64_t FSHashedId8;
             FSHashedId8 id = FSCertificate_Digest(m.sign.cert);
+            printf("\n          signer digest = %lx \n", id);
+            
             memcpy(buf + 6, &id, 6);
         }
         if (m.payloadType == FS_PAYLOAD_UNSECURED) {

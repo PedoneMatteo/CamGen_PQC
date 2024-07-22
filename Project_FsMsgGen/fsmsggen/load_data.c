@@ -39,6 +39,14 @@ by simple request to the author.
 #include <sys/stat.h>
 #endif
 
+void printCertificate(unsigned char *data){
+	printf("\n	CERTIFICATE: \n");
+	for(int i=0; i<187; i++){
+		printf("%02x ", data[i]);
+	}
+	printf("\n");
+}
+
 static char _data[4096]; // for keys only
 static FSHashedId8 _load_data(FitSec * e, FSTime32 curTime, pchar_t * path, pchar_t * fname)
 {
@@ -48,8 +56,9 @@ static FSHashedId8 _load_data(FitSec * e, FSTime32 curTime, pchar_t * path, pcha
 	pchar_t *ext;
 	FSHashedId8 digest = (FSHashedId8)0;
 	int error = 0;
-
+		printf("\npath in _load_data = %s\n",path);
 	end = cstraload(&data, path);
+	printCertificate(data);
 	if (end > data){
         if ( (data[0] & 0x7F) == 0 && data[1] == 0x03) {
 			// looks like certificate
@@ -57,10 +66,16 @@ static FSHashedId8 _load_data(FitSec * e, FSTime32 curTime, pchar_t * path, pcha
 			size_t cert_len = end - data;
 
 			ext = cstrpathextension(fname);
-			if((ext - fname) > 3 && cmemcmp("_EA", ext-3, 3) && cmemcmp("_AA", ext-3, 3) && cmemcmp("_RCA", ext-4, 4)) {
-				pchar_cpy(ext, ".vkey");
+			printf("\n print extension = %s\n", ext);	//ext = .oer         ext-3  =  RCA.oer / _AT.oer / _AA.oer
+			printf("\n	bool = %d\n",(ext - fname) > 3 && cmemcmp("_EA", ext-3, 3) && cmemcmp("_AA", ext-3, 3) && cmemcmp("_RCA", ext-4, 4));
+
+			//cmemcmp() controlla se le stringhe passate alla funzione non sono uguali
+			if((ext - fname) > 3 && cmemcmp("_EA", ext-3, 3) && cmemcmp("_AA", ext-3, 3) && cmemcmp("_RCA", ext-4, 4)) { 
+				pchar_cpy(ext, ".vkey"); //strcpy
+				printf("\n print extension after pchar_cpy = %s\n", ext); //ext = .vkey
 					vkey = _data;
 					end = cstrnload(vkey, sizeof(_data), path);
+					printf("\n path = %s\n", path);	//path = ../../POOL_CAM/CERT_IUT_A_AT.vkey
 				if (end <= vkey){
 					end = vkey; vkey = NULL;
 				}
@@ -71,6 +86,7 @@ static FSHashedId8 _load_data(FitSec * e, FSTime32 curTime, pchar_t * path, pcha
 				pchar_cpy(ext, ".ekey");
 				ekey = end;
 					end = cstrnload(ekey, sizeof(_data) - (end-_data), path);
+					printf("\n path = %s\n", path); //path = ../../POOL_CAM/CERT_IUT_A_AT.ekey
 				if (end <= ekey){
 					end = ekey; ekey = NULL;
 				}
@@ -80,9 +96,27 @@ static FSHashedId8 _load_data(FitSec * e, FSTime32 curTime, pchar_t * path, pcha
 				errno = 0;
 			}
 			*ext = 0;
+			 /** Install certificate (root, AA, local AT pseudonymes, any other)
+     *  Install any kind of certificates: AA, AT, EC, EA, Root, etc.
+     *  Local AT certificates shall be followed by private keys.
+     *  TODO: support for HSM key sorage
+     *  @param e     The FitSec engine
+     *  @param cert         The buffer with the certificate data
+     *  @param cert_length  The buffer size
+     *  @param vkey         The verification private key. 
+     *                      Required for AT certificates. Must be NULL for other types.
+     *                      
+     *  @param vkey_length  The size of the key
+     *  @param ekey         The encryption private key.fitsec.
+     *                      Optional for AT certificates. Must be NULL for other types.
+     *  @param ekey_length  The size of the key
+     *  @param perror       The status of the procedure. See fitsec_error.h.
+     *  @return             The certificate structure or NULL if certificate is not installed.
+     */
 			const FSCertificate* c =  FitSec_InstallCertificate(e, data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
 			digest = FSCertificate_Digest(c);
 			const char * name = FSCertificate_Name(c);
+			printf("\n 	digest of %s = %lx\n\n",name,digest);
 			if(name == NULL){
 				FSCertificate_SetName(c, fname);
 			}

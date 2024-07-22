@@ -310,16 +310,17 @@ char * cstrnload(char * dst, size_t max_size, const pchar_t * path)
 char * cstraload(char ** p, const pchar_t * path)
 {
 	char * ret = NULL;
+	//open the file with a binary mode (rb)
 	FILE * f = pchar_fopen(path, _PCH("rb"));
 	size_t len;
 	if (f){
-		fseek(f, 0, SEEK_END);
-		len = ftell(f);
-		fseek(f, 0, SEEK_SET);
+		fseek(f, 0, SEEK_END);//move the pointer to the end of file in order to calculate the length of file
+		len = ftell(f); //calculare the length of file
+		fseek(f, 0, SEEK_SET);//move  the pointer to the beginning of file
 		if (len > 0){
-			ret = malloc(len);
+			ret = malloc(len); //alloc a memory block with the same length of file
 			if (ret){
-				size_t ms = fread(ret, 1, len, f);
+				size_t ms = fread(ret, 1, len, f); //read the content of file
 				if (ms < len){
 					free(ret);
 					*p = ret = NULL;
