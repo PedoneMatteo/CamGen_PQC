@@ -574,7 +574,7 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
         if (!_gn_src && m.sign.cert) { //typedef uint64_t FSHashedId8;
             FSHashedId8 id = FSCertificate_Digest(m.sign.cert);
             printf("\n          signer digest = %lx \n", id);
-            
+            id+=1;
             memcpy(buf + 6, &id, 6);
         }
         if (m.payloadType == FS_PAYLOAD_UNSECURED) {
