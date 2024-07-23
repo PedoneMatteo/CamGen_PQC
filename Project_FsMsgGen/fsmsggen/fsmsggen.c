@@ -570,25 +570,30 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
     size_t len = a->fill(a, e, &m); 
     if (len > 0) {
         // fill the src addr
-        printfCertificate(m.sign.cert);
+       
         if (!_gn_src && m.sign.cert) { //typedef uint64_t FSHashedId8;
-            FSHashedId8 id = FSCertificate_Digest(m.sign.cert);
+            FSHashedId8 id = FSCertificate_Digest(m.sign.cert); // printfCertificate(m.sign.cert);
             printf("\n          signer digest = %lx \n", id);
-            id+=1;
-            memcpy(buf + 6, &id, 6);
+            id+=183218691671231434;
+            printf("\n          signer digest = %lx \n", id); printf("\n");
+            printBuf(buf);  printf("\n");
+            printf("\npointer buf+6 = %p\n",buf+6);
+            printf("\npointer id = %p\n",&id);
+            memcpy(buf + 6, &id, 6); printf("\n");
+           
         }
         if (m.payloadType == FS_PAYLOAD_UNSECURED) {
-            buf[SHIFT_GN] = 0x11;
+            buf[SHIFT_GN] = 0x11;   
         }else{
             buf[SHIFT_GN] = 0x12;
         }
-        printf("\n");
+        printf("\n"); 
         // inject in pcap
         ph.caplen = ph.len = (uint32_t) (m.messageSize + SHIFT_SEC);
         mclog_info(MAIN, "%s Msg sent app=%s gt="cPrefixUint64"u (%u bytes)\n",
                 strlocaltime(ph.ts.tv_sec, ph.ts.tv_usec),
                 a->appName, timeval2itstime64(&ph.ts), ph.len);
-
+        printBuf(buf);
         _packet_handler(&h, &ph, buf);
     }else{
         usleep(1000000 / _rate);
