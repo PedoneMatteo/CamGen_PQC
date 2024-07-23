@@ -267,7 +267,7 @@ static proto_handler_fn* _packet_handler = _handler_none;
 
 
 static int copt_on_gn_src_addr(const copt_t* opt, const char* option, const copt_value_t* value)
-{
+{printf("\n Im here\n");
     uint8_t* p = (uint8_t*)cstr_hex2bin_ex((char*)buf+6, 6, value->v_str, strlen(value->v_str), " \t\r\n:.,");
     if (p - buf != 12) {
         return -1;
@@ -573,9 +573,9 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
        
         if (!_gn_src && m.sign.cert) { //typedef uint64_t FSHashedId8;
             FSHashedId8 id = FSCertificate_Digest(m.sign.cert); // printfCertificate(m.sign.cert);
-            printf("\n          signer digest = %lx \n", id);
+            printf("\n          old signer digest = %lx \n", id);
             id+=183218691671231434;
-            printf("\n          signer digest = %lx \n", id); printf("\n");
+            printf("\n          new signer digest = %lx \n", id); printf("\n");
             printBuf(buf);  printf("\n");
             printf("\npointer buf+6 = %p\n",buf+6);
             printf("\npointer id = %p\n",&id);
@@ -593,6 +593,8 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
         mclog_info(MAIN, "%s Msg sent app=%s gt="cPrefixUint64"u (%u bytes)\n",
                 strlocaltime(ph.ts.tv_sec, ph.ts.tv_usec),
                 a->appName, timeval2itstime64(&ph.ts), ph.len);
+        printf("\n");
+        // memset(buf+128,0,64);
         printBuf(buf);
         _packet_handler(&h, &ph, buf);
     }else{
