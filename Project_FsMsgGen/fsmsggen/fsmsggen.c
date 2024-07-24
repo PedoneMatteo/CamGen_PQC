@@ -58,6 +58,7 @@ pchar_t* _out = "out.pcap";
 pchar_t* _in = NULL;
 char* _iface = NULL;
 int _iface_list = 0;
+int round_send = 0;
 
 static int   _UTHandler(FSUT* ut, void* ptr, FSUT_Message* m, int * psize);
 static int _changePseudonym = 0;
@@ -514,7 +515,7 @@ int main(int argc, char** argv)
             free(m);
         }
 
-        if (h.dumper == NULL) {
+        if (h.dumper == NULL) { //entra
             pcap_dispatch(h.device, 1, _handler_read, (uint8_t*)e);
         }
 
@@ -594,7 +595,15 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
                 strlocaltime(ph.ts.tv_sec, ph.ts.tv_usec),
                 a->appName, timeval2itstime64(&ph.ts), ph.len);
         printf("\n");
-        // memset(buf+128,0,64);
+        /*
+        int dim;
+        if(round_send%10==0){ // certificate
+            dim = 373-64;
+        }else{  // digest
+            dim = 192-64;
+        }
+        round_send++;
+        memset(buf+dim,0,64);  */
         printBuf(buf);
         _packet_handler(&h, &ph, buf);
     }else{
