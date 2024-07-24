@@ -67,7 +67,6 @@ static FSHashedId8 _load_data(FitSec * e, FSTime32 curTime, pchar_t * path, pcha
 
 			ext = cstrpathextension(fname);
 			printf("\n print extension = %s\n", ext);	//ext = .oer         ext-3  =  RCA.oer / _AT.oer / _AA.oer
-			printf("\n	bool = %d\n",(ext - fname) > 3 && cmemcmp("_EA", ext-3, 3) && cmemcmp("_AA", ext-3, 3) && cmemcmp("_RCA", ext-4, 4));
 
 			//cmemcmp() controlla se le stringhe passate alla funzione non sono uguali
 			if((ext - fname) > 3 && cmemcmp("_EA", ext-3, 3) && cmemcmp("_AA", ext-3, 3) && cmemcmp("_RCA", ext-4, 4)) { 
@@ -113,6 +112,10 @@ static FSHashedId8 _load_data(FitSec * e, FSTime32 curTime, pchar_t * path, pcha
      *  @param perror       The status of the procedure. See fitsec_error.h.
      *  @return             The certificate structure or NULL if certificate is not installed.
      */
+			printf("\n	 private key len = %ld - public key len = %ld\n\n", ekey_len, vkey_len);
+		/*	ekey_len+=32;
+			vkey_len+=32;
+			cert_len+=64;	*/
 			const FSCertificate* c =  FitSec_InstallCertificate(e, data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
 			digest = FSCertificate_Digest(c);
 			const char * name = FSCertificate_Name(c);

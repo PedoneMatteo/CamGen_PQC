@@ -8,3 +8,9 @@ in fsmsggen.c:
 
 N.B: setting the variable _o_secured to 0 in both the files, I obtain only cam messages 
      without signatures and so without the secured packet inside the Geonetworking layer.
+
+   - - - DIM KEYS AND SIGNATURE - - -
+
+dim private key = 32 Byte
+dim public key = 32 Byte
+dim signature = 64 Byte

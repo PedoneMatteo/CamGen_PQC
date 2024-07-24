@@ -220,7 +220,6 @@ static size_t cam_fill(MsgGenApp* app, FitSec * e, FSMessageInfo* m)
     else {
         char* p = m->payload + len + rc.encoded;
         m->payloadSize = p - m->payload;
-
         ch->plLength = cint16_hton((unsigned short)(rc.encoded + 4)); // plus BTP
         if (_o_secured) {
             printf("\n      FinalizedSignedMessage (in msggen_cam.c)\n");

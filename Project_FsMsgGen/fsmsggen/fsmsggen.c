@@ -559,7 +559,7 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
     gettimeofday(&ph.ts, NULL);
     ph.ts.tv_sec += _tdelta;
     m.message = (char*)&buf[SHIFT_SEC]; //pointer to the first byte of Secured Header
-    m.messageSize = sizeof(buf) - SHIFT_SEC; 
+    m.messageSize = sizeof(buf) - SHIFT_SEC;// + 32+32+64; 
     // printBuf(m.message);
     m.sign.signerType = FS_SI_AUTO;
     m.position = position;
@@ -574,12 +574,12 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
        
         if (!_gn_src && m.sign.cert) { //typedef uint64_t FSHashedId8;
             FSHashedId8 id = FSCertificate_Digest(m.sign.cert); // printfCertificate(m.sign.cert);
-            printf("\n          old signer digest = %lx \n", id);
-            id+=183218691671231434;
-            printf("\n          new signer digest = %lx \n", id); printf("\n");
-            printBuf(buf);  printf("\n");
-            printf("\npointer buf+6 = %p\n",buf+6);
-            printf("\npointer id = %p\n",&id);
+            printf("\n          signer digest = %lx \n", id);
+          //  id+=183218691671231434;
+          //  printf("\n          new signer digest = %lx \n", id); printf("\n");
+          //  printBuf(buf);  printf("\n");
+          //  printf("\npointer buf+6 = %p\n",buf+6);
+          //  printf("\npointer id = %p\n",&id);
             memcpy(buf + 6, &id, 6); printf("\n");
            
         }
@@ -604,7 +604,8 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
         }
         round_send++;
         memset(buf+dim,0,64);  */
-        printBuf(buf);
+       
+       // printBuf(buf);
         _packet_handler(&h, &ph, buf);
     }else{
         usleep(1000000 / _rate);
@@ -615,7 +616,7 @@ static void _handler_none(pcap_handler_t* h, struct pcap_pkthdr* ph, const uint8
 {
 
 }
-
+ 
 static void _handler_file(pcap_handler_t* h, struct pcap_pkthdr* ph, const uint8_t* data)
 {
     pcap_dump((uint8_t*)h->dumper, ph, data);
