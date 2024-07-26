@@ -68,7 +68,7 @@ static int cam_options(MsgGenApp* app, int argc, char* argv[])
         cam->header.messageID = messageID_cam;
         cam->header.protocolVersion = 2;
         cam->cam.generationDeltaTime = 0;
-        
+
         cam->cam.camParameters.basicContainer.stationType = StationType_passengerCar;
         cam->cam.camParameters.basicContainer.referencePosition.altitude.altitudeValue = AltitudeValue_unavailable;
         cam->cam.camParameters.basicContainer.referencePosition.altitude.altitudeConfidence = AltitudeConfidence_unavailable;
@@ -173,7 +173,7 @@ static size_t cam_fill(MsgGenApp* app, FitSec * e, FSMessageInfo* m)
         printf("\n IM in CAM FILL (mssgen_cam.c)\n");
     size_t len;
     m->status = 0;
-
+   
     if (_o_secured) {
         m->payloadType = FS_PAYLOAD_SIGNED;
         m->sign.ssp.aid = 36;
@@ -194,7 +194,7 @@ static size_t cam_fill(MsgGenApp* app, FitSec * e, FSMessageInfo* m)
     //printBufs(m->payload);
     GNCommonHeader* ch = (GNCommonHeader*)m->payload;
     GNExtendedHeader* eh = (GNExtendedHeader*)(ch + 1);
-
+ 
     *ch = _def_ch;
     *eh = _def_eh;
     uint32_t * bh = (uint32_t*)&((&eh->shb)[1]);
@@ -231,7 +231,7 @@ static size_t cam_fill(MsgGenApp* app, FitSec * e, FSMessageInfo* m)
         else {
             m->messageSize = p - m->message;
         }
-    }
+    }printf("\n message size = %ld\n", m->messageSize);
     return len;
 }
 

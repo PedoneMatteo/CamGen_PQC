@@ -9,8 +9,35 @@ in fsmsggen.c:
 N.B: setting the variable _o_secured to 0 in both the files, I obtain only cam messages 
      without signatures and so without the secured packet inside the Geonetworking layer.
 
-   - - - DIM KEYS AND SIGNATURE - - -
+
+   - - - DIM KEYS AND SIGNATURE ECDSA256- - -
 
 dim private key = 32 Byte
 dim public key = 32 Byte
 dim signature = 64 Byte
+
+
+  - - - - LEN message - - - -
+
+messagesize è 1006 fino alla funzione FitSec_FinalizeSignedMessage che setta la dimensione del messaggio a 174 (quando non si include il certificato)
+
+
+  - - - - - ALLUNGARE IL MESSAGGIO - - - -
+
+decommentare le parti di codice commentate:
+
+        //m.messageSize+=100;
+        ph.caplen = ph.len = (uint32_t) (m.messageSize + SHIFT_SEC);
+        mclog_info(MAIN, "%s Msg sent app=%s gt="cPrefixUint64"u (%u bytes)\n",
+                strlocaltime(ph.ts.tv_sec, ph.ts.tv_usec),
+                a->appName, timeval2itstime64(&ph.ts), ph.len);
+        printf("\n");
+
+      /*  int point_signature = ph.len - 164;
+        round_send++;
+        memset(buf+point_signature,0,164);     */
+
+  - - - - - PRE & POST FILL - - - -
+Stampando il buf prima e dopo la chiamata a cam_fill, le uniche cose che cambiano sono:
+- generationTime
+- signature (ultimi 64 B)

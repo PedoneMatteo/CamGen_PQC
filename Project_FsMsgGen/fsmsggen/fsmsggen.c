@@ -310,7 +310,12 @@ unsigned int printBuf (uint8_t *bufs)
 {
    unsigned int i = 0;
    int num_row = -10;
-   for(i=0; i<192; i++){  
+   int dim;
+
+   if(round_send%10==0) dim = 373;
+   else dim = 192;
+
+   for(i=0; i<dim; i++){  
 
         if(i%16==0){
             num_row+=10;
@@ -568,11 +573,15 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
         FitSec_ChangeId(e, FITSEC_AID_ANY);
     }
     //call to cam_fill
+    printf("\n\nPRE FILL\n\n");
+    printBuf(buf);
     size_t len = a->fill(a, e, &m); 
+     printf("\n\nPOST FILL\n\n");
+    printBuf(buf);
     if (len > 0) {
         // fill the src addr
        
-        if (!_gn_src && m.sign.cert) { //typedef uint64_t FSHashedId8;
+        if (!_gn_src && m.sign.cert) {                                                                   //typedef uint64_t FSHashedId8;
             FSHashedId8 id = FSCertificate_Digest(m.sign.cert); // printfCertificate(m.sign.cert);
             printf("\n          signer digest = %lx \n", id);
           //  id+=183218691671231434;
@@ -590,21 +599,19 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
         }
         printf("\n"); 
         // inject in pcap
+        
+        //m.messageSize+=100;
         ph.caplen = ph.len = (uint32_t) (m.messageSize + SHIFT_SEC);
         mclog_info(MAIN, "%s Msg sent app=%s gt="cPrefixUint64"u (%u bytes)\n",
                 strlocaltime(ph.ts.tv_sec, ph.ts.tv_usec),
                 a->appName, timeval2itstime64(&ph.ts), ph.len);
         printf("\n");
-        /*
-        int dim;
-        if(round_send%10==0){ // certificate
-            dim = 373-64;
-        }else{  // digest
-            dim = 192-64;
-        }
+        
         round_send++;
-        memset(buf+dim,0,64);  */
-       
+      /*  int point_signature = ph.len - 164;
+        
+        memset(buf+point_signature,0,164);  */
+
        // printBuf(buf);
         _packet_handler(&h, &ph, buf);
     }else{
