@@ -335,14 +335,15 @@ int main(int argc, char ** argv)
 	if (_certName == NULL) {
 		_certName = _profileName;
 	}
-
+	printf("\n Cert Name = %s\n", _certName);
 
 	//load XER file
 	char * buf = malloc(CERT_MAX_SIZE);
 	char * ebuf;
 	EtsiTs103097Certificate_t * cert = NULL;
+	printf("\n argv[1] = %s\n", argv[1]);
 
-	ebuf = cstrnload(buf, CERT_MAX_SIZE, argv[1]);
+	ebuf = cstrnload(buf, CERT_MAX_SIZE, argv[1]); // argv[1] = CERT_IUT_A_RCA.xer
 	if(ebuf == NULL){
 		fprintf(stderr, "%s: Certificate%s not found\n", argv[1], (_view)?"":" profile");
 		return -1;
@@ -381,7 +382,7 @@ int main(int argc, char ** argv)
 	serviceSpecificPermissionsOps.oer_decoder = ServiceSpecificPermissions_oer_decoder;
 	time32Ops.print_struct = Time32_print_struct;
 
-	if(_view) {
+	if(_view) { //non entra, _view = 0
 		char hash[50], hash_hex[256];
 		size_t hLen;
 		rc_d = asn_decode(NULL, ATS_BASIC_OER, &asn_DEF_EtsiTs103097Certificate, (void**)&cert, buf, ebuf - buf);
@@ -396,18 +397,18 @@ int main(int argc, char ** argv)
 				sha384_calculate(hash, (const char*)buf, rc_d.consumed);
 			}
 			else{
-				hLen = 32;
+				hLen = 32; 
 				sha256_calculate(hash, (const char*)buf, rc_d.consumed);
 			}
 			*_bin2hex(hash_hex, sizeof(hash_hex), hash, hLen) = 0;
 		}
-
+		
 		rc_e = asn_encode_to_buffer(NULL, _xer ? ATS_CANONICAL_XER : ATS_NONSTANDARD_PLAINTEXT, &asn_DEF_EtsiTs103097Certificate, cert, buf, CERT_MAX_SIZE);
 		if (rc_e.encoded <0){
 			fprintf(stderr, "%s: %s encoding failed for %s\n", argv[1], _xer ? "XER" : "text", rc_e.failed_type->name);
 			return -1;
 		}
-		if (!_xer){
+		if (!_xer){ printf("\nhash digest\n");
 			fprintf(stderr, "Hash  : %s\n", hash_hex);
 			fprintf(stderr, "Digest: %s\n", hash_hex + (hLen-8) * 2);
 		}
@@ -431,7 +432,7 @@ int main(int argc, char ** argv)
 		fprintf(stderr, "%s: unknown signer\n", argv[1]);
 		return -1;
 	}
-	if (_signerName){
+	if (_signerName){	printf("\n signer \n"); // non entra
 		cvstrncpy(buf, CERT_MAX_SIZE, _searchPath, "/", _signerName, ".oer", NULL);
 		ebuf = cstrnload(buf, CERT_MAX_SIZE, buf);
 		if (ebuf == NULL){
@@ -491,12 +492,13 @@ int main(int argc, char ** argv)
 		if (signer){
 			ASN_STRUCT_FREE(asn_DEF_EtsiTs103097Certificate, signer);
 		}
-	} else  {
+	} else  { printf("\n self signed\n");
 		// self-signed
 		// use hash(empty string)
+		printf("\n cert->toBeSigned.verifyKeyIndicator.present = %d\n", cert->toBeSigned.verifyKeyIndicator.present); //-->1
 		switch (cert->toBeSigned.verifyKeyIndicator.present){
 		case VerificationKeyIndicator_PR_verificationKey:
-			hashType = cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present;
+			hashType = cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present; printf("\n hashtype = %d\n", hashType); //hashType = 1
 			break;
 		case VerificationKeyIndicator_PR_reconstructionValue:
 			fprintf(stderr, "%s: self-signed certificate can not contain reconstruction value\n", _signerName);
@@ -510,9 +512,9 @@ int main(int argc, char ** argv)
 
 		switch (hashType) {
 		case PublicVerificationKey_PR_ecdsaBrainpoolP256r1:
-		case PublicVerificationKey_PR_ecdsaNistP256:
-			_signerHash = &sha256_emptyString[0];
-			_signerHashLength = sha256_hash_size;
+		case PublicVerificationKey_PR_ecdsaNistP256: //entra qui
+			_signerHash = &sha256_emptyString[0]; printf("\n signer hash = %s\n", &sha256_emptyString[0]);
+			_signerHashLength = sha256_hash_size; //32
 			break;
 		case PublicVerificationKey_PR_ecdsaBrainpoolP384r1:
 		case PublicVerificationKey_PR_ecdsaNistP384:
@@ -533,10 +535,14 @@ int main(int argc, char ** argv)
 	// buf = name of private key file
 	int rc = -1;
 	cvstrncpy(buf, CERT_MAX_SIZE, _keyPath, "/", _certName, EXT_VKEY, NULL);
+
+	printf("\n cert->toBeSigned.verifyKeyIndicator.present = %d\n", cert->toBeSigned.verifyKeyIndicator.present);
+	printf(" cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present = %d\n", cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present);
+	
 	switch (cert->toBeSigned.verifyKeyIndicator.present){
 	case VerificationKeyIndicator_PR_verificationKey:
 		switch (cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present){
-		case PublicVerificationKey_PR_ecdsaNistP256:
+		case PublicVerificationKey_PR_ecdsaNistP256: // entra qui
 			rc = fill_curve_point_eccP256(&cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.ecdsaNistP256, ecies_nistp256, buf);
 			break;
 		case PublicVerificationKey_PR_ecdsaBrainpoolP256r1:
@@ -579,7 +585,9 @@ int main(int argc, char ** argv)
 	if (rc < 0){
 		return -1;
 	}
-	if (cert->toBeSigned.encryptionKey){
+	printf("\n cert->toBeSigned.encryptionKey = %d\n", cert->toBeSigned.encryptionKey);
+	if (cert->toBeSigned.encryptionKey){ // non entra
+		printf(" cert->toBeSigned.encryptionKey->publicKey.present = %d\n", cert->toBeSigned.encryptionKey->publicKey.present);
 		rc = -1;
 		cvstrncpy(buf, CERT_MAX_SIZE, _keyPath, "/", _certName, EXT_EKEY, NULL);
 		switch (cert->toBeSigned.encryptionKey->publicKey.present){

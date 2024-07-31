@@ -325,10 +325,10 @@ int main(int argc, char ** argv)
 		_signerName = argv[2];
 	}
 	
-	if(ecc_api_init()){
+	/*if(ecc_api_init()){
 		fprintf(stderr, "Cannot initialize ECC engine\n");
 		return -1;
-	}
+	}*/
 
 	_profileName = cstrdup(cstrlastpathelement(argv[1]));
 	if(_profileName){

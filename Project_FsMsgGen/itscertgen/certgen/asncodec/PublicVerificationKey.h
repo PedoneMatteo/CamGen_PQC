@@ -41,6 +41,7 @@ typedef struct PublicVerificationKey {
 		 * This type is extensible,
 		 * possible extensions are below.
 		 */
+		
 		EccP384CurvePoint_t	 ecdsaBrainpoolP384r1;
 		EccP384CurvePoint_t	 ecdsaNistP384;
 		EccP256CurvePoint_t	 ecsigSm2;
