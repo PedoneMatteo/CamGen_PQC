@@ -28,8 +28,14 @@ typedef enum PublicVerificationKey_PR {
 	/* Extensions may appear below */
 	PublicVerificationKey_PR_ecdsaBrainpoolP384r1,
 	PublicVerificationKey_PR_ecdsaNistP384,
-	PublicVerificationKey_PR_ecsigSm2
+	PublicVerificationKey_PR_ecsigSm2,
+	PublicVerificationKey_PR_dilithium2
 } PublicVerificationKey_PR;
+
+typedef struct Dilithium_Struct{
+	int len;
+	int publicKey;
+}Dilithium_Struct;
 
 /* PublicVerificationKey */
 typedef struct PublicVerificationKey {
@@ -45,6 +51,7 @@ typedef struct PublicVerificationKey {
 		EccP384CurvePoint_t	 ecdsaBrainpoolP384r1;
 		EccP384CurvePoint_t	 ecdsaNistP384;
 		EccP256CurvePoint_t	 ecsigSm2;
+		Dilithium_Struct  dilithium2;
 	} choice;
 	
 	/* Context for parsing across buffer boundaries */

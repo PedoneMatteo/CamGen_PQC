@@ -62,7 +62,7 @@
               <sspRange>
                 <bitmapSspRange>
                   <sspValue>01 E0</sspValue>
-                  <sspBitmask>FF 1F</sspithisrangementre>
+                  <sspBitmask>FF 1F</sspBitmask>
                 </bitmapSspRange>
               </sspRange>
             </PsidSspRange>
@@ -152,11 +152,10 @@
       </PsidGroupPermissions>
     </certIssuePermissions>
     <verifyKeyIndicator>
-      <verificationKey>
-        <dilithium>
-          <publicKey>  <!-- insert here the public key Dilithium -->
-          </publicKey>
-        </dilithium>
+        <verificationKey>
+        <dilithium2>
+          <publicKey/>
+        </dilithium2>
       </verificationKey>
     </verifyKeyIndicator>
   </toBeSigned>

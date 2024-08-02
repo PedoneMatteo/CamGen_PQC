@@ -105,6 +105,7 @@ static const asn_TYPE_tag2member_t asn_MAP_PublicVerificationKey_tag2el_1[] = {
     { (ASN_TAG_CLASS_CONTEXT | (2 << 2)), 2, 0, 0 }, /* ecdsaBrainpoolP384r1 */
     { (ASN_TAG_CLASS_CONTEXT | (3 << 2)), 3, 0, 0 }, /* ecdsaNistP384 */
     { (ASN_TAG_CLASS_CONTEXT | (4 << 2)), 4, 0, 0 } /* ecsigSm2 */
+	//{ (ASN_TAG_CLASS_CONTEXT | (5 << 2)), 5, 0, 0 } /* dilithium2 */
 };
 asn_CHOICE_specifics_t asn_SPC_PublicVerificationKey_specs_1 = {
 	sizeof(struct PublicVerificationKey),

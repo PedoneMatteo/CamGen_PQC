@@ -150,6 +150,7 @@ char * cvstrncpy(char * dst, size_t maxsize, const char * ptr, ...)
 		va_end(ap);
 		*p = 0;
 	}
+	printf("\n dst = %s\n", dst);
 	return p;
 }
 

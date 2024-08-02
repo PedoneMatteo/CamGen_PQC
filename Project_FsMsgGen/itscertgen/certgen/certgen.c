@@ -498,7 +498,9 @@ int main(int argc, char ** argv)
 		printf("\n cert->toBeSigned.verifyKeyIndicator.present = %d\n", cert->toBeSigned.verifyKeyIndicator.present); //-->1
 		switch (cert->toBeSigned.verifyKeyIndicator.present){
 		case VerificationKeyIndicator_PR_verificationKey:
-			hashType = cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present; printf("\n hashtype = %d\n", hashType); //hashType = 1
+			hashType = cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present; 
+			if(hashType==0) hashType=6;
+			printf("\n cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present = %d\n", hashType); //hashType = 1
 			break;
 		case VerificationKeyIndicator_PR_reconstructionValue:
 			fprintf(stderr, "%s: self-signed certificate can not contain reconstruction value\n", _signerName);
@@ -508,8 +510,8 @@ int main(int argc, char ** argv)
 			return -1;
 		}
 
-		_tbsHashType = hashType;
-
+		_tbsHashType = cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present = hashType;
+		printf("\n hashtype = %d\n", hashType);
 		switch (hashType) {
 		case PublicVerificationKey_PR_ecdsaBrainpoolP256r1:
 		case PublicVerificationKey_PR_ecdsaNistP256: //entra qui
@@ -525,6 +527,9 @@ int main(int argc, char ** argv)
 			_signerHash = &sm3_emptyString[0];
 			_signerHashLength = sm3_hash_size;
 			break;
+		case PublicVerificationKey_PR_dilithium2:
+			printf("\n Dilithium\n");
+			break;
 		default:
 			fprintf(stderr, "Unknown verification key curve type\n");
 			return -1;
@@ -534,15 +539,17 @@ int main(int argc, char ** argv)
 	// generate keys if necessary
 	// buf = name of private key file
 	int rc = -1;
+
+/* after this call, buf contains "outputcertificates/CERT_IUT_A_RCA_Dilithium.vkey" */
 	cvstrncpy(buf, CERT_MAX_SIZE, _keyPath, "/", _certName, EXT_VKEY, NULL);
 
 	printf("\n cert->toBeSigned.verifyKeyIndicator.present = %d\n", cert->toBeSigned.verifyKeyIndicator.present);
-	printf(" cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present = %d\n", cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present);
+	printf("\n cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present = %d\n", cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present);
 	
 	switch (cert->toBeSigned.verifyKeyIndicator.present){
 	case VerificationKeyIndicator_PR_verificationKey:
 		switch (cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present){
-		case PublicVerificationKey_PR_ecdsaNistP256: // entra qui
+		case PublicVerificationKey_PR_ecdsaNistP256: // entra qui nella versione iniziale
 			rc = fill_curve_point_eccP256(&cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.ecdsaNistP256, ecies_nistp256, buf);
 			break;
 		case PublicVerificationKey_PR_ecdsaBrainpoolP256r1:
@@ -554,6 +561,11 @@ int main(int argc, char ** argv)
 		case PublicVerificationKey_PR_ecdsaNistP384:
 			rc = fill_curve_point_eccP384(&cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.ecdsaNistP384, ecies_nistp384, buf);
 			break;
+		case PublicVerificationKey_PR_dilithium2: // ora entra qui
+			cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.dilithium2.len=10;
+			cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.dilithium2.publicKey=10;
+			rc=6;
+		break;
 		default:
 			fprintf(stderr, "Unknown verification key curve type\n");
 			return -1;
@@ -585,7 +597,7 @@ int main(int argc, char ** argv)
 	if (rc < 0){
 		return -1;
 	}
-	printf("\n cert->toBeSigned.encryptionKey = %d\n", cert->toBeSigned.encryptionKey);
+	
 	if (cert->toBeSigned.encryptionKey){ // non entra
 		printf(" cert->toBeSigned.encryptionKey->publicKey.present = %d\n", cert->toBeSigned.encryptionKey->publicKey.present);
 		rc = -1;
@@ -608,8 +620,9 @@ int main(int argc, char ** argv)
 			return -1;
 		}
 	}
-
+/* after this call, buf contains "outputcertificates/CERT_IUT_A_RCA_Dilithium.oer" */
 	cvstrncpy(buf, CERT_MAX_SIZE, _outPath, "/", _certName, EXT_CERT, NULL);
+
 	f = fopen(buf, "wb");
 	if (f == NULL){
 		perror(buf);
