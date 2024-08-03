@@ -22,4 +22,7 @@ packages        += cshared openssl
 predirs         := asncodec
 includes        += asncodec
 libs            += $(outdir)/libItsCertAsn.a
+includes += $(PROJECTROOT)/../liboqs/build/include/oqs
+includes += $(PROJECTROOT)/../liboqs/src/sig/dilithium
+
 include $(CSHAREDDIR)/common.mk

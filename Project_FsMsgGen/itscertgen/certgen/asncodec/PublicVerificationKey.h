@@ -34,7 +34,7 @@ typedef enum PublicVerificationKey_PR {
 
 typedef struct Dilithium_Struct{
 	int len;
-	int publicKey;
+	char* publicKey;
 }Dilithium_Struct;
 
 /* PublicVerificationKey */

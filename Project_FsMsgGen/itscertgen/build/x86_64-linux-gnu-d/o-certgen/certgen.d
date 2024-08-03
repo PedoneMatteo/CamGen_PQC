@@ -52,4 +52,28 @@
  asncodec/BasePublicEncryptionKey.h asncodec/Signature.h \
  asncodec/EcdsaP256Signature.h asncodec/EcdsaP384Signature.h \
  asncodec/EcsigP256Signature.h asncodec/CountryOnly.h \
- asncodec/xer_support.h
+ asncodec/xer_support.h \
+ asncodec/../../../liboqs/build/include/oqs/sig_dilithium.h \
+ ../../liboqs/build/include/oqs/oqs.h \
+ ../../liboqs/build/include/oqs/oqsconfig.h \
+ ../../liboqs/build/include/oqs/common.h \
+ ../../liboqs/build/include/oqs/rand.h \
+ ../../liboqs/build/include/oqs/kem.h \
+ ../../liboqs/build/include/oqs/kem_bike.h \
+ ../../liboqs/build/include/oqs/kem_classic_mceliece.h \
+ ../../liboqs/build/include/oqs/kem_hqc.h \
+ ../../liboqs/build/include/oqs/kem_kyber.h \
+ ../../liboqs/build/include/oqs/kem_ml_kem.h \
+ ../../liboqs/build/include/oqs/kem_ntruprime.h \
+ ../../liboqs/build/include/oqs/kem_frodokem.h \
+ ../../liboqs/build/include/oqs/sig.h \
+ ../../liboqs/build/include/oqs/sig_dilithium.h \
+ ../../liboqs/build/include/oqs/sig_ml_dsa.h \
+ ../../liboqs/build/include/oqs/sig_falcon.h \
+ ../../liboqs/build/include/oqs/sig_sphincs.h \
+ ../../liboqs/build/include/oqs/sig_mayo.h \
+ ../../liboqs/build/include/oqs/sig_stfl.h \
+ ../../liboqs/build/include/oqs/aes_ops.h \
+ ../../liboqs/build/include/oqs/sha2_ops.h \
+ ../../liboqs/build/include/oqs/sha3_ops.h \
+ ../../liboqs/build/include/oqs/sha3x4_ops.h

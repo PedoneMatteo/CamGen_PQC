@@ -154,7 +154,7 @@
     <verifyKeyIndicator>
         <verificationKey>
         <dilithium2>
-          <publicKey/>
+          <publicKey>
         </dilithium2>
       </verificationKey>
     </verifyKeyIndicator>
