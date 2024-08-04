@@ -168,7 +168,7 @@ asn_encode_to_buffer(const asn_codec_ctx_t *opt_codec_ctx,
         errno = EINVAL;
         ASN__ENCODE_FAILED;
     }
-
+    printf("\nIm before buf_key.buffer\n");
     buf_key.buffer = buffer;
     buf_key.buffer_size = buffer_size;
     buf_key.computed_size = 0;

@@ -23,10 +23,11 @@ predirs         := asncodec
 includes        += asncodec
 libs            += $(outdir)/libItsCertAsn.a
 
-# Include headers di liboqs
-includes += $(PROJECTROOT)/../liboqs/build/include/oqs
+# Include headers of liboqs
+includes += /root/Project_FsMsGen/liboqs/build/include
+#includes += $(PROJECTROOT)/../liboqs/build/include/oqs
 
-# Directory della libreria liboqs
+# Directory of library liboqs
 libs += -L$(PROJECTROOT)/../liboqs/build/lib -loqs
 libs += -lssl -lcrypto
 

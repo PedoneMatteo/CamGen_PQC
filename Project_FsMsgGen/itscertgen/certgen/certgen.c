@@ -632,7 +632,6 @@ int main(int argc, char **argv)
 			}
 			fwrite(secret_key, 1, OQS_SIG_dilithium_2_length_secret_key, f);
 			fclose(f);
-			// memcpy(cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.dilithium2.publicKey,"ciao", 5);
 			rc = 6;
 			break;
 		default:
