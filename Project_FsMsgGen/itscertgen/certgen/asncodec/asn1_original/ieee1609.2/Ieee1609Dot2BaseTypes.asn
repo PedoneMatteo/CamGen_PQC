@@ -203,9 +203,8 @@ HashedId32 ::= OCTET STRING (SIZE(32))
  */
 HashedId48 ::= OCTET STRING(SIZE(48))
 
-/* added for Dilithium jey and signature*/
-HashedId1312 ::= OCTET STRING(SIZE(1312))
-HashedId2420 ::= OCTET STRING(SIZE(2420))
+/* added for Dilithium signature
+HashedId2420 ::= OCTET STRING(SIZE(2420))*/
 --***************************************************************************--
 --                             Time Structures                               --
 --***************************************************************************--
@@ -728,15 +727,9 @@ Signature ::= CHOICE {
   ecdsaBrainpoolP384r1Signature EcdsaP384Signature,
   ecdsaNistP384Signature        EcdsaP384Signature,
   sm2Signature                  EcsigP256Signature,
-  dilithiumsignature            DilithiumSignature    /*added*/
+ /* dilithiumsignature            DilithiumSignature    added*/
 }
 
-/* added Dilithium Sig struct */
-DilithiumSignature ::= SEQUENCE {
-  algVersion        Uint8(2),
-  signatureLen      Uint16,
-  signatureValue    OCTET STRING(SIZE(2420))
-}
 
 /**
  * @brief This structure represents an ECDSA signature. The signature is
@@ -991,9 +984,8 @@ EcencP256EncryptedKey ::= SEQUENCE  {
  * operations.
  */
 EncryptionKey ::= CHOICE {
-  /* public    PublicEncryptionKey,
-  symmetric SymmetricEncryptionKey */
-  dilithiumKey    DilithiumKey  /*added (commented also the two above lines)*/
+  public    PublicEncryptionKey,
+  symmetric SymmetricEncryptionKey 
 }
 
 /**
@@ -1031,13 +1023,6 @@ BasePublicEncryptionKey ::= CHOICE {
   ecencSm2             EccP256CurvePoint
 }
 
-DilithiumKey ::= SEQUENCE {
-  algVersion   Uint8,
-  keyLen       Uint16,
-  keyValue     OCTET STRING(SIZE(1312))
-}
-
-
 /**
  * @brief This structure represents a public key and states with what 
  * algorithm the public key is to be used. Cryptographic mechanisms are 
@@ -1064,8 +1049,7 @@ PublicVerificationKey ::= CHOICE {
   ... ,
   ecdsaBrainpoolP384r1 EccP384CurvePoint,
   ecdsaNistP384        EccP384CurvePoint,
-  ecsigSm2             EccP256CurvePoint,
-  dilithiumKey         DilithiumKey         /*added*/
+  ecsigSm2             EccP256CurvePoint
 }
 
 /**

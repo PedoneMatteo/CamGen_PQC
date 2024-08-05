@@ -19,17 +19,18 @@ TS103097_DIR     := asn1/sec_ts103097
 IEEE1609_2_DIR   := asn1/ieee1609.2
 IEEE1609_2_1_DIR := asn1/ieee1609.2.1
 
-ASN1CDIR ?= ../../../../asn1c-fillabs2
+#ASN1CDIR ?= ../../../../asn1c-fillabs2
 
 ifeq (,$(ASN1C))
  ifneq (,$(ASN1CDIR))
   ASN1C := $(ASN1CDIR)/asn1c/asn1c -S $(ASN1CDIR)/skeletons
  else
-  ASN1C := asn1c
+  ASN1C := /usr/local/bin/asn1c
  endif
 endif
 
 ASN1C_ARGS := -no-gen-BER -no-gen-JER -no-gen-UPER -no-gen-APER -no-gen-random-fill -no-gen-example
+#ASN1C_ARGS := -fcompound-names
 
 ASN1_SRC := \
 	$(TS102941_DIR)/EtsiTs102941MessagesCa.asn \
@@ -70,8 +71,8 @@ ASN1_PDU :=  \
     CaCertificateRequestMessage \
     EtsiTs103097Certificate 
 
-#regen: force_regen  Makefile.am.libasncodec
-#force_regen:
-#	rm -f Makefile.am.libasncodec
-#Makefile.am.libasncodec: $(ASN1_SRC)
-#	$(ASN1C) -fcompound-names $(ASN1C_ARGS) $(addprefix -pdu=,$(ASN1_PDU)) $(patsubst %,"%",$(ASN1_SRC)) 2>&1
+regen: force_regen  Makefile.am.libasncodec
+force_regen:
+	rm -f Makefile.am.libasncodec
+Makefile.am.libasncodec: $(ASN1_SRC)
+	$(ASN1C) -fcompound-names $(ASN1C_ARGS) $(addprefix -pdu=,$(ASN1_PDU)) $(patsubst %,"%",$(ASN1_SRC)) 2>&1
