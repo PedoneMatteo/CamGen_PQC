@@ -8,7 +8,6 @@
 
 /* Including external dependencies */
 #include "Uint8.h"
-#include "Uint16.h"
 #include <OCTET_STRING.h>
 #include <constr_SEQUENCE.h>
 #ifndef	_DilithiumKey_H_
@@ -24,8 +23,7 @@ extern "C" {
 /* DilithiumKey */
 typedef struct DilithiumKey {
 	Uint8_t	 algVersion;
-	Uint16_t	 keyLen;
-	OCTET_STRING_t	 keyValue;
+	OCTET_STRING_t	 key;
 	
 	/* Context for parsing across buffer boundaries */
 	asn_struct_ctx_t _asn_ctx;
@@ -34,7 +32,7 @@ typedef struct DilithiumKey {
 /* Implementation */
 extern asn_TYPE_descriptor_t asn_DEF_DilithiumKey;
 extern asn_SEQUENCE_specifics_t asn_SPC_DilithiumKey_specs_1;
-extern asn_TYPE_member_t asn_MBR_DilithiumKey_1[3];
+extern asn_TYPE_member_t asn_MBR_DilithiumKey_1[2];
 
 #ifdef __cplusplus
 }

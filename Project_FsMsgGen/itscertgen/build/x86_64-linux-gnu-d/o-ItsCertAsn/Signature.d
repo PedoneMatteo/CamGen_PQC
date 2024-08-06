@@ -13,5 +13,4 @@
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcsigP256Signature.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/DilithiumSignature.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \
- NativeInteger.h INTEGER.h asn_codecs_prim.h \
- /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint16.h
+ NativeInteger.h INTEGER.h asn_codecs_prim.h

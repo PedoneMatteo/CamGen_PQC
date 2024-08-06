@@ -80,6 +80,7 @@ char *_bin2hex(char *hex, size_t hlen, const char *bin, size_t blen);
 
 static int is_CurvePoint_empty(EccP256CurvePoint_t *point);
 
+static int fill_Dilithium_keyPair(DilithiumKey_t *dilithium, int algorithmVersion, char *keyPath);
 static int fill_curve_point_eccP256(EccP256CurvePoint_t *point, ecc_curve_id curveType, char *keyPath);
 static int fill_curve_point_eccP384(EccP384CurvePoint_t *point, ecc_curve_id curveType, char *keyPath);
 static void *fill_reconstruction_value(EccP256CurvePoint_t *point, void *r_key);
@@ -528,6 +529,9 @@ int main(int argc, char **argv)
 			_signerHashLength = sha384_hash_size;
 			OCTET_STRING_fromBuf(&cert->issuer.choice.sha384AndDigest, &_signerHash[sha384_hash_size - 8], 8);
 			break;
+		case PublicVerificationKey_PR_dilithiumKey:
+			printf("\n Dilithium\n");
+			break;
 		case PublicVerificationKey_PR_ecsigSm2:
 		default:
 			fprintf(stderr, "%s: signer verification key type curve is unknown\n", _signerName);
@@ -578,7 +582,7 @@ int main(int argc, char **argv)
 			_signerHash = &sm3_emptyString[0];
 			_signerHashLength = sm3_hash_size;
 			break;
-		case PublicVerificationKey_PR_dilithium2:
+		case PublicVerificationKey_PR_dilithiumKey:
 			printf("\n Dilithium\n");
 			break;
 		default:
@@ -593,7 +597,7 @@ int main(int argc, char **argv)
 
 	/* after this call, buf contains "outputcertificates/CERT_IUT_A_RCA_Dilithium.vkey" */
 	cvstrncpy(buf, CERT_MAX_SIZE, _keyPath, "/", _certName, EXT_VKEY, NULL);
-	char *secret_key = NULL;
+	char *public_key = NULL;
 	printf("\n cert->toBeSigned.verifyKeyIndicator.present = %d\n", cert->toBeSigned.verifyKeyIndicator.present);
 	printf("\n cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present = %d\n", cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present);
 
@@ -614,25 +618,8 @@ int main(int argc, char **argv)
 		case PublicVerificationKey_PR_ecdsaNistP384:
 			rc = fill_curve_point_eccP384(&cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.ecdsaNistP384, ecies_nistp384, buf);
 			break;
-		case PublicVerificationKey_PR_dilithium2: // ora entra qui
-			cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.dilithium2.len = OQS_SIG_dilithium_2_length_public_key;
-			cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.dilithium2.publicKey = malloc(cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.dilithium2.len);
-			secret_key = malloc(OQS_SIG_dilithium_2_length_secret_key);
-			OQS_STATUS stat = OQS_SIG_dilithium_2_keypair(cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.dilithium2.publicKey, secret_key);
-			if (stat != OQS_SUCCESS)
-			{
-				printf("\nError generating Dilithium key pair\n");
-				return 0;
-			}
-			f = fopen(buf, "wb");
-			if (f == NULL)
-			{
-				perror(buf);
-				return -1;
-			}
-			fwrite(secret_key, 1, OQS_SIG_dilithium_2_length_secret_key, f);
-			fclose(f);
-			rc = 6;
+		case PublicVerificationKey_PR_dilithiumKey: // ora entra qui
+			rc = fill_Dilithium_keyPair(&cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.dilithiumKey, 2, buf);
 			break;
 		default:
 			fprintf(stderr, "Unknown verification key curve type\n");
@@ -828,6 +815,47 @@ static void *gen_or_load_public_key(ecc_curve_id curveType, char *keyPath)
 	return key;
 }
 
+static int fill_Dilithium_keyPair(DilithiumKey_t *dilithium, int algorithmVersion, char *keyPath)	// added
+{
+	char* public_key;
+	dilithium->algVersion = algorithmVersion;
+	dilithium->key.size = OQS_SIG_dilithium_2_length_secret_key;
+	dilithium->key.buf = malloc(dilithium->key.buf);
+	public_key = malloc(OQS_SIG_dilithium_2_length_public_key);
+	OQS_STATUS stat = OQS_SIG_dilithium_2_keypair(dilithium->key.buf, public_key);
+	if (stat != OQS_SUCCESS)
+	{
+		printf("\nError generating Dilithium key pair\n");
+		return 0;
+	}
+
+	/* load Private Key */
+	FILE* f = fopen(keyPath, "wb");
+	if (f == NULL)
+	{
+		perror(keyPath);
+		return -1;
+	}
+	fwrite(dilithium->key.size, 1, OQS_SIG_dilithium_2_length_secret_key, f);
+	fclose(f);
+
+	/* load Public Key */
+	void *key = NULL;
+	char *e_pub = keyPath + strlen(keyPath);
+	keyPath = strcat(keyPath, EXT_PUB);
+	
+	FILE* f = fopen(keyPath, "wb");
+	if (f == NULL)
+	{
+		perror(keyPath);
+		return -1;
+	}
+	fwrite(public_key, 1, OQS_SIG_dilithium_2_length_public_key, f);
+	fclose(f);
+	
+	return 6;
+}
+
 static int fill_curve_point_eccP256(EccP256CurvePoint_t *point, ecc_curve_id curveType, char *keyPath)
 {
 	return fill_curve_point_eccP384((EccP384CurvePoint_t *)point, curveType, keyPath);
@@ -846,7 +874,7 @@ static void _fill_curve_point(EccP384CurvePoint_t *point, int fsize, const char 
 	}
 }
 
-static int fill_curve_point_eccP384(EccP384CurvePoint_t *point, ecc_curve_id curveType, char *keyPath)
+static int(EccP384CurvePoint_t *point, ecc_curve_id curveType, char *keyPath)
 {
 	char x[48], y[48];
 	int compressed_y;
