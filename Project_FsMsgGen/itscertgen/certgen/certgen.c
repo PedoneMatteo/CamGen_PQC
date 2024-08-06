@@ -584,6 +584,8 @@ int main(int argc, char **argv)
 			break;
 		case PublicVerificationKey_PR_dilithiumKey:
 			printf("\n Dilithium\n");
+				_signerHash = &sha256_emptyString[0];
+			_signerHashLength = sha256_hash_size; // 32
 			break;
 		default:
 			fprintf(stderr, "Unknown verification key curve type\n");
@@ -619,6 +621,7 @@ int main(int argc, char **argv)
 			rc = fill_curve_point_eccP384(&cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.ecdsaNistP384, ecies_nistp384, buf);
 			break;
 		case PublicVerificationKey_PR_dilithiumKey: // ora entra qui
+		printf("\nsono ancora vivo\n");
 			rc = fill_Dilithium_keyPair(&cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.dilithiumKey, 2, buf);
 			break;
 		default:
@@ -828,7 +831,7 @@ static int fill_Dilithium_keyPair(DilithiumKey_t *dilithium, int algorithmVersio
 		printf("\nError generating Dilithium key pair\n");
 		return 0;
 	}
-
+	
 	/* load Private Key */
 	FILE* f = fopen(keyPath, "wb");
 	if (f == NULL)
@@ -836,15 +839,16 @@ static int fill_Dilithium_keyPair(DilithiumKey_t *dilithium, int algorithmVersio
 		perror(keyPath);
 		return -1;
 	}
-	fwrite(dilithium->key.size, 1, OQS_SIG_dilithium_2_length_secret_key, f);
+	fwrite(dilithium->key.buf, 1, OQS_SIG_dilithium_2_length_secret_key, f);
+	
 	fclose(f);
-
+	
 	/* load Public Key */
 	void *key = NULL;
 	char *e_pub = keyPath + strlen(keyPath);
 	keyPath = strcat(keyPath, EXT_PUB);
 	
-	FILE* f = fopen(keyPath, "wb");
+	f = fopen(keyPath, "wb");
 	if (f == NULL)
 	{
 		perror(keyPath);
@@ -874,7 +878,7 @@ static void _fill_curve_point(EccP384CurvePoint_t *point, int fsize, const char 
 	}
 }
 
-static int(EccP384CurvePoint_t *point, ecc_curve_id curveType, char *keyPath)
+static int fill_curve_point_eccP384(EccP384CurvePoint_t *point, ecc_curve_id curveType, char *keyPath)
 {
 	char x[48], y[48];
 	int compressed_y;

@@ -24,11 +24,12 @@
  asncodec/Duration.h asncodec/SubjectAssurance.h \
  asncodec/VerificationKeyIndicator.h asncodec/PublicVerificationKey.h \
  asncodec/EccP256CurvePoint.h asncodec/EccP384CurvePoint.h \
- asncodec/ReconstructionValue.h asncodec/BIT_STRING.h \
- asncodec/SequenceOfAppExtensions.h asncodec/asn_SEQUENCE_OF.h \
- asncodec/asn_SET_OF.h asncodec/constr_SEQUENCE_OF.h \
- asncodec/constr_SET_OF.h asncodec/AppExtension.h asncodec/ExtId.h \
- asncodec/ANY.h asncodec/asn_ioc.h asncodec/OperatingOrganizationId.h \
+ asncodec/DilithiumKey.h asncodec/ReconstructionValue.h \
+ asncodec/BIT_STRING.h asncodec/SequenceOfAppExtensions.h \
+ asncodec/asn_SEQUENCE_OF.h asncodec/asn_SET_OF.h \
+ asncodec/constr_SEQUENCE_OF.h asncodec/constr_SET_OF.h \
+ asncodec/AppExtension.h asncodec/ExtId.h asncodec/ANY.h \
+ asncodec/asn_ioc.h asncodec/OperatingOrganizationId.h \
  asncodec/OBJECT_IDENTIFIER.h asncodec/OPEN_TYPE.h \
  asncodec/SequenceOfCertIssueExtensions.h asncodec/CertIssueExtension.h \
  asncodec/SequenceOfCertRequestExtensions.h \
@@ -51,8 +52,8 @@
  asncodec/PublicEncryptionKey.h asncodec/SymmAlgorithm.h \
  asncodec/BasePublicEncryptionKey.h asncodec/Signature.h \
  asncodec/EcdsaP256Signature.h asncodec/EcdsaP384Signature.h \
- asncodec/EcsigP256Signature.h asncodec/CountryOnly.h \
- asncodec/xer_support.h \
+ asncodec/EcsigP256Signature.h asncodec/DilithiumSignature.h \
+ asncodec/CountryOnly.h asncodec/xer_support.h \
  asncodec/../../../liboqs/build/include/oqs/sig_dilithium.h \
  /root/Project_FsMsGen/liboqs/build/include/oqs/oqs.h \
  /root/Project_FsMsGen/liboqs/build/include/oqs/oqsconfig.h \
