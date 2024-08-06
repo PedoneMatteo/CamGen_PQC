@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/AprvHashCalculationInput.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/AprvHashCalculationInput.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AprvHashCalculationInput.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AprvHashCalculationInput.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

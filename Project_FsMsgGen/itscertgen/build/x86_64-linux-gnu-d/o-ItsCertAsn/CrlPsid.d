@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CrlPsid.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CrlPsid.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CrlPsid.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CrlPsid.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Psid.h NativeInteger.h \

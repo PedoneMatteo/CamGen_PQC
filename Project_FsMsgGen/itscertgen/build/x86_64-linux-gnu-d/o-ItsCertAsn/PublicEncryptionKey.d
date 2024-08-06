@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/PublicEncryptionKey.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/PublicEncryptionKey.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PublicEncryptionKey.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PublicEncryptionKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SymmAlgorithm.h \

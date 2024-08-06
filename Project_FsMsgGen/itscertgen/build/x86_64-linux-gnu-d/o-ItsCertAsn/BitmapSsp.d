@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/BitmapSsp.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/BitmapSsp.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/BitmapSsp.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/BitmapSsp.h \
  OCTET_STRING.h asn_application.h asn_system.h asn_codecs.h asn_config.h \

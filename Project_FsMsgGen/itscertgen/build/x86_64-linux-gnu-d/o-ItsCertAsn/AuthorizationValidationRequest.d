@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/AuthorizationValidationRequest.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/AuthorizationValidationRequest.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AuthorizationValidationRequest.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AuthorizationValidationRequest.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SharedAtRequest.h \
@@ -93,6 +93,7 @@
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/VerificationKeyIndicator.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PublicVerificationKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP384CurvePoint.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/DilithiumKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ReconstructionValue.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfAppExtensions.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AppExtension.h \
@@ -111,6 +112,7 @@
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcdsaP256Signature.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcdsaP384Signature.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcsigP256Signature.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/DilithiumSignature.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ToBeSignedData.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HeaderInfo.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Time64.h \
@@ -120,7 +122,6 @@
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Elevation.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/MissingCrlIdentifier.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EncryptionKey.h \
- /root/Project_FsMsGen/itscertgen/certgen/asncodec/SymmetricEncryptionKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfHashedId3.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ContributedExtensionBlocks.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ContributedExtensionBlock.h \

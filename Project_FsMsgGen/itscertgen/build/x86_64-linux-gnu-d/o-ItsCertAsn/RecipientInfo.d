@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/RecipientInfo.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/RecipientInfo.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RecipientInfo.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RecipientInfo.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PreSharedKeyRecipientInfo.h \

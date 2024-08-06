@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/IMaxGroup.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/IMaxGroup.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/IMaxGroup.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/IMaxGroup.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint16.h \

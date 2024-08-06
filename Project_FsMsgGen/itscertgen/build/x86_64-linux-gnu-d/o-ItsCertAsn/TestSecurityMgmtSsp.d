@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/TestSecurityMgmtSsp.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/TestSecurityMgmtSsp.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/TestSecurityMgmtSsp.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/TestSecurityMgmtSsp.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SecurityMgmtSsp.h \

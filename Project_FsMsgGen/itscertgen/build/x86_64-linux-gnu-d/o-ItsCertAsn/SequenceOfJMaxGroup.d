@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfJMaxGroup.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfJMaxGroup.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfJMaxGroup.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfJMaxGroup.h \
  asn_SEQUENCE_OF.h asn_SET_OF.h constr_SEQUENCE_OF.h asn_application.h \

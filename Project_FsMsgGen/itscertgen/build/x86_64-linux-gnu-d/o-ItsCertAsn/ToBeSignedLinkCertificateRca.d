@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/ToBeSignedLinkCertificateRca.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/ToBeSignedLinkCertificateRca.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ToBeSignedLinkCertificateRca.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ToBeSignedLinkCertificateRca.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ToBeSignedLinkCertificate.h \

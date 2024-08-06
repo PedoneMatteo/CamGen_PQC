@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/ThreeDLocation.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/ThreeDLocation.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ThreeDLocation.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ThreeDLocation.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Latitude.h \

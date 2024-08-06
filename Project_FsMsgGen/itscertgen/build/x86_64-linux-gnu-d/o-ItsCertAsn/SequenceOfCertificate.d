@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfCertificate.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfCertificate.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfCertificate.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfCertificate.h \
  asn_SEQUENCE_OF.h asn_SET_OF.h constr_SEQUENCE_OF.h asn_application.h \
@@ -38,6 +38,7 @@
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PublicVerificationKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP256CurvePoint.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP384CurvePoint.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/DilithiumKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ReconstructionValue.h \
  BIT_STRING.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfAppExtensions.h \
@@ -89,4 +90,5 @@
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Signature.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcdsaP256Signature.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcdsaP384Signature.h \
- /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcsigP256Signature.h
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcsigP256Signature.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/DilithiumSignature.h

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/DcDelete.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/DcDelete.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/DcDelete.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/DcDelete.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Url.h IA5String.h \

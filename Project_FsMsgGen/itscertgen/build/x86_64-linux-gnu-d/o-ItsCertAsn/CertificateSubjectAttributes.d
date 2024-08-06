@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CertificateSubjectAttributes.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CertificateSubjectAttributes.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CertificateSubjectAttributes.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CertificateSubjectAttributes.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SubjectAssurance.h \

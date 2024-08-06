@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/AcpcPdu.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/AcpcPdu.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AcpcPdu.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AcpcPdu.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AprvBinaryTree.h \

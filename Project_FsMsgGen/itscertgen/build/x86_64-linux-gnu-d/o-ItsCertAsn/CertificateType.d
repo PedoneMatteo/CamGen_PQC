@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CertificateType.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CertificateType.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CertificateType.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CertificateType.h \
  NativeEnumerated.h NativeInteger.h asn_application.h asn_system.h \

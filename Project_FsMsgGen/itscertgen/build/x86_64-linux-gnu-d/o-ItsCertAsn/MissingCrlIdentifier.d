@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/MissingCrlIdentifier.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/MissingCrlIdentifier.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/MissingCrlIdentifier.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/MissingCrlIdentifier.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedId3.h \

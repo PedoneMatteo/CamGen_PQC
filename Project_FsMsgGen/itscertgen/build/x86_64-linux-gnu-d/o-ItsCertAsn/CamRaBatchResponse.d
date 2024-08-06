@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CamRaBatchResponse.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CamRaBatchResponse.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CamRaBatchResponse.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CamRaBatchResponse.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

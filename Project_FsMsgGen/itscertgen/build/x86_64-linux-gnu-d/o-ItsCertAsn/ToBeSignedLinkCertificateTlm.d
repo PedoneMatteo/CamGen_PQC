@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/ToBeSignedLinkCertificateTlm.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/ToBeSignedLinkCertificateTlm.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ToBeSignedLinkCertificateTlm.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ToBeSignedLinkCertificateTlm.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ToBeSignedLinkCertificate.h \

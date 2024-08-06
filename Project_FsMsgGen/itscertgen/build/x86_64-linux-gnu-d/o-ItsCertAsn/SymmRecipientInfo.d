@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SymmRecipientInfo.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SymmRecipientInfo.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SymmRecipientInfo.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SymmRecipientInfo.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedId8.h \

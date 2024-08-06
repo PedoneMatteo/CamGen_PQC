@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CertificateId.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CertificateId.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CertificateId.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CertificateId.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/LinkageData.h \

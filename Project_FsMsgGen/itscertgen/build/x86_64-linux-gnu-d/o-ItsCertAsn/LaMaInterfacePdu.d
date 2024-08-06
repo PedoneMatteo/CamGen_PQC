@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/LaMaInterfacePdu.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/LaMaInterfacePdu.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/LaMaInterfacePdu.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/LaMaInterfacePdu.h \
  NULL.h asn_application.h asn_system.h asn_codecs.h asn_config.h \

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfPsidSsp.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfPsidSsp.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfPsidSsp.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfPsidSsp.h \
  asn_SEQUENCE_OF.h asn_SET_OF.h constr_SEQUENCE_OF.h asn_application.h \

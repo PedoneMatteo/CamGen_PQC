@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/Ieee1609ContributedHeaderInfoExtension.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/Ieee1609ContributedHeaderInfoExtension.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Ieee1609ContributedHeaderInfoExtension.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Ieee1609ContributedHeaderInfoExtension.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Extension.h \

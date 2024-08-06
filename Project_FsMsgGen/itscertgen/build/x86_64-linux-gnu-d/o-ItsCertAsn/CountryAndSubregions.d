@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CountryAndSubregions.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CountryAndSubregions.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CountryAndSubregions.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CountryAndSubregions.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/UnCountryId.h \

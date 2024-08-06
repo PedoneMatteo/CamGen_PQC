@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/PsidSspRange.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/PsidSspRange.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PsidSspRange.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PsidSspRange.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Psid.h NativeInteger.h \

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/ToBeSignedCrl.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/ToBeSignedCrl.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ToBeSignedCrl.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ToBeSignedCrl.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Version.h \

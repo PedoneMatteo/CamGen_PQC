@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/BasePublicEncryptionKey.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/BasePublicEncryptionKey.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/BasePublicEncryptionKey.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/BasePublicEncryptionKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP256CurvePoint.h \

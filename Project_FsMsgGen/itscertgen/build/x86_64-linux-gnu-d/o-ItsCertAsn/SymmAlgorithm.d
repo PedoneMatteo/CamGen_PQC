@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SymmAlgorithm.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SymmAlgorithm.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SymmAlgorithm.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SymmAlgorithm.h \
  NativeEnumerated.h NativeInteger.h asn_application.h asn_system.h \

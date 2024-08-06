@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/HashedData.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/HashedData.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedData.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedData.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedId32.h \

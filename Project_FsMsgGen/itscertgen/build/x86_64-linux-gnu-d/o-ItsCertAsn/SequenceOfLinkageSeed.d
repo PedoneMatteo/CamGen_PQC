@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfLinkageSeed.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfLinkageSeed.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfLinkageSeed.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfLinkageSeed.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/LinkageSeed.h \

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/Time64.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/Time64.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Time64.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Time64.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint64.h INTEGER.h \

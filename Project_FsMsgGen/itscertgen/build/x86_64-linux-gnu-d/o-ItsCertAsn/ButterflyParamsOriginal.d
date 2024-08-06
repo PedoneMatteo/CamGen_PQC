@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/ButterflyParamsOriginal.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/ButterflyParamsOriginal.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ButterflyParamsOriginal.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ButterflyParamsOriginal.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ButterflyExpansion.h \

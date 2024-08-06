@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/IndividualRevocation.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/IndividualRevocation.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/IndividualRevocation.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/IndividualRevocation.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/LinkageSeed.h \

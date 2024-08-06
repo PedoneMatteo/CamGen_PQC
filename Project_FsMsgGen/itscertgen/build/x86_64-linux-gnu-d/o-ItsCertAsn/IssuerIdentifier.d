@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/IssuerIdentifier.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/IssuerIdentifier.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/IssuerIdentifier.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/IssuerIdentifier.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedId8.h \

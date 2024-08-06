@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/GeographicRegion.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/GeographicRegion.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/GeographicRegion.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/GeographicRegion.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CircularRegion.h \

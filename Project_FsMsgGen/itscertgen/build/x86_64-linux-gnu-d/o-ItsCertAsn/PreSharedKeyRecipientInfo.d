@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/PreSharedKeyRecipientInfo.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/PreSharedKeyRecipientInfo.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PreSharedKeyRecipientInfo.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PreSharedKeyRecipientInfo.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedId8.h \

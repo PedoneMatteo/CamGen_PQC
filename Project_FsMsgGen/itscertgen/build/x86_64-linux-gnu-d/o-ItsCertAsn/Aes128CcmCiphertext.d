@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/Aes128CcmCiphertext.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/Aes128CcmCiphertext.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Aes128CcmCiphertext.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Aes128CcmCiphertext.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/One28BitCcmCiphertext.h \

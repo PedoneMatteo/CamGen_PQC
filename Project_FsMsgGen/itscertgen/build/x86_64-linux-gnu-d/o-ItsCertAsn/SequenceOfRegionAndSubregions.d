@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfRegionAndSubregions.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfRegionAndSubregions.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfRegionAndSubregions.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfRegionAndSubregions.h \
  asn_SEQUENCE_OF.h asn_SET_OF.h constr_SEQUENCE_OF.h asn_application.h \

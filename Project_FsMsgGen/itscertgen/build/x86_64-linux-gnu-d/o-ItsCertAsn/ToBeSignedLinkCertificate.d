@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/ToBeSignedLinkCertificate.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/ToBeSignedLinkCertificate.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ToBeSignedLinkCertificate.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ToBeSignedLinkCertificate.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Time32.h \

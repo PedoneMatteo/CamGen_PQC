@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SubjectAssurance.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SubjectAssurance.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SubjectAssurance.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SubjectAssurance.h \
  OCTET_STRING.h asn_application.h asn_system.h asn_codecs.h asn_config.h \

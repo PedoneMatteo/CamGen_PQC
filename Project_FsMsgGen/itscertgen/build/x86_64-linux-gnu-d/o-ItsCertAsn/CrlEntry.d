@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CrlEntry.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CrlEntry.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CrlEntry.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CrlEntry.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedId8.h \

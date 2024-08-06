@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/AprvBinaryTree.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/AprvBinaryTree.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AprvBinaryTree.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AprvBinaryTree.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

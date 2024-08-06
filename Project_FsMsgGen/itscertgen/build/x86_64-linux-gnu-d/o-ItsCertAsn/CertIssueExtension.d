@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CertIssueExtension.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CertIssueExtension.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CertIssueExtension.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CertIssueExtension.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ExtId.h \

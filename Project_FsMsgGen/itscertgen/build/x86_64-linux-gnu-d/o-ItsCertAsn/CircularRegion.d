@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CircularRegion.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CircularRegion.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CircularRegion.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CircularRegion.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/TwoDLocation.h \

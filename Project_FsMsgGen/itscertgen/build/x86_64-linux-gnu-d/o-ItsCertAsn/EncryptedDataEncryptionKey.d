@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/EncryptedDataEncryptionKey.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/EncryptedDataEncryptionKey.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EncryptedDataEncryptionKey.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EncryptedDataEncryptionKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EciesP256EncryptedKey.h \

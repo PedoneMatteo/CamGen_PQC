@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/EtsiTs103097Data-Unsecured.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/EtsiTs103097Data-Unsecured.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EtsiTs103097Data-Unsecured.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EtsiTs103097Data-Unsecured.h \
  asn_application.h asn_system.h asn_codecs.h asn_config.h constr_TYPE.h \

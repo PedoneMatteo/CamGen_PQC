@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CrlSignerSsp.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CrlSignerSsp.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CrlSignerSsp.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CrlSignerSsp.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

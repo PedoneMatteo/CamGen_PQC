@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/RegionAndSubregions.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/RegionAndSubregions.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RegionAndSubregions.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RegionAndSubregions.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/Uint64.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/Uint64.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint64.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint64.h INTEGER.h \
  asn_application.h asn_system.h asn_codecs.h asn_config.h constr_TYPE.h \

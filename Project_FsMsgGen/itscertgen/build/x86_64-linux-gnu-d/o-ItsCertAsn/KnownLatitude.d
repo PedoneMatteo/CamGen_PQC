@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/KnownLatitude.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/KnownLatitude.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/KnownLatitude.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/KnownLatitude.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/NinetyDegreeInt.h \

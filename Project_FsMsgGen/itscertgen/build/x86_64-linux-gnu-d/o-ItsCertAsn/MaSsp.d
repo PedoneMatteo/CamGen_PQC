@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/MaSsp.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/MaSsp.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/MaSsp.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/MaSsp.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CrlContents.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CrlContents.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CrlContents.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CrlContents.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/ExtensionModuleVersion.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/ExtensionModuleVersion.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ExtensionModuleVersion.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ExtensionModuleVersion.h \
  NativeInteger.h asn_application.h asn_system.h asn_codecs.h asn_config.h \

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/RaEeCertAck.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/RaEeCertAck.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RaEeCertAck.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RaEeCertAck.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

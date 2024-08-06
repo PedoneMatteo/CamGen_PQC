@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CtlRootCaEntry.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CtlRootCaEntry.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CtlRootCaEntry.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CtlRootCaEntry.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedId32.h \

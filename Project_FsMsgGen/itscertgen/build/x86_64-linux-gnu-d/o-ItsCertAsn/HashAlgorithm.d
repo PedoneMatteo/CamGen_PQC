@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/HashAlgorithm.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/HashAlgorithm.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashAlgorithm.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashAlgorithm.h \
  NativeEnumerated.h NativeInteger.h asn_application.h asn_system.h \

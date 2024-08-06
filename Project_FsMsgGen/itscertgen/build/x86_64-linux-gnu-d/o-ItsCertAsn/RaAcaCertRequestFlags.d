@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/RaAcaCertRequestFlags.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/RaAcaCertRequestFlags.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RaAcaCertRequestFlags.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RaAcaCertRequestFlags.h \
  BIT_STRING.h OCTET_STRING.h asn_application.h asn_system.h asn_codecs.h \

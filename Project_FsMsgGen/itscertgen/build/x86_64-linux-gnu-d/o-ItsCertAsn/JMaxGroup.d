@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/JMaxGroup.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/JMaxGroup.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/JMaxGroup.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/JMaxGroup.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/FullIeeeTbsCtl.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/FullIeeeTbsCtl.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/FullIeeeTbsCtl.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/FullIeeeTbsCtl.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Ieee1609dot2dot1MsctlType.h \

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/ReconstructionValue.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/ReconstructionValue.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ReconstructionValue.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ReconstructionValue.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP256CurvePoint.h \

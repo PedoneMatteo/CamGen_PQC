@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/GroupSingleSeedCrlEntry.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/GroupSingleSeedCrlEntry.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/GroupSingleSeedCrlEntry.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/GroupSingleSeedCrlEntry.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint16.h \

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/RootCaSsp.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/RootCaSsp.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RootCaSsp.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RootCaSsp.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

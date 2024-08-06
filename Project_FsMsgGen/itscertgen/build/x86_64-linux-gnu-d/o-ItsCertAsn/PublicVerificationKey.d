@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/PublicVerificationKey.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/PublicVerificationKey.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PublicVerificationKey.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PublicVerificationKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP256CurvePoint.h \
@@ -7,4 +7,8 @@
  constraints.h asn_system.h oer_decoder.h oer_support.h oer_encoder.h \
  NULL.h constr_SEQUENCE.h constr_CHOICE.h asn_internal.h \
  asn_application.h \
- /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP384CurvePoint.h
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP384CurvePoint.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/DilithiumKey.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \
+ NativeInteger.h INTEGER.h asn_codecs_prim.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint16.h

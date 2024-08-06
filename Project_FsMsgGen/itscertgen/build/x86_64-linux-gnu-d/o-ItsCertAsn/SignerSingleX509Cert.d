@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SignerSingleX509Cert.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SignerSingleX509Cert.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SignerSingleX509Cert.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SignerSingleX509Cert.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/X509SignerIdentifier.h \

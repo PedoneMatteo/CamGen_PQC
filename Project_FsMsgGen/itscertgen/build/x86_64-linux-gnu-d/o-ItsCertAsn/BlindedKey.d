@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/BlindedKey.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/BlindedKey.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/BlindedKey.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/BlindedKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP256CurvePoint.h \

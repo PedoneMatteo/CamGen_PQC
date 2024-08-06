@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/ValidityPeriod.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/ValidityPeriod.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ValidityPeriod.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ValidityPeriod.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Time32.h \

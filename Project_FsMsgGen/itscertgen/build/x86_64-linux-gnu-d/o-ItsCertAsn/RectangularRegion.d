@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/RectangularRegion.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/RectangularRegion.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RectangularRegion.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RectangularRegion.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/TwoDLocation.h \

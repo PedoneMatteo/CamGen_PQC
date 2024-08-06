@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/Signature.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/Signature.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Signature.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Signature.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcdsaP256Signature.h \
@@ -10,4 +10,8 @@
  asn_application.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcdsaP384Signature.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP384CurvePoint.h \
- /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcsigP256Signature.h
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcsigP256Signature.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/DilithiumSignature.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \
+ NativeInteger.h INTEGER.h asn_codecs_prim.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint16.h

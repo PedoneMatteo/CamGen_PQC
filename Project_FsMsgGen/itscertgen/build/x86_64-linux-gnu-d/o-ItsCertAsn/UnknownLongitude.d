@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/UnknownLongitude.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/UnknownLongitude.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/UnknownLongitude.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/UnknownLongitude.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/OneEightyDegreeInt.h \

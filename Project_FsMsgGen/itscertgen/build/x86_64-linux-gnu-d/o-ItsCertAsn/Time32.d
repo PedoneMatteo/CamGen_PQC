@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/Time32.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/Time32.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Time32.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Time32.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint32.h \

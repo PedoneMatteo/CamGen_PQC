@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/PduFunctionalType.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/PduFunctionalType.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PduFunctionalType.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PduFunctionalType.h \
  NativeInteger.h asn_application.h asn_system.h asn_codecs.h asn_config.h \

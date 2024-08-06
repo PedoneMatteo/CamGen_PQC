@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/EtsiTs102941CrlRequest.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/EtsiTs102941CrlRequest.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EtsiTs102941CrlRequest.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EtsiTs102941CrlRequest.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedId8.h \

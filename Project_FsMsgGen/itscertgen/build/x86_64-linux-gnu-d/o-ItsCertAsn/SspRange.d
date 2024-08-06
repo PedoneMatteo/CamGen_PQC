@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SspRange.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SspRange.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SspRange.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SspRange.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfOctetString.h \

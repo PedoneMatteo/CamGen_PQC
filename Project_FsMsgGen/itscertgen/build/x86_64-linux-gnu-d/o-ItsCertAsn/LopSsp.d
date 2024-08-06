@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/LopSsp.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/LopSsp.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/LopSsp.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/LopSsp.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

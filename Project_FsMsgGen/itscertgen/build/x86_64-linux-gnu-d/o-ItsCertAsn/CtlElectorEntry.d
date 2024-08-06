@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CtlElectorEntry.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CtlElectorEntry.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CtlElectorEntry.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CtlElectorEntry.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedId48.h \

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SecurityMgmtPsid.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SecurityMgmtPsid.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SecurityMgmtPsid.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SecurityMgmtPsid.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Psid.h NativeInteger.h \

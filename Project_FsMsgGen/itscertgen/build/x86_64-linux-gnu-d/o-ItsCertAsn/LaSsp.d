@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/LaSsp.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/LaSsp.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/LaSsp.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/LaSsp.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

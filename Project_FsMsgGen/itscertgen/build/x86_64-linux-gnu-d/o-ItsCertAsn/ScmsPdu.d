@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/ScmsPdu.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/ScmsPdu.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ScmsPdu.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ScmsPdu.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \
@@ -38,6 +38,7 @@
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PublicVerificationKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP256CurvePoint.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP384CurvePoint.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/DilithiumKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ReconstructionValue.h \
  BIT_STRING.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfAppExtensions.h \
@@ -91,6 +92,7 @@
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcdsaP256Signature.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcdsaP384Signature.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcsigP256Signature.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/DilithiumSignature.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AcaLaInterfacePdu.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AcaMaInterfacePdu.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AcaRaInterfacePdu.h \
@@ -126,7 +128,6 @@
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Elevation.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/MissingCrlIdentifier.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EncryptionKey.h \
- /root/Project_FsMsGen/itscertgen/certgen/asncodec/SymmetricEncryptionKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfHashedId3.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ContributedExtensionBlocks.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ContributedExtensionBlock.h \

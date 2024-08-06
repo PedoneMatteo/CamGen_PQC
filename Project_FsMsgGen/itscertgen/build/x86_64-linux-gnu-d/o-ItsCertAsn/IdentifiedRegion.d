@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/IdentifiedRegion.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/IdentifiedRegion.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/IdentifiedRegion.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/IdentifiedRegion.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/UnCountryId.h \

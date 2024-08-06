@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/MaRaInterfacePdu.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/MaRaInterfacePdu.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/MaRaInterfacePdu.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/MaRaInterfacePdu.h \
  NULL.h asn_application.h asn_system.h asn_codecs.h asn_config.h \

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/X509Certificate.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/X509Certificate.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/X509Certificate.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/X509Certificate.h \
  OCTET_STRING.h asn_application.h asn_system.h asn_codecs.h asn_config.h \

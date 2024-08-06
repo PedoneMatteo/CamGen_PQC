@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SharedAtRequest.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SharedAtRequest.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SharedAtRequest.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SharedAtRequest.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedId8.h \

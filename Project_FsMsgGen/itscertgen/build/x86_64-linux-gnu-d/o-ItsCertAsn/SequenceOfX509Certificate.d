@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfX509Certificate.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfX509Certificate.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfX509Certificate.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfX509Certificate.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/X509Certificate.h \

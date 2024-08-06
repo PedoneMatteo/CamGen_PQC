@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/DcEntry.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/DcEntry.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/DcEntry.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/DcEntry.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Url.h IA5String.h \

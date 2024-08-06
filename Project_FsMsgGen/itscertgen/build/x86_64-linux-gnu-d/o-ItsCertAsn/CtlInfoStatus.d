@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CtlInfoStatus.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CtlInfoStatus.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CtlInfoStatus.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CtlInfoStatus.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CtlSeriesId.h \

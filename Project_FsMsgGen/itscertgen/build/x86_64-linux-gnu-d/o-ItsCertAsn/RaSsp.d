@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/RaSsp.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/RaSsp.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RaSsp.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RaSsp.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

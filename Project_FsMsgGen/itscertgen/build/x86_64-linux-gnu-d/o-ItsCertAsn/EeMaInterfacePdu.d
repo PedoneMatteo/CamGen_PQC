@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/EeMaInterfacePdu.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/EeMaInterfacePdu.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EeMaInterfacePdu.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EeMaInterfacePdu.h \
  NULL.h asn_application.h asn_system.h asn_codecs.h asn_config.h \

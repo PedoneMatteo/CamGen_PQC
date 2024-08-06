@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SymmetricCiphertext.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SymmetricCiphertext.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SymmetricCiphertext.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SymmetricCiphertext.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/One28BitCcmCiphertext.h \

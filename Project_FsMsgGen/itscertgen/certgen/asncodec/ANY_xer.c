@@ -5,7 +5,7 @@
  */
 #include <asn_internal.h>
 #include <ANY.h>
-#include <xer_encoder.h>  /* Encoder into XER (XML, text) */
+
 asn_enc_rval_t
 ANY_encode_xer(const asn_TYPE_descriptor_t *td, const void *sptr, int ilevel,
                enum xer_encoder_flags_e flags, asn_app_consume_bytes_f *cb,

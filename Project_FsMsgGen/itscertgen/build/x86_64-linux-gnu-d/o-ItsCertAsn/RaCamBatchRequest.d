@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/RaCamBatchRequest.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/RaCamBatchRequest.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RaCamBatchRequest.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/RaCamBatchRequest.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

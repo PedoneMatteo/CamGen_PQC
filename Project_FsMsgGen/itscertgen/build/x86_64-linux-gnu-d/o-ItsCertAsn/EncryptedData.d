@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/EncryptedData.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/EncryptedData.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EncryptedData.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EncryptedData.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfRecipientInfo.h \

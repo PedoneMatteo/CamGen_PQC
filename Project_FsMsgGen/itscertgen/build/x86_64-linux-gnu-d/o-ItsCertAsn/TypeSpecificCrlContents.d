@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/TypeSpecificCrlContents.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/TypeSpecificCrlContents.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/TypeSpecificCrlContents.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/TypeSpecificCrlContents.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ToBeSignedHashIdCrl.h \

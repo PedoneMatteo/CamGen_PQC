@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfLAGroup.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfLAGroup.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfLAGroup.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfLAGroup.h \
  asn_SEQUENCE_OF.h asn_SET_OF.h constr_SEQUENCE_OF.h asn_application.h \

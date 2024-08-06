@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/AcaSsp.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/AcaSsp.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AcaSsp.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AcaSsp.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

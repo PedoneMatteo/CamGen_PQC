@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/VerificationKeyIndicator.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/VerificationKeyIndicator.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/VerificationKeyIndicator.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/VerificationKeyIndicator.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PublicVerificationKey.h \
@@ -9,4 +9,8 @@
  NULL.h constr_SEQUENCE.h constr_CHOICE.h asn_internal.h \
  asn_application.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP384CurvePoint.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/DilithiumKey.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \
+ NativeInteger.h INTEGER.h asn_codecs_prim.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint16.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ReconstructionValue.h

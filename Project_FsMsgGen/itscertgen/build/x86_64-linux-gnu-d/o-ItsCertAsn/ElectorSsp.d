@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/ElectorSsp.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/ElectorSsp.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ElectorSsp.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ElectorSsp.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

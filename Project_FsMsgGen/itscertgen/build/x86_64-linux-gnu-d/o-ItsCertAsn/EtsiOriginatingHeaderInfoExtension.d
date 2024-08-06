@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/EtsiOriginatingHeaderInfoExtension.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/EtsiOriginatingHeaderInfoExtension.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EtsiOriginatingHeaderInfoExtension.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EtsiOriginatingHeaderInfoExtension.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Extension.h \

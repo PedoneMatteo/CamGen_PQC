@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/ToBeSignedCtlSignature.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/ToBeSignedCtlSignature.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ToBeSignedCtlSignature.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ToBeSignedCtlSignature.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CtlSeriesId.h \

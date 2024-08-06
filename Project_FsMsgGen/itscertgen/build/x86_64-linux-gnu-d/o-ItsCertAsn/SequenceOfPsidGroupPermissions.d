@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfPsidGroupPermissions.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfPsidGroupPermissions.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfPsidGroupPermissions.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfPsidGroupPermissions.h \
  asn_SEQUENCE_OF.h asn_SET_OF.h constr_SEQUENCE_OF.h asn_application.h \

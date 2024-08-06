@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/Latitude.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/Latitude.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Latitude.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Latitude.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/NinetyDegreeInt.h \

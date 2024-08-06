@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/IndividualAprv.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/IndividualAprv.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/IndividualAprv.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/IndividualAprv.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \

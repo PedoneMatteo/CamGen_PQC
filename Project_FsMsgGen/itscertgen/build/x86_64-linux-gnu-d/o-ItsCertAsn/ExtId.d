@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/ExtId.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/ExtId.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ExtId.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ExtId.h \
  NativeInteger.h asn_application.h asn_system.h asn_codecs.h asn_config.h \

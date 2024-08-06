@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/KnownLongitude.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/KnownLongitude.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/KnownLongitude.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/KnownLongitude.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/OneEightyDegreeInt.h \

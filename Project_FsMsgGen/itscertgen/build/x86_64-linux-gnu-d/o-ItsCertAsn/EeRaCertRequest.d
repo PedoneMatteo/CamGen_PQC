@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/EeRaCertRequest.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/EeRaCertRequest.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EeRaCertRequest.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EeRaCertRequest.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \
@@ -29,6 +29,7 @@
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PublicVerificationKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP256CurvePoint.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP384CurvePoint.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/DilithiumKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ReconstructionValue.h \
  BIT_STRING.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfAppExtensions.h \

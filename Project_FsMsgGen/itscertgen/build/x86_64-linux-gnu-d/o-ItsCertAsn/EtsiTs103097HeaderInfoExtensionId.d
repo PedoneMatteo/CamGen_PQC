@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/EtsiTs103097HeaderInfoExtensionId.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/EtsiTs103097HeaderInfoExtensionId.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EtsiTs103097HeaderInfoExtensionId.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EtsiTs103097HeaderInfoExtensionId.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ExtId.h \

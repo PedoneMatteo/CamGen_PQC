@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CtlDelete.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CtlDelete.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CtlDelete.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CtlDelete.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedId8.h \

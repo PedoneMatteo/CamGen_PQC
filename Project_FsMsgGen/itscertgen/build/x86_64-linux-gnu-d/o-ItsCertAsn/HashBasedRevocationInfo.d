@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/HashBasedRevocationInfo.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/HashBasedRevocationInfo.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashBasedRevocationInfo.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashBasedRevocationInfo.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedId10.h \

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/EeRaDownloadRequest.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/EeRaDownloadRequest.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EeRaDownloadRequest.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EeRaDownloadRequest.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Time32.h \

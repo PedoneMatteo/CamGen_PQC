@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/Ieee1609dot2dot1MsctlType.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/Ieee1609dot2dot1MsctlType.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Ieee1609dot2dot1MsctlType.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Ieee1609dot2dot1MsctlType.h \
  NativeInteger.h asn_application.h asn_system.h asn_codecs.h asn_config.h \

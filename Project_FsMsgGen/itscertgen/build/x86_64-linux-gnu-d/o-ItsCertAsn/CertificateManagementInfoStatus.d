@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CertificateManagementInfoStatus.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CertificateManagementInfoStatus.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CertificateManagementInfoStatus.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CertificateManagementInfoStatus.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfCrlInfoStatus.h \

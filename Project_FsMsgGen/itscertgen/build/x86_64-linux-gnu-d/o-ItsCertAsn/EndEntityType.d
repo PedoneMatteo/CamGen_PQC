@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/EndEntityType.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/EndEntityType.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EndEntityType.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EndEntityType.h \
  BIT_STRING.h OCTET_STRING.h asn_application.h asn_system.h asn_codecs.h \

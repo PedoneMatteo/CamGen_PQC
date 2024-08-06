@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfOctetString.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfOctetString.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfOctetString.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfOctetString.h \
  OCTET_STRING.h asn_application.h asn_system.h asn_codecs.h asn_config.h \

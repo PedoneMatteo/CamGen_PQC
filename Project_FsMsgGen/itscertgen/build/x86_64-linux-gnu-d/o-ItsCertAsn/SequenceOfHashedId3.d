@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfHashedId3.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/SequenceOfHashedId3.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfHashedId3.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfHashedId3.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedId3.h \

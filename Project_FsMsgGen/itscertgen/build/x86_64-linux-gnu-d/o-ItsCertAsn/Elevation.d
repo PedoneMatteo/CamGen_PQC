@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/Elevation.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/Elevation.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Elevation.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Elevation.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint16.h \

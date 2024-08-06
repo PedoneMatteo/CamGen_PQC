@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/CrlInfoStatus.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/CrlInfoStatus.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CrlInfoStatus.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CrlInfoStatus.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedId8.h \

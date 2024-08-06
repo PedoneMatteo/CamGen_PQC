@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/EcdsaP256Signature.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/EcdsaP256Signature.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcdsaP256Signature.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EcdsaP256Signature.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP256CurvePoint.h \

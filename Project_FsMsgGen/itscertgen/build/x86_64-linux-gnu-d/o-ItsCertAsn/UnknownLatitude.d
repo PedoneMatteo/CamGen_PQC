@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/UnknownLatitude.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/UnknownLatitude.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/UnknownLatitude.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/UnknownLatitude.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/NinetyDegreeInt.h \

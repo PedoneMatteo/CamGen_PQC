@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/PKRecipientInfo.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/PKRecipientInfo.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PKRecipientInfo.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PKRecipientInfo.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HashedId8.h \

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/AuthorizationValidationResponseCode.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/AuthorizationValidationResponseCode.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AuthorizationValidationResponseCode.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AuthorizationValidationResponseCode.h \
  NativeEnumerated.h NativeInteger.h asn_application.h asn_system.h \

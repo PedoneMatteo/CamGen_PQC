@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/AcpcSsp.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/AcpcSsp.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AcpcSsp.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/AcpcSsp.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/CamSsp.h \

@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/ContributedExtensionBlock.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/ContributedExtensionBlock.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ContributedExtensionBlock.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ContributedExtensionBlock.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/HeaderInfoContributorId.h \

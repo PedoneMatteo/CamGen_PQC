@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/LAGroup.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/LAGroup.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/LAGroup.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/LAGroup.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/LaId.h OCTET_STRING.h \

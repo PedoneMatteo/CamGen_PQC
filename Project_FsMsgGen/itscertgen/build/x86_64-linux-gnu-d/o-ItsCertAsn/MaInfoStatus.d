@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/MaInfoStatus.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/MaInfoStatus.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/MaInfoStatus.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/MaInfoStatus.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfPsid.h \

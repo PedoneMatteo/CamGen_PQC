@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/OperatingOrganizationId.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/OperatingOrganizationId.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/OperatingOrganizationId.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/OperatingOrganizationId.h \
  OBJECT_IDENTIFIER.h asn_application.h asn_system.h asn_codecs.h \

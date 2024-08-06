@@ -1,4 +1,4 @@
-/root/Project_FsMsGen/itscertgen/build/x86_64-linux-gnu-d/o-ItsCertAsn/TwoDLocation.o: \
+../../build/x86_64-linux-gnu-d/o-ItsCertAsn/TwoDLocation.o: \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/TwoDLocation.c \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/TwoDLocation.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Latitude.h \
