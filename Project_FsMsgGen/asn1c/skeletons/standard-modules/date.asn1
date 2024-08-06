@@ -1,0 +1,24 @@
+﻿ASN1C-DATE
+DEFINITIONS ::= BEGIN
+
+YEAR-ENCODING ::= CHOICE { -- 2 bits for choice determinant
+  immediate   [0] INTEGER (2005..2020), -- 4 bits
+  near-future [1] INTEGER (2021..2276), -- 8 bits
+  near-past   [2] INTEGER (1749..2004), -- 8 bits
+  remainder   [3] INTEGER (MIN..1748 | 2277..MAX)
+}
+
+YEAR-MONTH-ENCODING ::= SEQUENCE {
+  year YEAR-ENCODING,
+  month INTEGER (1..12) -- 4 bits --
+}
+
+DATE-ENCODING ::= SEQUENCE {
+  year YEAR-ENCODING,
+  month INTEGER (1..12), -- 4 bits
+  day INTEGER (1..31) -- 5 bits --
+}
+
+DATE ::= DATE-ENCODING
+
+END

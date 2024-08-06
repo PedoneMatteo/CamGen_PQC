@@ -1,0 +1,17 @@
+ModuleClassRecursive { iso org(3) dod(6) internet(1) private(4) enterprise(1)
+	spelio(9363) software(1) asn1c(5) test(1) 103 1 }
+DEFINITIONS ::=
+BEGIN
+
+REF-ID ::= TYPE-IDENTIFIER
+
+REF-ID1 ::= REF-ID
+
+REF-ID2 ::= REF-ID1
+
+RefID ::= SEQUENCE {
+    field	 REF-ID2.&id,
+    params	 REF-ID2.&Type
+}
+
+END
