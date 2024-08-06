@@ -216,12 +216,13 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 											const asn_oer_constraints_t *constraints, const void *sptr,
 											asn_app_consume_bytes_f *cb, void *app_key)
 {
-	Signature_t *s = (Signature_t *)sptr;
+	Signature_t *s = (Signature_t *)sptr;printf("\n\n hasIDDDD\n\n");
 	if (is_CurvePoint_empty(&s->choice.ecdsaNistP256Signature.rSig))
 	{
 		// look for signer private key
 		ecc_curve_id alg = _pk_type_to_curveid[s->present];
 		ecc_hash_id hashId = _pk_type_to_hashid[s->present];
+		
 		const char *sName = _signerName;
 
 		if (sName == NULL && _cert->issuer.present == IssuerIdentifier_PR_self)
@@ -621,7 +622,6 @@ int main(int argc, char **argv)
 			rc = fill_curve_point_eccP384(&cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.ecdsaNistP384, ecies_nistp384, buf);
 			break;
 		case PublicVerificationKey_PR_dilithiumKey: // ora entra qui
-		printf("\nsono ancora vivo\n");
 			rc = fill_Dilithium_keyPair(&cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.choice.dilithiumKey, 2, buf);
 			break;
 		default:

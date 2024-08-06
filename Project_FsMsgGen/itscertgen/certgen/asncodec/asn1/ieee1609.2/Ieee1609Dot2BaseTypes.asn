@@ -990,9 +990,9 @@ EcencP256EncryptedKey ::= SEQUENCE  {
  * operations.
  */
 EncryptionKey ::= CHOICE {
-  /* public    PublicEncryptionKey,
-  symmetric SymmetricEncryptionKey */
-  dilithiumKey    DilithiumKey  /*added (commented also the two above lines)*/
+  public    PublicEncryptionKey,
+  symmetric SymmetricEncryptionKey,
+  dilithiumKey    DilithiumKey  /*added */
 }
 
 /**

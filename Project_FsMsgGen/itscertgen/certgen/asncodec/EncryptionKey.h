@@ -7,6 +7,8 @@
 
 
 /* Including external dependencies */
+#include "PublicEncryptionKey.h"
+#include "SymmetricEncryptionKey.h"
 #include "DilithiumKey.h"
 #include <constr_CHOICE.h>
 #ifndef	_EncryptionKey_H_
@@ -22,6 +24,8 @@ extern "C" {
 /* Dependencies */
 typedef enum EncryptionKey_PR {
 	EncryptionKey_PR_NOTHING,	/* No components present */
+	EncryptionKey_PR_public,
+	EncryptionKey_PR_symmetric,
 	EncryptionKey_PR_dilithiumKey
 } EncryptionKey_PR;
 
@@ -29,6 +33,8 @@ typedef enum EncryptionKey_PR {
 typedef struct EncryptionKey {
 	EncryptionKey_PR present;
 	union EncryptionKey_u {
+		PublicEncryptionKey_t	 Public;
+		SymmetricEncryptionKey_t	 symmetric;
 		DilithiumKey_t	 dilithiumKey;
 	} choice;
 	
@@ -39,7 +45,7 @@ typedef struct EncryptionKey {
 /* Implementation */
 extern asn_TYPE_descriptor_t asn_DEF_EncryptionKey;
 extern asn_CHOICE_specifics_t asn_SPC_EncryptionKey_specs_1;
-extern asn_TYPE_member_t asn_MBR_EncryptionKey_1[1];
+extern asn_TYPE_member_t asn_MBR_EncryptionKey_1[3];
 
 #ifdef __cplusplus
 }
