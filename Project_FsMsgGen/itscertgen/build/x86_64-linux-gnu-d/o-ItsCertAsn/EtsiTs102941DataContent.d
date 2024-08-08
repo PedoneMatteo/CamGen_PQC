@@ -121,6 +121,7 @@
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/Elevation.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/MissingCrlIdentifier.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EncryptionKey.h \
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/SymmetricEncryptionKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SequenceOfHashedId3.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ContributedExtensionBlocks.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/ContributedExtensionBlock.h \

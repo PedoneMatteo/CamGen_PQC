@@ -10,9 +10,7 @@
  asn_application.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP384CurvePoint.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/DilithiumKey.h \
- /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h \
- NativeInteger.h INTEGER.h asn_codecs_prim.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/PublicEncryptionKey.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SymmAlgorithm.h \
- NativeEnumerated.h \
+ NativeEnumerated.h NativeInteger.h INTEGER.h asn_codecs_prim.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/BasePublicEncryptionKey.h

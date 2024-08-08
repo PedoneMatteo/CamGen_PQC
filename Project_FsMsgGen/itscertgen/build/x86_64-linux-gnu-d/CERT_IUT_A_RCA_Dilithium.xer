@@ -154,15 +154,14 @@
     <verifyKeyIndicator>
         <verificationKey>
         <dilithium2>
-          <publicKey>
+          <publicKey/>
         </dilithium2>
       </verificationKey>
     </verifyKeyIndicator>
   </toBeSigned>
   <signature>
     <dilithiumSignature>
-      <signatureValue>  <!-- insert here the signature Dilithium -->
-      </signatureValue>
+      <signature/>  <!-- insert here the signature Dilithium -->
     </dilithiumSignature>
   </signature>
 </EtsiTs103097Certificate>

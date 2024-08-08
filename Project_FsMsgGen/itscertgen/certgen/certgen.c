@@ -194,15 +194,45 @@ static size_t _pk_type_to_hashsize[] = {
 	sm3_hash_size	  // Signature_PR_sm2Signature
 };
 
+static void *search_private_Dilithium_key(const char *sName, int alg)
+{
+	char *secretKey = malloc(OQS_SIG_dilithium_2_length_secret_key);
+	char *path = cvstrdup(_keyPath, "/", sName, EXT_VKEY, NULL);
+	FILE *f = fopen(path, "rb");
+
+	if (f == NULL)
+	{
+		fprintf(stderr, "Error: impossible to open the file%s\n", path);
+		free(secretKey);
+		free(path);
+		return NULL;
+	}
+
+	// read content of file
+	size_t bytesRead = fread(secretKey, 1, OQS_SIG_dilithium_2_length_secret_key, f);
+
+	if (bytesRead != OQS_SIG_dilithium_2_length_secret_key)
+	{
+		fprintf(stderr, "Error: wrong len of bytes read %s\n", path);
+		free(secretKey);
+		secretKey = NULL;
+	}
+
+	fclose(f);
+	free(path);
+
+	return secretKey;
+}
+
 static void *search_private_key(const char *sName, ecc_curve_id alg)
 {
 	char *pk = cvstrdup(_keyPath, "/", sName, EXT_VKEY, NULL);
+
 	void *k = ecc_key_private_load(pk, alg);
 	if (k == NULL)
 	{
 		free(pk);
 		pk = cvstrdup(_searchPath, "/", sName, EXT_VKEY, NULL);
-		k = ecc_key_private_load(pk, alg);
 		if (k == NULL)
 		{
 			fprintf(stderr, "%s: Private key not found\n", pk);
@@ -216,14 +246,20 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 											const asn_oer_constraints_t *constraints, const void *sptr,
 											asn_app_consume_bytes_f *cb, void *app_key)
 {
-	Signature_t *s = (Signature_t *)sptr;printf("\n\n hasIDDDD\n\n");
-	if (is_CurvePoint_empty(&s->choice.ecdsaNistP256Signature.rSig))
+	Signature_t *s = (Signature_t *)sptr;
+
+	if (is_CurvePoint_empty(&s->choice.ecdsaNistP256Signature.rSig) && _tbsHashType < 6)
 	{
+		printf("\t\n - - - Signature oer encoder - - - \n");
 		// look for signer private key
 		ecc_curve_id alg = _pk_type_to_curveid[s->present];
+		printf("alg = %ld\n", alg);
 		ecc_hash_id hashId = _pk_type_to_hashid[s->present];
-		
+		printf("hashId = %ld\n", hashId);
+
 		const char *sName = _signerName;
+		printf("signerName = %s\n", _signerName);
+		printf(" issuer present? = %d\n", _cert->issuer.present);
 
 		if (sName == NULL && _cert->issuer.present == IssuerIdentifier_PR_self)
 			sName = _certName;
@@ -271,6 +307,70 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 
 		ecc_sign(k, h, hl, s->choice.ecdsaNistP256Signature.rSig.choice.x_only.buf, s->choice.ecdsaNistP256Signature.sSig.buf);
 	}
+	else
+	{ // added Dilithium Signature
+		printf("\t\n - - - Signature oer encoder - - - \n");
+		// look for signer private key
+		ecc_hash_id hashId = _pk_type_to_hashid[s->present];
+		printf("\nhashId = %ld\n", hashId);
+
+		const char *sName = _signerName;
+		printf("signerName = %s\n", _signerName);
+		printf(" issuer present? = %d\n", _cert->issuer.present);
+
+		if (sName == NULL && _cert->issuer.present == IssuerIdentifier_PR_self)
+			sName = _certName;
+		printf("sName = %s\n", sName);
+
+		uint8_t *secret_key = search_private_Dilithium_key(sName, 2);
+		if (secret_key == NULL)
+		{
+			ASN__ENCODE_FAILED;
+		}
+		
+		char h[48];
+		int hl = 0;
+		// calculate joint hash
+		memcpy(_tbsHash + _tbsHashLength, _signerHash, _signerHashLength);
+		switch (hashId)
+		{
+		case sha_256:
+			sha256_calculate(h, _tbsHash, _tbsHashLength + _signerHashLength);
+			hl = sha256_hash_size;
+			break;
+		case sha_384:
+			sha384_calculate(h, _tbsHash, _tbsHashLength + _signerHashLength);
+			hl = sha384_hash_size;
+			break;
+		case sm3:
+			sm3_calculate(h, _tbsHash, _tbsHashLength + _signerHashLength);
+			hl = sm3_hash_size;
+			break;
+		}
+
+		if (_debug)
+		{
+			char hex[48 * 3 + 1];
+			*_bin2hex(hex, sizeof(hex), _tbsHash, _tbsHashLength) = 0;
+			fprintf(stderr, "DEBUG: ToBeSignedHash[%d]=%s\n", _tbsHashLength, hex);
+			*_bin2hex(hex, sizeof(hex), _signerHash, _signerHashLength) = 0;
+			fprintf(stderr, "DEBUG: SignerHash[%d]=%s\n", _signerHashLength, hex);
+			*_bin2hex(hex, sizeof(hex), h, hl) = 0;
+			fprintf(stderr, "DEBUG: JoinedHash[%d]=%s\n", hl, hex);
+		}
+		
+		s->choice.dilithiumsignature.signature.buf = malloc(OQS_SIG_dilithium_2_length_signature);
+		s->choice.dilithiumsignature.signature.size = OQS_SIG_dilithium_2_length_signature;
+
+		OQS_STATUS returnedCheck = OQS_SIG_dilithium_2_sign(s->choice.dilithiumsignature.signature.buf, &(s->choice.dilithiumsignature.signature.size), h, hl, secret_key);
+		if (returnedCheck != 0)
+		{
+			printf("\n Error: during gen Signature phase\n");
+			return;
+		}
+		free(secret_key);
+	}
+	printf("\n%s\n",td->name);
 	return asn_OP_CHOICE.oer_encoder(td, constraints, sptr, cb, app_key);
 }
 
@@ -553,6 +653,7 @@ int main(int argc, char **argv)
 		{
 		case VerificationKeyIndicator_PR_verificationKey:
 			hashType = cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present;
+			printf("\n HASH TYPE = %d\n", hashType);
 			if (hashType == 0)
 				hashType = 6;
 			printf("\n cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present = %d\n", hashType); // hashType = 1
@@ -585,7 +686,7 @@ int main(int argc, char **argv)
 			break;
 		case PublicVerificationKey_PR_dilithiumKey:
 			printf("\n Dilithium\n");
-				_signerHash = &sha256_emptyString[0];
+			_signerHash = &sha256_emptyString[0];
 			_signerHashLength = sha256_hash_size; // 32
 			break;
 		default:
@@ -600,7 +701,6 @@ int main(int argc, char **argv)
 
 	/* after this call, buf contains "outputcertificates/CERT_IUT_A_RCA_Dilithium.vkey" */
 	cvstrncpy(buf, CERT_MAX_SIZE, _keyPath, "/", _certName, EXT_VKEY, NULL);
-	char *public_key = NULL;
 	printf("\n cert->toBeSigned.verifyKeyIndicator.present = %d\n", cert->toBeSigned.verifyKeyIndicator.present);
 	printf("\n cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present = %d\n", cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present);
 
@@ -818,45 +918,47 @@ static void *gen_or_load_public_key(ecc_curve_id curveType, char *keyPath)
 	return key;
 }
 
-static int fill_Dilithium_keyPair(DilithiumKey_t *dilithium, int algorithmVersion, char *keyPath)	// added
+static int fill_Dilithium_keyPair(DilithiumKey_t *dilithium, int algorithmVersion, char *keyPath) // added
 {
-	char* public_key;
-	dilithium->algVersion = algorithmVersion;
-	dilithium->key.size = OQS_SIG_dilithium_2_length_secret_key;
-	dilithium->key.buf = malloc(dilithium->key.buf);
-	public_key = malloc(OQS_SIG_dilithium_2_length_public_key);
-	OQS_STATUS stat = OQS_SIG_dilithium_2_keypair(dilithium->key.buf, public_key);
+	char *private_key;
+	dilithium->publicKey.size = OQS_SIG_dilithium_2_length_public_key;
+	dilithium->publicKey.buf = malloc(dilithium->publicKey.size);
+	private_key = malloc(OQS_SIG_dilithium_2_length_secret_key);
+
+	OQS_STATUS stat = OQS_SIG_dilithium_2_keypair(dilithium->publicKey.buf, private_key);
 	if (stat != OQS_SUCCESS)
 	{
 		printf("\nError generating Dilithium key pair\n");
 		return 0;
 	}
-	
+
 	/* load Private Key */
-	FILE* f = fopen(keyPath, "wb");
+	FILE *f = fopen(keyPath, "wb");
 	if (f == NULL)
 	{
 		perror(keyPath);
 		return -1;
 	}
-	fwrite(dilithium->key.buf, 1, OQS_SIG_dilithium_2_length_secret_key, f);
-	
+
+	fwrite(private_key, 1, OQS_SIG_dilithium_2_length_secret_key, f);
+
 	fclose(f);
-	
+
 	/* load Public Key */
 	void *key = NULL;
-	char *e_pub = keyPath + strlen(keyPath);
 	keyPath = strcat(keyPath, EXT_PUB);
-	
+
 	f = fopen(keyPath, "wb");
 	if (f == NULL)
 	{
 		perror(keyPath);
 		return -1;
 	}
-	fwrite(public_key, 1, OQS_SIG_dilithium_2_length_public_key, f);
+	fwrite(dilithium->publicKey.buf, 1, OQS_SIG_dilithium_2_length_public_key, f);
 	fclose(f);
-	
+
+	free(private_key);
+
 	return 6;
 }
 

@@ -12,5 +12,4 @@
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/EccP256CurvePoint.h \
  OCTET_STRING.h NULL.h constr_SEQUENCE.h constr_CHOICE.h \
  /root/Project_FsMsGen/itscertgen/certgen/asncodec/SymmetricEncryptionKey.h \
- /root/Project_FsMsGen/itscertgen/certgen/asncodec/DilithiumKey.h \
- /root/Project_FsMsGen/itscertgen/certgen/asncodec/Uint8.h
+ /root/Project_FsMsGen/itscertgen/certgen/asncodec/DilithiumKey.h

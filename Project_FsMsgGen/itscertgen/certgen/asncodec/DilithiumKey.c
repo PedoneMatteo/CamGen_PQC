@@ -8,7 +8,7 @@
 #include "DilithiumKey.h"
 
 static int
-memb_key_constraint_1(const asn_TYPE_descriptor_t *td, const void *sptr,
+memb_publicKey_constraint_1(const asn_TYPE_descriptor_t *td, const void *sptr,
 			asn_app_constraint_failed_f *ctfailcb, void *app_key) {
 	const OCTET_STRING_t *st = (const OCTET_STRING_t *)sptr;
 	size_t size;
@@ -34,58 +34,40 @@ memb_key_constraint_1(const asn_TYPE_descriptor_t *td, const void *sptr,
 }
 
 #if !defined(ASN_DISABLE_OER_SUPPORT)
-static asn_oer_constraints_t asn_OER_memb_key_constr_3 CC_NOTUSED = {
+static asn_oer_constraints_t asn_OER_memb_publicKey_constr_2 CC_NOTUSED = {
 	{ 0, 0 },
 	1312	/* (SIZE(1312..1312)) */};
 #endif  /* !defined(ASN_DISABLE_OER_SUPPORT) */
 asn_TYPE_member_t asn_MBR_DilithiumKey_1[] = {
-	{ ATF_NOFLAGS, 0, offsetof(struct DilithiumKey, algVersion),
+	{ ATF_NOFLAGS, 0, offsetof(struct DilithiumKey, publicKey),
 		(ASN_TAG_CLASS_CONTEXT | (0 << 2)),
-		-1,	/* IMPLICIT tag at current level */
-		&asn_DEF_Uint8,
-		0,
-		{
-#if !defined(ASN_DISABLE_OER_SUPPORT)
-			0,
-#endif  /* !defined(ASN_DISABLE_OER_SUPPORT) */
-#if !defined(ASN_DISABLE_UPER_SUPPORT) || !defined(ASN_DISABLE_APER_SUPPORT)
-			0,
-#endif  /* !defined(ASN_DISABLE_UPER_SUPPORT) || !defined(ASN_DISABLE_APER_SUPPORT) */
-			0
-		},
-		0, 0, /* No default value */
-		"algVersion"
-		},
-	{ ATF_NOFLAGS, 0, offsetof(struct DilithiumKey, key),
-		(ASN_TAG_CLASS_CONTEXT | (1 << 2)),
 		-1,	/* IMPLICIT tag at current level */
 		&asn_DEF_OCTET_STRING,
 		0,
 		{
 #if !defined(ASN_DISABLE_OER_SUPPORT)
-			&asn_OER_memb_key_constr_3,
+			&asn_OER_memb_publicKey_constr_2,
 #endif  /* !defined(ASN_DISABLE_OER_SUPPORT) */
 #if !defined(ASN_DISABLE_UPER_SUPPORT) || !defined(ASN_DISABLE_APER_SUPPORT)
 			0,
 #endif  /* !defined(ASN_DISABLE_UPER_SUPPORT) || !defined(ASN_DISABLE_APER_SUPPORT) */
-			memb_key_constraint_1
+			memb_publicKey_constraint_1
 		},
 		0, 0, /* No default value */
-		"key"
+		"publicKey"
 		},
 };
 static const ber_tlv_tag_t asn_DEF_DilithiumKey_tags_1[] = {
 	(ASN_TAG_CLASS_UNIVERSAL | (16 << 2))
 };
 static const asn_TYPE_tag2member_t asn_MAP_DilithiumKey_tag2el_1[] = {
-    { (ASN_TAG_CLASS_CONTEXT | (0 << 2)), 0, 0, 0 }, /* algVersion */
-    { (ASN_TAG_CLASS_CONTEXT | (1 << 2)), 1, 0, 0 } /* key */
+    { (ASN_TAG_CLASS_CONTEXT | (0 << 2)), 0, 0, 0 } /* publicKey */
 };
 asn_SEQUENCE_specifics_t asn_SPC_DilithiumKey_specs_1 = {
 	sizeof(struct DilithiumKey),
 	offsetof(struct DilithiumKey, _asn_ctx),
 	asn_MAP_DilithiumKey_tag2el_1,
-	2,	/* Count of tags in the map */
+	1,	/* Count of tags in the map */
 	0, 0, 0,	/* Optional elements (not needed) */
 	-1,	/* First extension addition */
 };
@@ -109,7 +91,7 @@ asn_TYPE_descriptor_t asn_DEF_DilithiumKey = {
 		SEQUENCE_constraint
 	},
 	asn_MBR_DilithiumKey_1,
-	2,	/* Elements count */
+	1,	/* Elements count */
 	&asn_SPC_DilithiumKey_specs_1	/* Additional specs */
 };
 

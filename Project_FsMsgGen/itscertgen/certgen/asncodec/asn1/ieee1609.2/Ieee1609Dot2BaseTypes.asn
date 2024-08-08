@@ -733,7 +733,6 @@ Signature ::= CHOICE {
 
 /* added Dilithium Sig struct */
 DilithiumSignature ::= SEQUENCE {
-  algVersion        Uint8(2),
   signature   OCTET STRING(SIZE(2420))
 }
 
@@ -1031,8 +1030,7 @@ BasePublicEncryptionKey ::= CHOICE {
 }
 
 DilithiumKey ::= SEQUENCE {
-  algVersion   Uint8,
-  key     OCTET STRING(SIZE(1312))
+  publicKey     OCTET STRING(SIZE(1312))
 }
 
 

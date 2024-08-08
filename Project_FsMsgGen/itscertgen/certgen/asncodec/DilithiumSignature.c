@@ -8,31 +8,6 @@
 #include "DilithiumSignature.h"
 
 static int
-memb_algVersion_constraint_1(const asn_TYPE_descriptor_t *td, const void *sptr,
-			asn_app_constraint_failed_f *ctfailcb, void *app_key) {
-	long value;
-	
-	if(!sptr) {
-		ASN__CTFAIL(app_key, td, sptr,
-			"%s: value not given (%s:%d)",
-			td->name, __FILE__, __LINE__);
-		return -1;
-	}
-	
-	value = *(const long *)sptr;
-	
-	if((value == 2)) {
-		/* Constraint check succeeded */
-		return 0;
-	} else {
-		ASN__CTFAIL(app_key, td, sptr,
-			"%s: constraint failed (%s:%d)",
-			td->name, __FILE__, __LINE__);
-		return -1;
-	}
-}
-
-static int
 memb_signature_constraint_1(const asn_TYPE_descriptor_t *td, const void *sptr,
 			asn_app_constraint_failed_f *ctfailcb, void *app_key) {
 	const OCTET_STRING_t *st = (const OCTET_STRING_t *)sptr;
@@ -59,41 +34,19 @@ memb_signature_constraint_1(const asn_TYPE_descriptor_t *td, const void *sptr,
 }
 
 #if !defined(ASN_DISABLE_OER_SUPPORT)
-static asn_oer_constraints_t asn_OER_memb_algVersion_constr_2 CC_NOTUSED = {
-	{ 1, 1 }	/* (2..2) */,
-	-1};
-#endif  /* !defined(ASN_DISABLE_OER_SUPPORT) */
-#if !defined(ASN_DISABLE_OER_SUPPORT)
-static asn_oer_constraints_t asn_OER_memb_signature_constr_3 CC_NOTUSED = {
+static asn_oer_constraints_t asn_OER_memb_signature_constr_2 CC_NOTUSED = {
 	{ 0, 0 },
 	2420	/* (SIZE(2420..2420)) */};
 #endif  /* !defined(ASN_DISABLE_OER_SUPPORT) */
 asn_TYPE_member_t asn_MBR_DilithiumSignature_1[] = {
-	{ ATF_NOFLAGS, 0, offsetof(struct DilithiumSignature, algVersion),
-		(ASN_TAG_CLASS_CONTEXT | (0 << 2)),
-		-1,	/* IMPLICIT tag at current level */
-		&asn_DEF_Uint8,
-		0,
-		{
-#if !defined(ASN_DISABLE_OER_SUPPORT)
-			&asn_OER_memb_algVersion_constr_2,
-#endif  /* !defined(ASN_DISABLE_OER_SUPPORT) */
-#if !defined(ASN_DISABLE_UPER_SUPPORT) || !defined(ASN_DISABLE_APER_SUPPORT)
-			0,
-#endif  /* !defined(ASN_DISABLE_UPER_SUPPORT) || !defined(ASN_DISABLE_APER_SUPPORT) */
-			memb_algVersion_constraint_1
-		},
-		0, 0, /* No default value */
-		"algVersion"
-		},
 	{ ATF_NOFLAGS, 0, offsetof(struct DilithiumSignature, signature),
-		(ASN_TAG_CLASS_CONTEXT | (1 << 2)),
+		(ASN_TAG_CLASS_CONTEXT | (0 << 2)),
 		-1,	/* IMPLICIT tag at current level */
 		&asn_DEF_OCTET_STRING,
 		0,
 		{
 #if !defined(ASN_DISABLE_OER_SUPPORT)
-			&asn_OER_memb_signature_constr_3,
+			&asn_OER_memb_signature_constr_2,
 #endif  /* !defined(ASN_DISABLE_OER_SUPPORT) */
 #if !defined(ASN_DISABLE_UPER_SUPPORT) || !defined(ASN_DISABLE_APER_SUPPORT)
 			0,
@@ -108,14 +61,13 @@ static const ber_tlv_tag_t asn_DEF_DilithiumSignature_tags_1[] = {
 	(ASN_TAG_CLASS_UNIVERSAL | (16 << 2))
 };
 static const asn_TYPE_tag2member_t asn_MAP_DilithiumSignature_tag2el_1[] = {
-    { (ASN_TAG_CLASS_CONTEXT | (0 << 2)), 0, 0, 0 }, /* algVersion */
-    { (ASN_TAG_CLASS_CONTEXT | (1 << 2)), 1, 0, 0 } /* signature */
+    { (ASN_TAG_CLASS_CONTEXT | (0 << 2)), 0, 0, 0 } /* signature */
 };
 asn_SEQUENCE_specifics_t asn_SPC_DilithiumSignature_specs_1 = {
 	sizeof(struct DilithiumSignature),
 	offsetof(struct DilithiumSignature, _asn_ctx),
 	asn_MAP_DilithiumSignature_tag2el_1,
-	2,	/* Count of tags in the map */
+	1,	/* Count of tags in the map */
 	0, 0, 0,	/* Optional elements (not needed) */
 	-1,	/* First extension addition */
 };
@@ -139,7 +91,7 @@ asn_TYPE_descriptor_t asn_DEF_DilithiumSignature = {
 		SEQUENCE_constraint
 	},
 	asn_MBR_DilithiumSignature_1,
-	2,	/* Elements count */
+	1,	/* Elements count */
 	&asn_SPC_DilithiumSignature_specs_1	/* Additional specs */
 };
 

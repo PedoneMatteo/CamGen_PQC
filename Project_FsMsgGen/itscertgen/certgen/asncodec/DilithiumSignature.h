@@ -7,7 +7,6 @@
 
 
 /* Including external dependencies */
-#include "Uint8.h"
 #include <OCTET_STRING.h>
 #include <constr_SEQUENCE.h>
 #ifndef	_DilithiumSignature_H_
@@ -22,7 +21,6 @@ extern "C" {
 
 /* DilithiumSignature */
 typedef struct DilithiumSignature {
-	Uint8_t	 algVersion;
 	OCTET_STRING_t	 signature;
 	
 	/* Context for parsing across buffer boundaries */
@@ -32,7 +30,7 @@ typedef struct DilithiumSignature {
 /* Implementation */
 extern asn_TYPE_descriptor_t asn_DEF_DilithiumSignature;
 extern asn_SEQUENCE_specifics_t asn_SPC_DilithiumSignature_specs_1;
-extern asn_TYPE_member_t asn_MBR_DilithiumSignature_1[2];
+extern asn_TYPE_member_t asn_MBR_DilithiumSignature_1[1];
 
 #ifdef __cplusplus
 }
