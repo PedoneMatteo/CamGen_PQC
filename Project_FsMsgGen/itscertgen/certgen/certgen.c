@@ -182,7 +182,8 @@ static ecc_curve_id _pk_type_to_hashid[] = {
 	sha_256, // Signature_PR_ecdsaBrainpoolP256r1Signature,
 	sha_384, // Signature_PR_ecdsaBrainpoolP384r1Signature
 	sha_384, // Signature_PR_ecdsaNistP384Signature,
-	sm3		 // Signature_PR_sm2Signature
+	sm3,		 // Signature_PR_sm2Signature
+	sha_256  //Dilithium
 };
 
 static size_t _pk_type_to_hashsize[] = {
@@ -252,6 +253,7 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 	{
 		printf("\t\n - - - Signature oer encoder - - - \n");
 		// look for signer private key
+		printf("s->present = %d\n",s->present);
 		ecc_curve_id alg = _pk_type_to_curveid[s->present];
 		printf("alg = %ld\n", alg);
 		ecc_hash_id hashId = _pk_type_to_hashid[s->present];
@@ -310,6 +312,9 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 	else
 	{ // added Dilithium Signature
 		printf("\t\n - - - Signature oer encoder - - - \n");
+		s->present = Signature_PR_dilithiumsignature;
+		printf("s->present = %d\n",s->present);
+
 		// look for signer private key
 		ecc_hash_id hashId = _pk_type_to_hashid[s->present];
 		printf("\nhashId = %ld\n", hashId);
@@ -362,8 +367,8 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 		s->choice.dilithiumsignature.signature.buf = malloc(OQS_SIG_dilithium_2_length_signature);
 		s->choice.dilithiumsignature.signature.size = OQS_SIG_dilithium_2_length_signature;
 
-		OQS_STATUS returnedCheck = OQS_SIG_dilithium_2_sign(s->choice.dilithiumsignature.signature.buf, &(s->choice.dilithiumsignature.signature.size), h, hl, secret_key);
-		if (returnedCheck != 0)
+		OQS_STATUS check = OQS_SIG_dilithium_2_sign(s->choice.dilithiumsignature.signature.buf, &(s->choice.dilithiumsignature.signature.size), h, hl, secret_key);
+		if (check != 0)
 		{
 			printf("\n Error: during gen Signature phase\n");
 			return;
