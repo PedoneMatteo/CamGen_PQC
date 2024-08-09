@@ -595,10 +595,13 @@ int main(int argc, char **argv)
 			fprintf(stderr, "%s: failed to load signer certificate at position %d\n  %.30s\n", _signerName, (int)rc_d.consumed, buf + rc_d.consumed);
 			return -1;
 		}
+		printf("\n signer->toBeSigned.verifyKeyIndicator.present = %d\n", signer->toBeSigned.verifyKeyIndicator.present);
 		switch (signer->toBeSigned.verifyKeyIndicator.present)
 		{
 		case VerificationKeyIndicator_PR_verificationKey:
 			hashType = signer->toBeSigned.verifyKeyIndicator.choice.verificationKey.present;
+			if (hashType == 0)
+				hashType = 6;
 			break;
 		case VerificationKeyIndicator_PR_reconstructionValue:
 			hashType = PublicVerificationKey_PR_ecdsaNistP256;
@@ -607,7 +610,8 @@ int main(int argc, char **argv)
 			fprintf(stderr, "%s: signer verification indicator type is unknown\n", _signerName);
 			return -1;
 		}
-		_tbsHashType = hashType;
+		
+		_tbsHashType = cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present = hashType;
 
 		if (signer->signature && signer->signature->choice.ecdsaNistP256Signature.rSig.present != EccP256CurvePoint_PR_x_only)
 		{
@@ -637,6 +641,12 @@ int main(int argc, char **argv)
 			break;
 		case PublicVerificationKey_PR_dilithiumKey:
 			printf("\n Dilithium\n");
+			if (cert->issuer.present == IssuerIdentifier_PR_NOTHING)
+				cert->issuer.present = IssuerIdentifier_PR_sha256AndDigest;
+			sha256_calculate(_signerHashBuf, buf, ebuf - buf);
+			_signerHash = &_signerHashBuf[0];
+			_signerHashLength = sha256_hash_size;
+			OCTET_STRING_fromBuf(&cert->issuer.choice.sha256AndDigest, &_signerHash[sha256_hash_size - 8], 8);
 			break;
 		case PublicVerificationKey_PR_ecsigSm2:
 		default:
@@ -703,7 +713,7 @@ int main(int argc, char **argv)
 	// generate keys if necessary
 	// buf = name of private key file
 	int rc = -1;
-
+	printf("\n hashtype = %d\n", hashType);
 	/* after this call, buf contains "outputcertificates/CERT_IUT_A_RCA_Dilithium.vkey" */
 	cvstrncpy(buf, CERT_MAX_SIZE, _keyPath, "/", _certName, EXT_VKEY, NULL);
 	printf("\n cert->toBeSigned.verifyKeyIndicator.present = %d\n", cert->toBeSigned.verifyKeyIndicator.present);
