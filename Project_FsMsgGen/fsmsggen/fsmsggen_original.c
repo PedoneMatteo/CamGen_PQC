@@ -78,7 +78,7 @@ __PACKED__(struct ether_header_t{
     uint16_t type;
 });
 
-uint8_t buf[8192] = {   //1024*8
+uint8_t buf[1024] = {
     // Ethernet header
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, // destination: broadcast
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // source MAC

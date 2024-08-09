@@ -38,10 +38,11 @@ by simple request to the author.
 #include <errno.h>
 #include <sys/stat.h>
 #endif
+int lenCert = 3960;//187
 
 void printCertificate(unsigned char *data){
 	printf("\n	CERTIFICATE: \n");
-	for(int i=0; i<187; i++){
+	for(int i=0; i<lenCert; i++){
 		printf("%02x ", data[i]);
 	}
 	printf("\n");
@@ -58,7 +59,7 @@ static FSHashedId8 _load_data(FitSec * e, FSTime32 curTime, pchar_t * path, pcha
 	int error = 0;
 		printf("\npath in _load_data = %s\n",path);
 	end = cstraload(&data, path);
-	printCertificate(data);
+	//printCertificate(data);
 	if (end > data){
         if ( (data[0] & 0x7F) == 0 && data[1] == 0x03) {
 			// looks like certificate
@@ -112,7 +113,8 @@ static FSHashedId8 _load_data(FitSec * e, FSTime32 curTime, pchar_t * path, pcha
      *  @param perror       The status of the procedure. See fitsec_error.h.
      *  @return             The certificate structure or NULL if certificate is not installed.
      */
-			printf("\n	 private key len = %ld - public key len = %ld\n\n", ekey_len, vkey_len);
+			printf("\n	 encryption key len = %ld -- verification key len = %ld\n\n", ekey_len, vkey_len);
+			printf("\n   cert len = %d\n", cert_len);
 		/*	ekey_len+=32;
 			vkey_len+=32;
 			cert_len+=64;	*/
