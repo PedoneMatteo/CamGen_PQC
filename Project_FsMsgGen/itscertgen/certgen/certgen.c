@@ -142,7 +142,7 @@ static asn_enc_rval_t ToBeSignedCertificate_oer_encoder(const asn_TYPE_descripto
 			*_bin2hex(hex, sizeof(hex) - 1, oer, ((rc.encoded > 256) ? 256 : rc.encoded)) = 0;
 			fprintf(stderr, "DEBUG: ToBeSigned OER[%zu]=%s\n", rc.encoded, hex);
 		}
-		// calculate hash
+		// calculate hash of ToBeSigned data
 		if (_signerHashLength == sha384_hash_size)
 		{
 			_tbsHashLength = 48;
@@ -274,7 +274,7 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 
 		char h[48];
 		int hl = 0;
-		// calculate joint hash
+		// calculate joint hash (toBeSigned Hash computed in ToBeSignedCertificate_oer_encoder + signerHash)
 		memcpy(_tbsHash + _tbsHashLength, _signerHash, _signerHashLength);
 		switch (hashId)
 		{
@@ -335,7 +335,7 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 		
 		char h[48];
 		int hl = 0;
-		// calculate joint hash
+		// calculate joint hash (toBeSigned Hash computed in ToBeSignedCertificate_oer_encoder + signerHash)
 		memcpy(_tbsHash + _tbsHashLength, _signerHash, _signerHashLength);
 		switch (hashId)
 		{

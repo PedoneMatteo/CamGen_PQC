@@ -834,6 +834,94 @@ extern "C" {
     FITSEC_EXPORT size_t FitSec_DecryptMessage(FitSec* e, FSMessageInfo* info);
     FITSEC_EXPORT size_t FitSec_DecryptMessageAsync(FitSec* e, FSMessageInfo* info, void * const userObject);
 
+typedef struct {
+    uint8_t sha256Digest[8]; // 8 bytes as seen in your example
+} FSIssuer;
+
+typedef struct {
+    uint8_t idType; // none or other types
+    // Optional fields if idType is not 'none'
+} FSCertificateId;
+
+typedef struct {
+    uint32_t start;
+    uint32_t duration; // in hours
+} FSValidityPeriod;
+
+typedef struct {
+    uint16_t psid;
+    uint8_t sspLength;
+    uint8_t ssp[32]; // max length of bitmapSsp
+} FSPsidSsp;
+
+typedef struct {
+    FSPsidSsp appPermissions[10]; // example max 10 permissions, adjust as needed
+    size_t appPermissionsCount;
+} FSAppPermissions;
+
+typedef struct {
+    uint8_t sspValue[8]; // max length of sspValue
+    uint8_t sspBitmask[8]; // max length of sspBitmask
+} FSBitmapSspRange;
+
+typedef struct {
+    uint16_t psid;
+    FSBitmapSspRange sspRange;
+} FSPsidSspRange;
+
+typedef struct {
+    FSPsidSspRange PsidSspRange[10]; // max 10 ranges, adjust as needed
+    size_t PsidSspRangeCount;
+} FSSubjectPermissions;
+
+typedef struct {
+    FSSubjectPermissions subjectPermissions;
+    uint8_t minChainLength;
+    uint8_t chainLengthRange;
+    uint8_t eeType; // bit flags for eeType
+} FSCertIssuePermissions;
+
+typedef struct {
+    uint8_t curveType;
+    uint8_t compressedY[33]; // 33 bytes for compressed-y
+} FSPublicKey;
+
+typedef struct {
+    uint8_t supportedSymmAlg; // enum for symmetric algorithms
+    FSPublicKey publicKey;
+} FSEncryptionKey;
+
+typedef struct {
+    FSPublicKey verificationKey;
+} FSVerifyKeyIndicator;
+
+typedef struct {
+    FSCertificateId id;
+    uint8_t cracaId[3]; // 3 bytes
+    uint32_t crlSeries;
+    FSValidityPeriod validityPeriod;
+    uint8_t assuranceLevel;
+    FSAppPermissions appPermissions;
+    FSCertIssuePermissions certIssuePermissions;
+    FSEncryptionKey encryptionKey;
+    FSVerifyKeyIndicator verifyKeyIndicator;
+} FSToBeSigned;
+
+typedef struct {
+    uint8_t rSig[32]; // assuming 32 bytes for rSig
+    uint8_t sSig[32]; // assuming 32 bytes for sSig
+} FSSignature;
+
+typedef struct {
+    uint8_t version;
+    uint8_t type; // explicit or implicit
+    FSIssuer issuer;
+    FSToBeSigned toBeSigned;
+    FSSignature signature;
+} MyFSCertificate;
+
+
+
 
 #ifdef __cplusplus
 }

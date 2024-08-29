@@ -450,7 +450,7 @@ int main(int argc, char** argv)
         }
         FSTime32 t = unix2itstime32(time(NULL) + _tdelta);
         cring_foreach(load_element_t, l, _o_load_elements){
-            _o_dc = l->dc; 
+            _o_dc = l->dc;
             if( 0 > FitSec_LoadTrustData(e, t, l->path)){   //l->path = ../../POOL_CAM
                 return -1;
             }
@@ -573,11 +573,14 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
         FitSec_ChangeId(e, FITSEC_AID_ANY);
     }
     //call to cam_fill
-    printf("\n\nPRE FILL\n\n");
+   // printf("\n\nPRE FILL\n\n");
     printBuf(buf);
     size_t len = a->fill(a, e, &m); 
      printf("\n\nPOST FILL\n\n");
-    printBuf(buf);
+    /* for(int i=124; i<132;i++)
+        buf[i]= 0xFF;
+    printBuf(buf); */
+    
     if (len > 0) {
         // fill the src addr
        
@@ -637,6 +640,8 @@ static void _handler_file(pcap_handler_t* h, struct pcap_pkthdr* ph, const uint8
 static void _handler_iface(pcap_handler_t* h, struct pcap_pkthdr* ph, const uint8_t* data)
 {
     printf("\n  - - - INJECTING MESSAGE (in fsmsggen.c)- - -\n\n");
+    printf("    here\n\n");
+    printBuf(data);
     pcap_inject(h->device, data, ph->len);
 /*
     // wait for next hop

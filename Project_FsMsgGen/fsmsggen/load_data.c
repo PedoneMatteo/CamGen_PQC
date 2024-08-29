@@ -40,9 +40,9 @@ by simple request to the author.
 #endif
 int lenCert = 3960;//187
 
-void printCertificate(unsigned char *data){
+void printCertificate(unsigned char *data, int len){
 	printf("\n	CERTIFICATE: \n");
-	for(int i=0; i<lenCert; i++){
+	for(int i=0; i<len; i++){
 		printf("%02x ", data[i]);
 	}
 	printf("\n");
@@ -118,6 +118,8 @@ static FSHashedId8 _load_data(FitSec * e, FSTime32 curTime, pchar_t * path, pcha
 		/*	ekey_len+=32;
 			vkey_len+=32;
 			cert_len+=64;	*/
+			
+			printCertificate(data,cert_len);
 			const FSCertificate* c =  FitSec_InstallCertificate(e, data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
 			digest = FSCertificate_Digest(c);
 			const char * name = FSCertificate_Name(c);
