@@ -574,7 +574,7 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
     }
     //call to cam_fill
    // printf("\n\nPRE FILL\n\n");
-    printBuf(buf);
+   // printBuf(buf);
     size_t len = a->fill(a, e, &m); 
      printf("\n\nPOST FILL\n\n");
     /* for(int i=124; i<132;i++)
@@ -616,9 +616,20 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
         memset(buf+point_signature,0,164);  */
 
        // printBuf(buf);
-        _packet_handler(&h, &ph, buf);
+       //aggiungere +2 a ph.caplen per vedere su wireshark messaggi con questi due campi aggiunti
+       int index;
+       if(round_send%10==0) index = 373;
+       else index = 192;      
+       buf[index]=0x01;
+       buf[index+1]=0x01;
+       printf("\n\n round_send = %d \n\n", round_send);
+        if(round_send<=12){
+            _packet_handler(&h, &ph, buf);
+        }
+        
+        
     }else{
-        usleep(1000000 / _rate);
+        usleep(1000000 / _rate); 
     }
 }
 
@@ -641,7 +652,7 @@ static void _handler_iface(pcap_handler_t* h, struct pcap_pkthdr* ph, const uint
 {
     printf("\n  - - - INJECTING MESSAGE (in fsmsggen.c)- - -\n\n");
     printf("    here\n\n");
-    printBuf(data);
+    //printBuf(data);
     pcap_inject(h->device, data, ph->len);
 /*
     // wait for next hop
