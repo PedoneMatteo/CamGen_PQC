@@ -866,7 +866,7 @@ typedef struct FSPsidSsp{
 
 typedef struct FSAppPermissions{
     uint8_t appPermissionsCount;
-    FSPsidSsp item[3]; // example max 3 permissions
+    FSPsidSsp item[20]; 
 } FSAppPermissions;
 
 typedef struct FSBitmapSspRange{
@@ -930,10 +930,188 @@ typedef struct MyFSCertificate{
     FSSignature signature;
 } MyFSCertificate;
 
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/
 
+// Definizione della struttura per PsidSsp
+typedef struct
+{
+	uint32_t psid;
+	struct
+	{
+		uint8_t *bitmapSsp;
+		size_t bitmapSspLength;
+	} ssp;
+} PsidSsp;
 
+// Definizione della struttura per bitmapSspRange
+typedef struct
+{
+	uint8_t *sspValue;
+	uint8_t *sspBitmask;
+	size_t sspValueLength;
+	size_t sspBitmaskLength;
+} BitmapSspRange;
+
+// Definizione della struttura per PsidSspRange
+typedef struct
+{
+	uint32_t psid;
+	BitmapSspRange sspRange;
+} PsidSspRange;
+
+// Definizione della struttura per Explicit Subject Permissions
+typedef struct
+{
+	PsidSspRange *psidSspRanges;
+	size_t numRanges;
+} ExplicitPermissions;
+
+// Definizione della struttura per SubjectPermissions
+typedef struct
+{
+	ExplicitPermissions explicitPermissions;
+} SubjectPermissions;
+
+// Definizione della struttura per PsidGroupPermissions
+typedef struct
+{
+	SubjectPermissions subjectPermissions;
+	uint8_t minChainLength;
+	uint8_t chainLengthRange;
+	uint8_t eeType;
+} PsidGroupPermissions;
+
+// Definizione della struttura per CertIssuePermissions
+typedef struct
+{
+	PsidGroupPermissions *psidGroupPermissions;
+	size_t numGroupPermissions;
+} CertIssuePermissions;
+
+/*
+typedef enum {
+	FS_X_COORDINATE_ONLY = 0,
+	FS_COMPRESSED_LSB_Y_0 = 2,
+	FS_COMPRESSED_LSB_Y_1 = 3,
+	FS_UNCOMPRESSED = 4
+}FSPointType;
+
+typedef struct FSECPoint {
+	FSPointType type;
+	uint8_t     * x;
+	uint8_t     * y;
+} FSECPoint;
+
+typedef enum FSCurve {
+	FS_NISTP256,
+	FS_BRAINPOOLP256R1,
+	FS_BRAINPOOLP384R1,
+	FS_NISTP384,
+	FS_SM2,
+
+	FSCurve_Max
+}FSCurve;
+
+typedef struct FSPublicKey {
+	FSCurve   curve;
+	FSECPoint point;
+	void    * k; // for plugin usage
+}FSPublicKey;
+*/
+// Definizione della struttura per EncryptionKey
+typedef struct
+{
+	uint8_t supportedSymmAlg; // enum for symmetric algorithms
+	FSPublicKey publicKey;
+} EncryptionKey;
+
+// Definizione della struttura per VerifyKeyIndicator
+typedef struct
+{
+	FSPublicKey verificationKey;
+} VerifyKeyIndicator;
+
+// Definizione della struttura per ToBeSigned
+typedef struct
+{
+	struct {
+        uint8_t idType;
+        union{
+            struct{
+                uint8_t len;
+                uint8_t *val;
+            }name
+        }id;
+    }id_Value;
+	uint8_t cracaId[7]; // "00 00 00"
+	uint8_t crlSeries[2];
+	struct
+	{
+		uint8_t start[4];
+        uint8_t durationType;
+		struct
+		{
+			uint8_t hours[2];
+		} duration;
+	} validityPeriod;
+	char *assuranceLevel;
+	PsidSsp *appPermissions;
+	size_t numAppPermissions;
+	CertIssuePermissions certIssuePermissions;
+	EncryptionKey encryptionKey;
+	VerifyKeyIndicator verifyKeyIndicator;
+} ToBeSigned;
+
+// Definizione della struttura per Signature
+/*typedef struct FSSignature {
+	FSCurve   curve;
+	FSECPoint point;
+	uint8_t * s;
+}FSSignature;*/
+
+// Definizione della struttura per Issuer
+
+typedef struct
+{
+	uint8_t issuerType;
+    union{
+        uint8_t *Digest;
+    }sha256
+} Issuer;
+
+// Definizione della struttura per EtsiTs103097Certificate
+typedef struct
+{
+	uint8_t version;
+	uint8_t type; // explicit or implicit
+	Issuer issuer;
+	ToBeSigned toBeSigned;
+	FSSignature signature;
+} EtsiTs103097Certificate;
 
 #ifdef __cplusplus
 }
 #endif
 #endif
+

@@ -41,7 +41,7 @@ by simple request to the author.
 int lenCert = 3960; // 187
 
 MyFSCertificate MyInstallCertificate(char *data, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror);
-
+EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror);
 void printCertificate(unsigned char *data, int len)
 {
 	printf("\n	CERTIFICATE: \n");
@@ -133,8 +133,8 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 				cert_len+=64;	*/
 
 			printCertificate(data, cert_len);
-
-			MyFSCertificate certificate = MyInstallCertificate(data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
+			EtsiTs103097Certificate *certif = Emulated_InstallCertificate(data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
+			//MyFSCertificate certificate = MyInstallCertificate(data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
 			const FSCertificate *c = FitSec_InstallCertificate(e, data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
 			digest = FSCertificate_Digest(c);
 			const char *name = FSCertificate_Name(c);
@@ -255,7 +255,7 @@ int compare_files(const void *a, const void *b)
 		return -1;
 	if (strstr(file_b, "AA") && !strstr(file_a, "AA"))
 		return 1;
-	if (strstr(file_b, "AA") &&  strstr(file_a, "AA"))
+	if (strstr(file_b, "AA") && strstr(file_a, "AA"))
 		return 1;
 
 	if (strstr(file_a, "AT") && !strstr(file_b, "AT"))
@@ -304,7 +304,7 @@ static int _FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, pchar_t *path, int
 			if (d)
 			{
 				path[plen++] = '/';
-				int max_num_files=10;
+				int max_num_files = 10;
 				char *files[max_num_files];
 				int file_count = 0;
 				/*Constructs the full path to the file and calls _FitSec_LoadTrustData recursively
@@ -319,9 +319,9 @@ static int _FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, pchar_t *path, int
 						0 == strcmp(ext, ".lcr") ||
 						0 == strcmp(ext, ".crt"))
 					{
-						if (file_count < max_num_files) //save all file names
+						if (file_count < max_num_files) // save all file names
 						{
-							files[file_count] = strdup(de->d_name); 
+							files[file_count] = strdup(de->d_name);
 							file_count++;
 						}
 					}
@@ -336,7 +336,7 @@ static int _FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, pchar_t *path, int
 					{
 						pchar_cpy(path + plen, files[i]);
 						count += _FitSec_LoadTrustData(e, curTime, path, plen + dlen, end);
-						free(files[i]); 
+						free(files[i]);
 					}
 				}
 				closedir(d);
@@ -370,6 +370,170 @@ d0 80 80 e1 ca 87 f2 3e 48 ae c3 dc 3c 9b f2 ce
 df 69 e3 ed 24 19 f2 4e 2b 75 07 39 03 b9 f3 51
 47 34 bf
 */
+
+// Funzione per leggere dati da un buffer
+#define READ_DATA(dest, src, len) memcpy((dest), (src), (len)); (src) += (len);
+
+// Funzione per emulare FitSec_InstallCertificate
+EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror)
+{
+    uint8_t *ptr = data;
+    EtsiTs103097Certificate *cert = (EtsiTs103097Certificate *)malloc(sizeof(EtsiTs103097Certificate));
+    if (!cert) {
+        *perror = -1;  // Errore: memoria non disponibile
+        return NULL;
+    }
+
+    memset(cert, 0, sizeof(EtsiTs103097Certificate));
+	ptr++;
+    // Inizializza le strutture di base
+    cert->version = *ptr++;
+    cert->type = *ptr++;
+	cert->issuer.issuerType = *ptr++;
+	if(cert->issuer.issuerType == 0x81){
+		*ptr++;
+	}else{
+		cert->issuer.sha256.Digest=malloc(8);
+		READ_DATA(cert->issuer.sha256.Digest,ptr,8);
+	}
+
+	//toBeSigned
+	*ptr++;
+	// Avanza il puntatore e assegna l'idType
+cert->toBeSigned.id_Value.idType = *ptr++;
+printf("idType: %x\n", cert->toBeSigned.id_Value.idType);
+
+if(cert->toBeSigned.id_Value.idType == 0x83){
+    *ptr++;
+} else {
+    // Assegna la lunghezza del nome
+    cert->toBeSigned.id_Value.id.name.len = *ptr++;
+    printf("name.len: %x\n", cert->toBeSigned.id_Value.id.name.len);
+
+    // Alloca memoria e legge il valore del nome
+    cert->toBeSigned.id_Value.id.name.val = malloc(cert->toBeSigned.id_Value.id.name.len);
+    READ_DATA(cert->toBeSigned.id_Value.id.name.val, ptr, cert->toBeSigned.id_Value.id.name.len);
+    
+    // Stampa il valore del nome come stringa
+    printf("name.val: ");
+    for (int i = 0; i < cert->toBeSigned.id_Value.id.name.len; i++) {
+        printf("%02x ", cert->toBeSigned.id_Value.id.name.val[i]);
+    }
+    printf("\n");
+}
+
+// Legge il cracaId
+printf("cracaId: ");
+for(int i = 0; i < 3; i++) {
+    cert->toBeSigned.cracaId[i] = *ptr++;
+    printf("%02x ", cert->toBeSigned.cracaId[i]);
+}
+printf("\n");
+
+// Legge il crlSeries
+printf("crlSeries: ");
+for(int i = 0; i < 2; i++) {
+	if(*ptr == 0x00)
+    	cert->toBeSigned.crlSeries[i] = *ptr++;
+	else cert->toBeSigned.crlSeries[i] = 0x00;
+    printf("%02x ", cert->toBeSigned.crlSeries[i]);
+}
+printf("\n");
+
+// Legge il validityPeriod start
+printf("validityPeriod.start: ");
+for(int i = 0; i < 4; i++) {
+    cert->toBeSigned.validityPeriod.start[i] = *ptr++;
+    printf("%02x ", cert->toBeSigned.validityPeriod.start[i]);
+}
+printf("\n");
+
+// Legge il durationType
+cert->toBeSigned.validityPeriod.durationType = *ptr++;
+printf("durationType: %x\n", cert->toBeSigned.validityPeriod.durationType);
+
+if(cert->toBeSigned.validityPeriod.durationType == 0x84) {
+    // Legge la durata in ore
+    printf("duration.hours: ");
+    for(int i = 0; i < 2; i++) {
+        cert->toBeSigned.validityPeriod.duration.hours[i] = *ptr++; 
+        printf("%02x ", cert->toBeSigned.validityPeriod.duration.hours[i]);
+    }
+    printf("\n");
+}
+
+// Legge l'assuranceLevel
+cert->toBeSigned.assuranceLevel = *ptr++;
+printf("assuranceLevel: %x\n", cert->toBeSigned.assuranceLevel);
+
+	
+/*
+    // Parsing dell'Issuer
+    cert->issuer.name = (char *)ptr;
+    ptr += strlen((char *)ptr) + 1;  // Salta il nome del certificatore (issuer)
+
+    cert->issuer.issuerType.sha256AndDigest = *ptr++;
+
+    // Parsing del campo ToBeSigned
+    cert->toBeSigned.id = *ptr++;
+    READ_DATA(cert->toBeSigned.cracaId, ptr, 7);
+    READ_DATA(&cert->toBeSigned.crlSeries, ptr, sizeof(cert->toBeSigned.crlSeries));
+    
+    // Validity Period
+    READ_DATA(&cert->toBeSigned.validityPeriod.start, ptr, sizeof(cert->toBeSigned.validityPeriod.start));
+    READ_DATA(&cert->toBeSigned.validityPeriod.duration.hours, ptr, sizeof(cert->toBeSigned.validityPeriod.duration.hours));
+
+    // App Permissions
+    cert->toBeSigned.numAppPermissions = 1;  // Supponendo che ci sia un singolo permesso
+    cert->toBeSigned.appPermissions = (PsidSsp *)malloc(sizeof(PsidSsp));
+    if (!cert->toBeSigned.appPermissions) {
+        *error = -2;  // Errore: memoria non disponibile per i permessi
+        free(cert);
+        return NULL;
+    }
+    READ_DATA(&cert->toBeSigned.appPermissions->psid, ptr, sizeof(cert->toBeSigned.appPermissions->psid));
+    cert->toBeSigned.appPermissions->ssp.bitmapSspLength = *ptr++;
+    cert->toBeSigned.appPermissions->ssp.bitmapSsp = (uint8_t *)malloc(cert->toBeSigned.appPermissions->ssp.bitmapSspLength);
+    READ_DATA(cert->toBeSigned.appPermissions->ssp.bitmapSsp, ptr, cert->toBeSigned.appPermissions->ssp.bitmapSspLength);
+
+    // Cert Issue Permissions
+    cert->toBeSigned.certIssuePermissions.numGroupPermissions = 1;  // Supponendo che ci sia un singolo gruppo di permessi
+    cert->toBeSigned.certIssuePermissions.psidGroupPermissions = (PsidGroupPermissions *)malloc(sizeof(PsidGroupPermissions));
+    if (!cert->toBeSigned.certIssuePermissions.psidGroupPermissions) {
+        *error = -3;  // Errore: memoria non disponibile per i permessi di emissione
+        free(cert->toBeSigned.appPermissions);
+        free(cert);
+        return NULL;
+    }
+    // (Continua il parsing degli altri campi come minChainLength, chainLengthRange, eeType, ecc.)
+
+    // Parsing EncryptionKey e VerifyKeyIndicator
+    cert->toBeSigned.encryptionKey.supportedSymmAlg = *ptr++;
+    memcpy(&cert->toBeSigned.encryptionKey.publicKey, ekey, sizeof(FSPublicKey));
+    memcpy(&cert->toBeSigned.verifyKeyIndicator.verificationKey, vkey, sizeof(FSPublicKey));
+
+    // Parsing della Signature
+    // Supponiamo che la firma sia di tipo ECDSA con NIST P-256
+    cert->signature.curve = FS_NISTP256;  // Supponendo che si usi questa curva
+    READ_DATA(&cert->signature.point, ptr, sizeof(cert->signature.point));
+    cert->signature.s = (uint8_t *)malloc(32);  // Supponendo che la firma sia 256-bit
+    if (!cert->signature.s) {
+        *error = -4;  // Errore: memoria non disponibile per la firma
+        free(cert->toBeSigned.certIssuePermissions.psidGroupPermissions);
+        free(cert->toBeSigned.appPermissions);
+        free(cert);
+        return NULL;
+    }
+    READ_DATA(cert->signature.s, ptr, 32);
+
+    // Se ci sono altri campi da analizzare, aggiungili qui
+
+    *error = 0;  // Nessun errore
+	*/
+    return cert;
+}
+
+
 MyFSCertificate MyInstallCertificate(char *data, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror)
 {
 	MyFSCertificate cert;
