@@ -524,7 +524,6 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 		else
 		{
 			printf("Skipping, no bitmap SSP present for appPermissions[%d]\n", i);
-			*ptr++;
 		}
 	}
 
@@ -611,9 +610,12 @@ if (*ptr == 0x01) {
             cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].eeType = *ptr++;
             printf("Default minChainLength: 1, chainLengthRange: 0, eeType: %x\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].eeType);
         }
-		ptr+=3;
+
+		if(j+1<numGroupPerms)
+			ptr+=3;
     }
 }
+printf("\n\n			ptr = %x\n", *ptr);
 
 	/*
 		// Parsing dell'Issuer
