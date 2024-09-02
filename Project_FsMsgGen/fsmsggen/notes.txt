@@ -137,7 +137,7 @@ ff
 66 
 01 02                                  <minChainLength>2</minChainLength>
 c0                                     <eeType>11000000</eeType>
-20 80                                  PsidGroupPermissions
+20 80                              PsidGroupPermissions
 01 01                                  subjectPermissions: 1 item
 80 02                                  PsidSspRange: Item 0 len 02 CRT REQ
 02 6f                                    psid
@@ -264,7 +264,7 @@ a9 ba 9e f3 cb 74 4d 7c       sha256Digest (digest of AA)
 25 9e 9d 80                   validityperiod start
 84                            duration type
 22 38                         hours
-60                            assurance level
+60                            assurancelevel
 01 03                         appPermissions: 3 items
 80 01                         Item 0
 24                            psid

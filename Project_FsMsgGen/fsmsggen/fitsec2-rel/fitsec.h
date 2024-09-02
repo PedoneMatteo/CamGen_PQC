@@ -956,11 +956,11 @@ typedef struct MyFSCertificate{
 // Definizione della struttura per PsidSsp
 typedef struct
 {
-	uint32_t psid;
+	uint16_t psid;
 	struct
 	{
+        uint8_t bitmapSspLength;
 		uint8_t *bitmapSsp;
-		size_t bitmapSspLength;
 	} ssp;
 } PsidSsp;
 
@@ -976,7 +976,7 @@ typedef struct
 // Definizione della struttura per PsidSspRange
 typedef struct
 {
-	uint32_t psid;
+	uint16_t psid;
 	BitmapSspRange sspRange;
 } PsidSspRange;
 
@@ -1075,10 +1075,12 @@ typedef struct
 			uint8_t hours[2];
 		} duration;
 	} validityPeriod;
-	char *assuranceLevel;
+	uint8_t assuranceLevel;
 	PsidSsp *appPermissions;
 	size_t numAppPermissions;
-	CertIssuePermissions certIssuePermissions;
+	union{
+        CertIssuePermissions certIssuePermissions;
+    };
 	EncryptionKey encryptionKey;
 	VerifyKeyIndicator verifyKeyIndicator;
 } ToBeSigned;
