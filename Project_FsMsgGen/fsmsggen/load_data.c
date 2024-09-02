@@ -40,7 +40,6 @@ by simple request to the author.
 #endif
 int lenCert = 3960; // 187
 
-MyFSCertificate MyInstallCertificate(char *data, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror);
 EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror);
 void printCertificate(unsigned char *data, int len)
 {
@@ -134,7 +133,6 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 
 			printCertificate(data, cert_len);
 			EtsiTs103097Certificate *certif = Emulated_InstallCertificate(data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
-			// MyFSCertificate certificate = MyInstallCertificate(data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
 			const FSCertificate *c = FitSec_InstallCertificate(e, data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
 			digest = FSCertificate_Digest(c);
 			const char *name = FSCertificate_Name(c);
@@ -483,7 +481,7 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 	printf("assuranceLevel: %x\n", cert->toBeSigned.assuranceLevel);
 	ptr += 2;
 	int num_appPerms = *ptr++;
-	
+
 	printf("num_appPerms: %d\n", num_appPerms);
 
 	cert->toBeSigned.appPermissions = malloc(num_appPerms * sizeof(PsidSsp));
@@ -509,7 +507,7 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 
 		if (ifBitmap != 0x00)
 		{
-			ptr += 2; 
+			ptr += 2;
 			cert->toBeSigned.appPermissions[i].ssp.bitmapSspLength = *ptr++;
 			printf("bitmapSspLength[%d]: %d\n", i, cert->toBeSigned.appPermissions[i].ssp.bitmapSspLength);
 
@@ -527,248 +525,265 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 		}
 	}
 
-if (*ptr == 0x01) {
-    printf("\ncertIssuePermissions detected\n");
-    ptr++;
-    
-    int numGroupPerms = *ptr++;
-    printf("numGroupPerms: %d\n", numGroupPerms);
-    
-    cert->toBeSigned.certIssuePermissions.numGroupPermissions = numGroupPerms;
-    cert->toBeSigned.certIssuePermissions.psidGroupPermissions = malloc(numGroupPerms * sizeof(PsidGroupPermissions));
-    
-    ptr += 3;
-    
-    for (int j = 0; j < numGroupPerms; j++) {
-        cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.numRanges = *ptr;
-        int numRanges = *ptr++;
-        printf("Group %d - numRanges: %d\n", j, numRanges);
-        
-        cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges = malloc(numRanges * sizeof(PsidSspRange));
-        
-        for (int k = 0; k < numRanges; k++) {
-			printf("\n\n k = %d \n\n", k);
-            if (*ptr == 0x80) {
-                ptr++;
-                if (*ptr == 0x01) {
-					ptr++;
-                    cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid = *ptr++;
-                    printf("psid (1-byte): 0x%02X\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid);
-                } else {
-					ptr++;
-                    cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid = (*ptr << 8) | *(ptr + 1);
-                    printf("psid (2-byte): 0x%04X\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid);
-                    ptr += 2;
-                }
-                ptr += 2;
-                
-                cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValueLength = *ptr;
-                printf("sspValueLength: %d\n", *ptr);
-                
-                cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValue = malloc(*ptr * sizeof(uint8_t));
-                ptr++;
-                
-                for (int z = 0; z < cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValueLength; z++) {
-                    cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValue[z] = *ptr++;
-                    printf("sspValue[%d]: 0x%02X\n", z, cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValue[z]);
-                }
-                
-                cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmaskLength = *ptr;
-                printf("sspBitmaskLength: %d\n", *ptr);
-                
-                cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmask = malloc(*ptr * sizeof(uint8_t));
-                ptr++;
-                
-                for (int z = 0; z < cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmaskLength; z++) {
-                    cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmask[z] = *ptr++;
-                    printf("sspBitmask[%d]: 0x%02X\n", z, cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmask[z]);
-                }
-				//printf("ptr = %x\n",*ptr);
-            } else if (*ptr == 0x00) {
-                ptr++;
-                if (*ptr == 0x01) {
-					ptr++;
-                    cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid = *ptr++;
-                    printf("psid (1-byte): 0x%02X\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid);
-                } else {
-                    cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid = (*ptr << 8) | *(ptr + 1);
-                    printf("psid (2-byte): 0x%04X\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid);
-                    ptr += 2;
-                }
-            }
-        }
-        
-        if (*ptr == 0x01) {
-            ptr++;
-            cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].minChainLength = *ptr++;
-            printf("minChainLength: %d\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].minChainLength);
-            cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].eeType = *ptr++;
-            printf("eeType: %x\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].eeType);
-        } else {
-            cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].minChainLength = 1;
-            cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].chainLengthRange = 0;
-            cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].eeType = *ptr++;
-            printf("Default minChainLength: 1, chainLengthRange: 0, eeType: %x\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].eeType);
-        }
-
-		if(j+1<numGroupPerms)
-			ptr+=3;
-    }
-}
-printf("\n\n			ptr = %x\n", *ptr);
-
-	/*
-		// Parsing dell'Issuer
-		cert->issuer.name = (char *)ptr;
-		ptr += strlen((char *)ptr) + 1;  // Salta il nome del certificatore (issuer)
-
-		cert->issuer.issuerType.sha256AndDigest = *ptr++;
-
-		// Parsing del campo ToBeSigned
-		cert->toBeSigned.id = *ptr++;
-		READ_DATA(cert->toBeSigned.cracaId, ptr, 7);
-		READ_DATA(&cert->toBeSigned.crlSeries, ptr, sizeof(cert->toBeSigned.crlSeries));
-
-		// Validity Period
-		READ_DATA(&cert->toBeSigned.validityPeriod.start, ptr, sizeof(cert->toBeSigned.validityPeriod.start));
-		READ_DATA(&cert->toBeSigned.validityPeriod.duration.hours, ptr, sizeof(cert->toBeSigned.validityPeriod.duration.hours));
-
-		// App Permissions
-		cert->toBeSigned.numAppPermissions = 1;  // Supponendo che ci sia un singolo permesso
-		cert->toBeSigned.appPermissions = (PsidSsp *)malloc(sizeof(PsidSsp));
-		if (!cert->toBeSigned.appPermissions) {
-			*error = -2;  // Errore: memoria non disponibile per i permessi
-			free(cert);
-			return NULL;
-		}
-		READ_DATA(&cert->toBeSigned.appPermissions->psid, ptr, sizeof(cert->toBeSigned.appPermissions->psid));
-		cert->toBeSigned.appPermissions->ssp.bitmapSspLength = *ptr++;
-		cert->toBeSigned.appPermissions->ssp.bitmapSsp = (uint8_t *)malloc(cert->toBeSigned.appPermissions->ssp.bitmapSspLength);
-		READ_DATA(cert->toBeSigned.appPermissions->ssp.bitmapSsp, ptr, cert->toBeSigned.appPermissions->ssp.bitmapSspLength);
-
-		// Cert Issue Permissions
-		cert->toBeSigned.certIssuePermissions.numGroupPermissions = 1;  // Supponendo che ci sia un singolo gruppo di permessi
-		cert->toBeSigned.certIssuePermissions.psidGroupPermissions = (PsidGroupPermissions *)malloc(sizeof(PsidGroupPermissions));
-		if (!cert->toBeSigned.certIssuePermissions.psidGroupPermissions) {
-			*error = -3;  // Errore: memoria non disponibile per i permessi di emissione
-			free(cert->toBeSigned.appPermissions);
-			free(cert);
-			return NULL;
-		}
-		// (Continua il parsing degli altri campi come minChainLength, chainLengthRange, eeType, ecc.)
-
-		// Parsing EncryptionKey e VerifyKeyIndicator
-		cert->toBeSigned.encryptionKey.supportedSymmAlg = *ptr++;
-		memcpy(&cert->toBeSigned.encryptionKey.publicKey, ekey, sizeof(FSPublicKey));
-		memcpy(&cert->toBeSigned.verifyKeyIndicator.verificationKey, vkey, sizeof(FSPublicKey));
-
-		// Parsing della Signature
-		// Supponiamo che la firma sia di tipo ECDSA con NIST P-256
-		cert->signature.curve = FS_NISTP256;  // Supponendo che si usi questa curva
-		READ_DATA(&cert->signature.point, ptr, sizeof(cert->signature.point));
-		cert->signature.s = (uint8_t *)malloc(32);  // Supponendo che la firma sia 256-bit
-		if (!cert->signature.s) {
-			*error = -4;  // Errore: memoria non disponibile per la firma
-			free(cert->toBeSigned.certIssuePermissions.psidGroupPermissions);
-			free(cert->toBeSigned.appPermissions);
-			free(cert);
-			return NULL;
-		}
-		READ_DATA(cert->signature.s, ptr, 32);
-
-		// Se ci sono altri campi da analizzare, aggiungili qui
-
-		*error = 0;  // Nessun errore
-		*/
-	return cert;
-}
-
-MyFSCertificate MyInstallCertificate(char *data, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror)
-{
-	MyFSCertificate cert;
-	/*
-	int j = 1;
-	cert.version = data[j++]; // j=1
-	printf("cert.version = %x\n", cert.version);
-
-	cert.type = data[j++]; // j=2
-	printf("cert.type = %x\n", cert.type);
-
-	cert.issuer.type = data[j++]; // j=3
-	printf("cert.issuer.type = %x\n", cert.issuer.type);
-
-	for (int i = 0; i < 8; i++)
+	if (*ptr == 0x01)
 	{
-		cert.issuer.sha256Digest[i] = data[j++]; // j=4...11
-		printf("cert.issuer.sha256Digest[%d] = %x\n", i, cert.issuer.sha256Digest[i]);
-	}
+		printf("\ncertIssuePermissions detected\n");
+		ptr++;
 
-	// j=12 now
-	j++;
+		int numGroupPerms = *ptr++;
+		printf("numGroupPerms: %d\n", numGroupPerms);
 
-	cert.toBeSigned.id.val = data[j++]; // j=13
-	printf("cert.toBeSigned.id.idType = %x\n", cert.toBeSigned.id.val);
+		cert->toBeSigned.certIssuePermissions.numGroupPermissions = numGroupPerms;
+		cert->toBeSigned.certIssuePermissions.psidGroupPermissions = malloc(numGroupPerms * sizeof(PsidGroupPermissions));
 
+		ptr += 3;
 
-	for (int i = 0; i < 3; i++)
-	{
-		cert.toBeSigned.cracaId[i] = data[j++]; // j=14,15,16
-		printf("cert.toBeSigned.cracaId[%d] = %x\n", i, cert.toBeSigned.cracaId[i]);
-	}
+		for (int j = 0; j < numGroupPerms; j++)
+		{
+			cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.numRanges = *ptr;
+			int numRanges = *ptr++;
+			printf("Group %d - numRanges: %d\n", j, numRanges);
 
-	cert.toBeSigned.crlSeries = (data[j] << 8) | data[j + 1];
-	j += 2; // j=17,18
-	printf("cert.toBeSigned.crlSeries = %x\n", cert.toBeSigned.crlSeries);
+			cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges = malloc(numRanges * sizeof(PsidSspRange));
 
-	for (int i = 0; i < 4; i++)
-	{
-		cert.toBeSigned.validityPeriod.start[i] = data[j++];
-		printf("cert.toBeSigned.validityPeriod.start[%d] = %x\n",i, cert.toBeSigned.validityPeriod.start[i]);
-	} // j=19,20,21,22
+			for (int k = 0; k < numRanges; k++)
+			{
+				printf("\n\n k = %d \n\n", k);
+				if (*ptr == 0x80)
+				{
+					ptr++;
+					if (*ptr == 0x01)
+					{
+						ptr++;
+						cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid = *ptr++;
+						printf("psid (1-byte): 0x%02X\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid);
+					}
+					else
+					{
+						ptr++;
+						cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid = (*ptr << 8) | *(ptr + 1);
+						printf("psid (2-byte): 0x%04X\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid);
+						ptr += 2;
+					}
+					ptr += 2;
 
-	cert.toBeSigned.validityPeriod.duration.type = data[j++]; // j=23
-	printf("cert.toBeSigned.validityPeriod.duration.type = %x\n", cert.toBeSigned.validityPeriod.duration.type);
+					cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValueLength = *ptr;
+					printf("sspValueLength: %d\n", *ptr);
 
-	cert.toBeSigned.validityPeriod.duration.hours = (data[j] << 8) | data[j + 1];
-	j += 2; // j=24,25
-	printf("cert.toBeSigned.validityPeriod.duration.hours = %x\n", cert.toBeSigned.validityPeriod.duration.hours);
+					cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValue = malloc(*ptr * sizeof(uint8_t));
+					ptr++;
 
-	cert.toBeSigned.assuranceLevel = data[j++]; // j=26
-	printf("cert.toBeSigned.assuranceLevel = %x\n", cert.toBeSigned.assuranceLevel);
-	j++;
+					for (int z = 0; z < cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValueLength; z++)
+					{
+						cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValue[z] = *ptr++;
+						printf("sspValue[%d]: 0x%02X\n", z, cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValue[z]);
+					}
 
-	cert.toBeSigned.appPermissions.appPermissionsCount = data[j++];
-	printf("cert.toBeSigned.appPermissions.appPermissionsCount = %d\n", cert.toBeSigned.appPermissions.appPermissionsCount);
+					cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmaskLength = *ptr;
+					printf("sspBitmaskLength: %d\n", *ptr);
 
-	for(int i = 0; i < cert.toBeSigned.appPermissions.appPermissionsCount; i++) {
-		cert.toBeSigned.appPermissions.item[i].sspType = data[j++];  // SSP Type
-		printf("appPermissions.items[%d].sspType = %x\n", i, cert.toBeSigned.appPermissions.item[i].sspType);
+					cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmask = malloc(*ptr * sizeof(uint8_t));
+					ptr++;
 
-		// PSID (encoded in a compact format with MSB signaling continuation)
-		if (data[j] & 0x80) {  // Se il bit più significativo è 1, il PSID è su 2 byte
-			cert.toBeSigned.appPermissions.item[i].psid = ((data[j] & 0x7F) << 8) | data[j + 1];
-			j += 2;
-		} else {  // PSID su 1 byte
-			cert.toBeSigned.appPermissions.item[i].psid = data[j++];
-		}
-		printf("appPermissions.items[%d].psid = %x\n", i, cert.toBeSigned.appPermissions.item[i].psid);
-
-		// SSP (se presente)
-		if (data[j] & 0x80) {  // Verifica se c'è un SSP
-			uint8_t sspLength = data[j++] & 0x7F;  // Ottieni la lunghezza dell'SSP
-			cert.toBeSigned.appPermissions.item[i].bitmapLength = sspLength;
-			for (int k = 0; k < sspLength; k++) {
-				cert.toBeSigned.appPermissions.item[i].bitmap[k] = data[j++];
+					for (int z = 0; z < cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmaskLength; z++)
+					{
+						cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmask[z] = *ptr++;
+						printf("sspBitmask[%d]: 0x%02X\n", z, cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmask[z]);
+					}
+					// printf("ptr = %x\n",*ptr);
+				}
+				else if (*ptr == 0x00)
+				{
+					ptr++;
+					if (*ptr == 0x01)
+					{
+						ptr++;
+						cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid = *ptr++;
+						printf("psid (1-byte): 0x%02X\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid);
+					}
+					else
+					{
+						cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid = (*ptr << 8) | *(ptr + 1);
+						printf("psid (2-byte): 0x%04X\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid);
+						ptr += 2;
+					}
+				}
 			}
-			printf("appPermissions.items[%d].bitmap = ", i);
-			for (int k = 0; k < sspLength; k++) {
-				printf("%02x", cert.toBeSigned.appPermissions.item[i].bitmap[k]);
+
+			if (*ptr == 0x01)
+			{
+				ptr++;
+				cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].minChainLength = *ptr++;
+				printf("minChainLength: %d\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].minChainLength);
+				cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].eeType = *ptr++;
+				printf("eeType: %x\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].eeType);
+			}
+			else
+			{
+				cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].minChainLength = 1;
+				cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].chainLengthRange = 0;
+				cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].eeType = *ptr++;
+				printf("Default minChainLength: 1, chainLengthRange: 0, eeType: %x\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].eeType);
+			}
+
+			if (j + 1 < numGroupPerms)
+				ptr += 3;
+		}
+	}
+
+	if (*ptr == 0x00)
+	{
+		// Fill supportedSymmAlg
+		cert->toBeSigned.encryptionKey.supportedSymmAlg = FS_AES_128_CCM;
+		printf("\nSupported Symmetric Algorithm: AES-128-CCM\n");
+		ptr++;
+
+		// Check for public key type
+		if (*ptr == 0x80)
+		{
+			ptr++;
+			// Set the curve type
+			cert->toBeSigned.encryptionKey.publicKey.curve = FS_NISTP256;
+			printf("Public Key Curve: NIST P-256\n");
+
+			// Check for the point type
+			if (*ptr == 0x83)
+			{
+				ptr++;
+
+				// Set the point type based on the value
+				cert->toBeSigned.encryptionKey.publicKey.point.type = FS_COMPRESSED_LSB_Y_1;
+				printf("Point Type: Compressed Y=1\n");
+
+				// Allocate memory for the x coordinate (compressed format only has the x coordinate)
+				cert->toBeSigned.encryptionKey.publicKey.point.x = malloc(32 * sizeof(uint8_t)); // NIST P-256 has 32-byte coordinates
+
+				// Copy the x coordinate from the provided data
+				printf("X Coordinate: ");
+				for (int i = 0; i < 32; i++)
+				{
+					cert->toBeSigned.encryptionKey.publicKey.point.x[i] = *ptr++;
+					printf("%02x", cert->toBeSigned.encryptionKey.publicKey.point.x[i]);
+				}
+				printf("\n");
+
+				// Since it's compressed-y-1, y coordinate is not used
+				cert->toBeSigned.encryptionKey.publicKey.point.y = NULL;
+				printf("Y Coordinate: NULL\n");
+
+				// If you have a `k` parameter to be set, do it here
+				cert->toBeSigned.encryptionKey.publicKey.k = NULL; // Assuming no value is provided
+			}
+		}
+	}
+
+	if (*ptr == 0x80)
+	{
+		ptr++;
+		if (*ptr == 0x80)
+		{
+			cert->toBeSigned.verifyKeyIndicator.verificationKey.curve = FS_NISTP256;
+			printf("\nVerification Key Curve: NIST P-256\n");
+			ptr++;
+
+			// Check for the point type
+			if (*ptr == 0x82)
+			{
+				ptr++;
+
+				// Set the point type based on the value
+				cert->toBeSigned.encryptionKey.publicKey.point.type = FS_COMPRESSED_LSB_Y_0;
+				printf("Point Type: Compressed Y=0\n");
+
+				// Allocate memory for the x coordinate (compressed format only has the x coordinate)
+				cert->toBeSigned.encryptionKey.publicKey.point.x = malloc(32 * sizeof(uint8_t)); // NIST P-256 has 32-byte coordinates
+
+				// Copy the x coordinate from the provided data
+				printf("X Coordinate: ");
+				for (int i = 0; i < 32; i++)
+				{
+					cert->toBeSigned.encryptionKey.publicKey.point.x[i] = *ptr++;
+					printf("%02x", cert->toBeSigned.encryptionKey.publicKey.point.x[i]);
+				}
+				printf("\n");
+
+				// Since it's compressed-y-0, y coordinate is not used
+				cert->toBeSigned.encryptionKey.publicKey.point.y = NULL;
+				printf("Y Coordinate: NULL\n");
+
+				// If you have a `k` parameter to be set, do it here
+				cert->toBeSigned.encryptionKey.publicKey.k = NULL; // Assuming no value is provided
+			}
+			else if (*ptr == 0x83)
+			{
+				ptr++;
+
+				// Set the point type based on the value
+				cert->toBeSigned.encryptionKey.publicKey.point.type = FS_COMPRESSED_LSB_Y_1;
+				printf("Point Type: Compressed Y=1\n");
+
+				// Allocate memory for the x coordinate (compressed format only has the x coordinate)
+				cert->toBeSigned.encryptionKey.publicKey.point.x = malloc(32 * sizeof(uint8_t)); // NIST P-256 has 32-byte coordinates
+
+				// Copy the x coordinate from the provided data
+				printf("X Coordinate: ");
+				for (int i = 0; i < 32; i++)
+				{
+					cert->toBeSigned.encryptionKey.publicKey.point.x[i] = *ptr++;
+					printf("%02x", cert->toBeSigned.encryptionKey.publicKey.point.x[i]);
+				}
+				printf("\n");
+
+				// Since it's compressed-y-1, y coordinate is not used
+				cert->toBeSigned.encryptionKey.publicKey.point.y = NULL;
+				printf("Y Coordinate: NULL\n");
+
+				// If you have a `k` parameter to be set, do it here
+				cert->toBeSigned.encryptionKey.publicKey.k = NULL; // Assuming no value is provided
+			}
+		}
+	}
+
+	if (*ptr == 0x80)
+	{
+		// Imposta la curva
+		cert->signature.curve = FS_NISTP256;
+		printf("\nSignature Curve: NIST P-256\n");
+		ptr++; // Avanza al prossimo byte
+
+		// Ora ci aspettiamo che ptr punti a `rSig` (x-only)
+		if (*ptr == 0x80)
+		{
+			ptr++; // Avanza al byte successivo che contiene il valore x della firma
+
+			// Allocazione e copia del valore x nella struttura point.x
+			cert->signature.point.type = FS_X_COORDINATE_ONLY; // Indica che è solo la coordinata x
+			cert->signature.point.x = malloc(32 * sizeof(uint8_t));
+			printf("Signature X Coordinate: ");
+			for (int i = 0; i < 32; i++)
+			{
+				cert->signature.point.x[i] = *ptr++;
+				printf("%02x", cert->signature.point.x[i]);
 			}
 			printf("\n");
-		} else {
-			cert.toBeSigned.appPermissions.item[i].bitmapLength = 0;  // Nessun SSP
+
+			// La coordinata y non è presente poiché è un punto x-only
+			cert->signature.point.y = NULL;
+			printf("Signature Y Coordinate: NULL\n");
+
+			// Ora ci aspettiamo che ptr punti a `sSig`
+			// Allocazione e copia del valore s nella struttura
+			cert->signature.s = malloc(32 * sizeof(uint8_t));
+			printf("Signature S Value: ");
+			for (int i = 0; i < 32; i++)
+			{
+				cert->signature.s[i] = *ptr++;
+				printf("%02x", cert->signature.s[i]);
+			}
+			printf("\n");
 		}
-	}*/
+	}
+	printf("\n");
 	return cert;
 }
 

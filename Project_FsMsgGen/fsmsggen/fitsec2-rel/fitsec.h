@@ -836,100 +836,6 @@ extern "C" {
     FITSEC_EXPORT size_t FitSec_DecryptMessage(FitSec* e, FSMessageInfo* info);
     FITSEC_EXPORT size_t FitSec_DecryptMessageAsync(FitSec* e, FSMessageInfo* info, void * const userObject);
 
-typedef struct FSIssuer{
-    uint8_t type;
-    uint8_t sha256Digest[8]; // 8 bytes
-} FSIssuer;
-
-typedef struct FSCertificateId{
-    uint8_t val; // none or other types
-    // Optional fields if idType is not 'none'
-} FSCertificateId;
-
-typedef struct FSduration{
-    uint8_t type;
-    uint16_t hours;
-}FSduration;
-
-typedef struct FSValidityPeriod{
-    uint8_t start[4];
-    FSduration duration;
-    //uint32_t duration; // in hours
-} FSValidityPeriod;
-
-typedef struct FSPsidSsp{
-    uint32_t psid;                          
-    uint8_t sspType;                        
-    uint8_t bitmap[MAX_BITMAP_SIZE];
-    uint8_t bitmapLength;
-} FSPsidSsp;
-
-typedef struct FSAppPermissions{
-    uint8_t appPermissionsCount;
-    FSPsidSsp item[20]; 
-} FSAppPermissions;
-
-typedef struct FSBitmapSspRange{
-    uint8_t sspValue[8]; // max length of sspValue
-    uint8_t sspBitmask[8]; // max length of sspBitmask
-} FSBitmapSspRange;
-
-typedef struct FSPsidSspRange{
-    uint16_t psid;
-    FSBitmapSspRange sspRange;
-} FSPsidSspRange;
-
-typedef struct FSSubjectPermissions{
-    FSPsidSspRange PsidSspRange[10]; // max 10 ranges, adjust as needed
-    size_t PsidSspRangeCount;
-} FSSubjectPermissions;
-
-typedef struct FSCertIssuePermissions{
-    FSSubjectPermissions subjectPermissions;
-    uint8_t minChainLength;
-    uint8_t chainLengthRange;
-    uint8_t eeType; // bit flags for eeType
-} FSCertIssuePermissions;
-
-/*typedef struct {
-    uint8_t curveType;
-    uint8_t compressedY[33]; // 33 bytes for compressed-y
-} FSPublicKey;*/
-
-typedef struct FSEncryptionKey{
-    uint8_t supportedSymmAlg; // enum for symmetric algorithms
-    FSPublicKey publicKey;
-} FSEncryptionKey;
-
-typedef struct FSVerifyKeyIndicator{
-    FSPublicKey verificationKey;
-} FSVerifyKeyIndicator;
-
-typedef struct FSToBeSigned{
-    FSCertificateId id;
-    uint8_t cracaId[3]; // 3 bytes
-    uint16_t crlSeries;
-    FSValidityPeriod validityPeriod;
-    uint8_t assuranceLevel;
-    FSAppPermissions appPermissions;
-    FSCertIssuePermissions certIssuePermissions;
-    FSEncryptionKey encryptionKey;
-    FSVerifyKeyIndicator verifyKeyIndicator;
-} FSToBeSigned;
-
-typedef struct MyFSSignature{
-    uint8_t rSig[32]; // assuming 32 bytes for rSig
-    uint8_t sSig[32]; // assuming 32 bytes for sSig
-} MyFSSignature;
-
-typedef struct MyFSCertificate{
-    uint8_t version;
-    uint8_t type; // explicit or implicit
-    FSIssuer issuer;
-    FSToBeSigned toBeSigned;
-    FSSignature signature;
-} MyFSCertificate;
-
 /*
 -
 -
@@ -1042,7 +948,7 @@ typedef struct FSPublicKey {
 // Definizione della struttura per EncryptionKey
 typedef struct
 {
-	uint8_t supportedSymmAlg; // enum for symmetric algorithms
+	FSSymmAlg supportedSymmAlg; // enum for symmetric algorithms
 	FSPublicKey publicKey;
 } EncryptionKey;
 
