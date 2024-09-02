@@ -147,7 +147,7 @@ unsigned int printBufs (uint8_t *bufs)
 {
    unsigned int i = 0;
    int num_row = -10;
-   for(i=0; i<192; i++){  
+   for(i=0; i<373; i++){  
 
         if(i%16==0){
             num_row+=10;
@@ -224,6 +224,7 @@ static size_t cam_fill(MsgGenApp* app, FitSec * e, FSMessageInfo* m)
         if (_o_secured) {
             printf("\n      FinalizedSignedMessage (in msggen_cam.c)\n");
             len = FitSec_FinalizeSignedMessage(e, m);
+           // printBufs(m->message);
             if (len == 0) {
                 fprintf(stderr, "%-2s SEND %s:\t ERROR: 0x%08X %s\n", FitSec_Name(e), "FinalizeSignedMessage", m->status, FitSec_ErrorMessage(m->status));
             }

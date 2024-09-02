@@ -576,6 +576,7 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
    // printf("\n\nPRE FILL\n\n");
    // printBuf(buf);
     size_t len = a->fill(a, e, &m); 
+    printBuf(buf);
      printf("\n\nPOST FILL\n\n");
     /* for(int i=124; i<132;i++)
         buf[i]= 0xFF;

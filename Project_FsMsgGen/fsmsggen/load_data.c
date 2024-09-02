@@ -37,10 +37,18 @@ by simple request to the author.
 #include <dirent.h>
 #include <errno.h>
 #include <sys/stat.h>
+
+#include <openssl/evp.h>
+#include <openssl/err.h>
+#include <openssl/ec.h>
+#include <openssl/pem.h>
+#include <openssl/sha.h>
+#include <openssl/ecdsa.h>
+
 #endif
 int lenCert = 3960; // 187
 
-EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror);
+EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_len, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror);
 void printCertificate(unsigned char *data, int len)
 {
 	printf("\n	CERTIFICATE: \n");
@@ -49,6 +57,15 @@ void printCertificate(unsigned char *data, int len)
 		printf("%02x ", data[i]);
 	}
 	printf("\n");
+}
+
+int sha256_calculate(char *hash, const char *ptr, size_t len)
+{
+	SHA256_CTX ctx;
+	SHA256_Init(&ctx);
+	SHA256_Update(&ctx, ptr, len);
+	SHA256_Final((unsigned char *)hash, &ctx);
+	return 0;
 }
 
 static char _data[4096]; // for keys only
@@ -132,7 +149,18 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 				cert_len+=64;	*/
 
 			printCertificate(data, cert_len);
-			EtsiTs103097Certificate *certif = Emulated_InstallCertificate(data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
+			size_t certif_len;
+			EtsiExtendedCertificate *certif = Emulated_InstallCertificate(data, &certif_len, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
+			char *dig;
+			sha256_calculate(dig, certif, certif_len);
+			// Visualizzo i primi 8 byte di 32
+					printf("\nSHA-256 Hash: ");
+					for (int i = 0; i < 8; i++)
+					{
+						printf("%02x", (unsigned char)dig[i]);
+					}
+			printf("\n\n");
+
 			const FSCertificate *c = FitSec_InstallCertificate(e, data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
 			digest = FSCertificate_Digest(c);
 			const char *name = FSCertificate_Name(c);
@@ -353,39 +381,24 @@ static int _FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, pchar_t *path, int
 	return count;
 }
 
-/*
-						80 03 00 80 a9 ba 9e f3
-cb 74 4d 7c 31 83 00 00 00 00 00 25 9e 9d 80 84
-22 38 60 01 03 80 01 24 81 04 03 01 ff fc 80 01
-25 81 05 04 01 ff ff ff 00 01 8d 00 80 83 cf 0e
-ed a0 b4 10 85 a8 b7 bc c8 f9 16 f8 34 66 31 64
-7c 30 a5 0a 36 81 54 07 27 d6 0b 81 74 fb 80 80
-82 91 2a b6 34 8d 5a 8b 82 2e 9c a6 13 bf 34 25
-7c d7 cb 50 09 12 42 ee e3 bf 60 60 44 11 1a a2
-d0 80 80 e1 ca 87 f2 3e 48 ae c3 dc 3c 9b f2 ce
-42 59 63 a5 99 db dc 6e 2b 55 8b 9d 21 53 15 7f
-88 24 1a 96 2a 36 5a b2 61 0c 58 1a b2 27 f3 fd
-df 69 e3 ed 24 19 f2 4e 2b 75 07 39 03 b9 f3 51
-47 34 bf
-*/
-
 // Funzione per leggere dati da un buffer
 #define READ_DATA(dest, src, len) \
 	memcpy((dest), (src), (len)); \
 	(src) += (len);
 
 // Funzione per emulare FitSec_InstallCertificate
-EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror)
+EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_len, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror)
 {
 	uint8_t *ptr = data;
-	EtsiTs103097Certificate *cert = (EtsiTs103097Certificate *)malloc(sizeof(EtsiTs103097Certificate));
+	EtsiExtendedCertificate *cert = (EtsiExtendedCertificate *)malloc(sizeof(EtsiExtendedCertificate));
+	size_t total_length = sizeof(EtsiExtendedCertificate);
 	if (!cert)
 	{
 		*perror = -1; // Errore: memoria non disponibile
 		return NULL;
 	}
 
-	memset(cert, 0, sizeof(EtsiTs103097Certificate));
+	memset(cert, 0, sizeof(EtsiExtendedCertificate));
 	ptr++;
 	// Inizializza le strutture di base
 	cert->version = *ptr++;
@@ -398,6 +411,7 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 	else
 	{
 		cert->issuer.sha256.Digest = malloc(8);
+		total_length += 8;
 		READ_DATA(cert->issuer.sha256.Digest, ptr, 8);
 	}
 
@@ -419,6 +433,7 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 
 		// Alloca memoria e legge il valore del nome
 		cert->toBeSigned.id_Value.id.name.val = malloc(cert->toBeSigned.id_Value.id.name.len);
+		total_length += cert->toBeSigned.id_Value.id.name.len;
 		READ_DATA(cert->toBeSigned.id_Value.id.name.val, ptr, cert->toBeSigned.id_Value.id.name.len);
 
 		// Stampa il valore del nome come stringa
@@ -485,6 +500,7 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 	printf("num_appPerms: %d\n", num_appPerms);
 
 	cert->toBeSigned.appPermissions = malloc(num_appPerms * sizeof(PsidSsp));
+	total_length += (num_appPerms * sizeof(PsidSsp));
 
 	for (int i = 0; i < num_appPerms; i++)
 	{
@@ -512,6 +528,7 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 			printf("bitmapSspLength[%d]: %d\n", i, cert->toBeSigned.appPermissions[i].ssp.bitmapSspLength);
 
 			cert->toBeSigned.appPermissions[i].ssp.bitmapSsp = malloc(cert->toBeSigned.appPermissions[i].ssp.bitmapSspLength);
+			total_length += cert->toBeSigned.appPermissions[i].ssp.bitmapSspLength;
 
 			for (int j = 0; j < cert->toBeSigned.appPermissions[i].ssp.bitmapSspLength; j++)
 			{
@@ -535,6 +552,7 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 
 		cert->toBeSigned.certIssuePermissions.numGroupPermissions = numGroupPerms;
 		cert->toBeSigned.certIssuePermissions.psidGroupPermissions = malloc(numGroupPerms * sizeof(PsidGroupPermissions));
+		total_length += (numGroupPerms * sizeof(PsidGroupPermissions));
 
 		ptr += 3;
 
@@ -545,6 +563,7 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 			printf("Group %d - numRanges: %d\n", j, numRanges);
 
 			cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges = malloc(numRanges * sizeof(PsidSspRange));
+			total_length += (numRanges * sizeof(PsidSspRange));
 
 			for (int k = 0; k < numRanges; k++)
 			{
@@ -571,6 +590,7 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 					printf("sspValueLength: %d\n", *ptr);
 
 					cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValue = malloc(*ptr * sizeof(uint8_t));
+					total_length += cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValueLength; // Aggiungi la lunghezza della sspValue
 					ptr++;
 
 					for (int z = 0; z < cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValueLength; z++)
@@ -583,6 +603,7 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 					printf("sspBitmaskLength: %d\n", *ptr);
 
 					cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmask = malloc(*ptr * sizeof(uint8_t));
+					total_length += cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmaskLength;
 					ptr++;
 
 					for (int z = 0; z < cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmaskLength; z++)
@@ -657,7 +678,7 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 
 				// Allocate memory for the x coordinate (compressed format only has the x coordinate)
 				cert->toBeSigned.encryptionKey.publicKey.point.x = malloc(32 * sizeof(uint8_t)); // NIST P-256 has 32-byte coordinates
-
+				total_length += 32;
 				// Copy the x coordinate from the provided data
 				printf("X Coordinate: ");
 				for (int i = 0; i < 32; i++)
@@ -697,7 +718,7 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 
 				// Allocate memory for the x coordinate (compressed format only has the x coordinate)
 				cert->toBeSigned.encryptionKey.publicKey.point.x = malloc(32 * sizeof(uint8_t)); // NIST P-256 has 32-byte coordinates
-
+				total_length += 32;
 				// Copy the x coordinate from the provided data
 				printf("X Coordinate: ");
 				for (int i = 0; i < 32; i++)
@@ -724,7 +745,7 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 
 				// Allocate memory for the x coordinate (compressed format only has the x coordinate)
 				cert->toBeSigned.encryptionKey.publicKey.point.x = malloc(32 * sizeof(uint8_t)); // NIST P-256 has 32-byte coordinates
-
+				total_length += 32;
 				// Copy the x coordinate from the provided data
 				printf("X Coordinate: ");
 				for (int i = 0; i < 32; i++)
@@ -759,6 +780,7 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 			// Allocazione e copia del valore x nella struttura point.x
 			cert->signature.point.type = FS_X_COORDINATE_ONLY; // Indica che è solo la coordinata x
 			cert->signature.point.x = malloc(32 * sizeof(uint8_t));
+			total_length += 32;
 			printf("Signature X Coordinate: ");
 			for (int i = 0; i < 32; i++)
 			{
@@ -774,6 +796,7 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 			// Ora ci aspettiamo che ptr punti a `sSig`
 			// Allocazione e copia del valore s nella struttura
 			cert->signature.s = malloc(32 * sizeof(uint8_t));
+			total_length += 32;
 			printf("Signature S Value: ");
 			for (int i = 0; i < 32; i++)
 			{
@@ -783,7 +806,10 @@ EtsiTs103097Certificate *Emulated_InstallCertificate(char *data, size_t cert_len
 			printf("\n");
 		}
 	}
-	printf("\n");
+
+	// Stampa la lunghezza totale della struttura cert
+	printf("\nTotal length of the cert structure: %zu bytes\n\n", total_length);
+	*struct_len = total_length;
 	return cert;
 }
 
