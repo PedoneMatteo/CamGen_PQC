@@ -47,8 +47,9 @@ by simple request to the author.
 
 #endif
 int lenCert = 3960; // 187
-
+char issuerDigest[8];
 EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_len, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror);
+
 void printCertificate(unsigned char *data, int len)
 {
 	printf("\n	CERTIFICATE: \n");
@@ -67,6 +68,7 @@ int sha256_calculate(char *hash, const char *ptr, size_t len)
 	SHA256_Final((unsigned char *)hash, &ctx);
 	return 0;
 }
+int turn = 0;
 
 static char _data[4096]; // for keys only
 static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_t *fname)
@@ -125,6 +127,7 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 				errno = 0;
 			}
 			*ext = 0;
+			turn++;
 			/** Install certificate (root, AA, local AT pseudonymes, any other)
 			 *  Install any kind of certificates: AA, AT, EC, EA, Root, etc.
 			 *  Local AT certificates shall be followed by private keys.
@@ -154,11 +157,11 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 			char *dig;
 			sha256_calculate(dig, certif, certif_len);
 			// Visualizzo i primi 8 byte di 32
-					printf("\nSHA-256 Hash: ");
-					for (int i = 0; i < 8; i++)
-					{
-						printf("%02x", (unsigned char)dig[i]);
-					}
+			printf("\nSHA-256 Hash: ");
+			for (int i = 0; i < 8; i++)
+			{
+				printf("%02x", (unsigned char)dig[i]);
+			}
 			printf("\n\n");
 
 			const FSCertificate *c = FitSec_InstallCertificate(e, data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
@@ -412,7 +415,18 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 	{
 		cert->issuer.sha256.Digest = malloc(8);
 		total_length += 8;
-		READ_DATA(cert->issuer.sha256.Digest, ptr, 8);
+		if (turn == 1) // se turn = 1 sto creando il certificato di RCA, altrimenti di AA o AT
+		{ // RCA
+			READ_DATA(cert->issuer.sha256.Digest, ptr, 8);
+		}
+		else // AA, AT
+		{
+			for (int i = 0; i < 8; i++)
+			{
+				cert->issuer.sha256.Digest[i] = issuerDigest[i];
+				*ptr++;
+			}
+		}
 	}
 
 	// toBeSigned
@@ -810,6 +824,16 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 	// Stampa la lunghezza totale della struttura cert
 	printf("\nTotal length of the cert structure: %zu bytes\n\n", total_length);
 	*struct_len = total_length;
+
+	if (turn == 3)
+		extendedCert = &cert;
+
+	char dig[32];
+	sha256_calculate(dig, cert, total_length);
+	
+	for (int i = 0; i < 8; i++)
+		issuerDigest[i] = dig[i];
+
 	return cert;
 }
 

@@ -39,7 +39,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #endif
-
+EtsiExtendedCertificate *extendedCert = NULL;
 static FitSecConfig cfg1;
 
 static pchar_t* cfgfile = NULL;
@@ -565,6 +565,7 @@ void MsgGenApp_Send(FitSec * e, MsgGenApp * a)
     ph.ts.tv_sec += _tdelta;
     m.message = (char*)&buf[SHIFT_SEC]; //pointer to the first byte of Secured Header
     m.messageSize = sizeof(buf) - SHIFT_SEC;// + 32+32+64; 
+    m.sign.cert = extendedCert;
     // printBuf(m.message);
     m.sign.signerType = FS_SI_AUTO;
     m.position = position;

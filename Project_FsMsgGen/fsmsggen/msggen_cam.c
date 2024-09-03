@@ -180,6 +180,8 @@ static size_t cam_fill(MsgGenApp* app, FitSec * e, FSMessageInfo* m)
         memset(m->sign.ssp.sspData.opaque, 0, sizeof(m->sign.ssp.sspData.opaque));
         m->sign.ssp.sspLen = 3;
         m->sign.ssp.sspData.bits.version = 1;
+        m->sign.cert = extendedCert;
+        m->encryption.cert = extendedCert ;
         printf("\n      PrepareSignedMessage (in msggen_cam.c)\n");
         len = FitSec_PrepareSignedMessage(e, m); // Prepare the buffer for the signed ITS message envelop
         if (len <= 0) {

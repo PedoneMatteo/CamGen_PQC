@@ -225,6 +225,7 @@ typedef struct
 	FSSignature signature;
 } EtsiExtendedCertificate;
 
+extern EtsiExtendedCertificate *extendedCert;
 /*
 *
 *
@@ -658,7 +659,8 @@ extern "C" {
             }sign;                                ///  or to inform the application about allowed message content
             struct {
                 union {
-                    FSCertificate   * cert;       ///< Certificate to be used for encryption / decription
+                    //FSCertificate   * cert;       ///< Certificate to be used for encryption / decription
+                    EtsiExtendedCertificate *cert;
                     FSPublicKey     * pub;        ///< Needs to be set for EC PSK-encryption
                     FSPrivateKey    * priv;       ///< Needs to be set for EC PSK-decription
                 };
