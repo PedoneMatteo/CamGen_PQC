@@ -48,7 +48,7 @@ by simple request to the author.
 #endif
 int lenCert = 3960; // 187
 char issuerDigest[8];
-EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_len, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror);
+EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_len, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror, int flag_PQC);
 
 void printCertificate(unsigned char *data, int len)
 {
@@ -81,6 +81,9 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 	int error = 0;
 	printf("\npath in _load_data = %s\n", path);
 	end = cstraload(&data, path);
+	int flag_PQC = 0;
+	if (strstr(path, "Dilithium") != NULL)
+		flag_PQC = 1;
 	// printCertificate(data);
 	if (end > data)
 	{
@@ -153,26 +156,31 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 
 			printCertificate(data, cert_len);
 			size_t certif_len;
-			EtsiExtendedCertificate *certif = Emulated_InstallCertificate(data, &certif_len, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
-			char *dig;
-			sha256_calculate(dig, certif, certif_len);
-			// Visualizzo i primi 8 byte di 32
-			printf("\nSHA-256 Hash: ");
-			for (int i = 0; i < 8; i++)
+			if (flag_PQC)
 			{
-				printf("%02x", (unsigned char)dig[i]);
+				EtsiExtendedCertificate *certif = Emulated_InstallCertificate(data, &certif_len, cert_len, vkey, vkey_len, ekey, ekey_len, &error, flag_PQC);
+				char *dig;
+				sha256_calculate(dig, certif, certif_len);
+				// Visualizzo i primi 8 byte di 32
+				printf("\nSHA-256 Hash: ");
+				for (int i = 0; i < 8; i++)
+				{
+					printf("%02x", (unsigned char)dig[i]);
+				}
+				printf("\n\n");
 			}
-			printf("\n\n");
-
-			const FSCertificate *c = FitSec_InstallCertificate(e, data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
-			digest = FSCertificate_Digest(c);
-			const char *name = FSCertificate_Name(c);
-			printf("\n 	digest of %s = %lx\n\n", name, digest);
-			if (name == NULL)
+			else
 			{
-				FSCertificate_SetName(c, fname);
+				const FSCertificate *c = FitSec_InstallCertificate(e, data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
+				digest = FSCertificate_Digest(c);
+				const char *name = FSCertificate_Name(c);
+				printf("\n 	digest of %s = %lx\n\n", name, digest);
+				if (name == NULL)
+				{
+					FSCertificate_SetName(c, fname);
+				}
+				printf("%5.5s %20.20s [%016" PRIX64 "] %s- %s\n", FitSec_Name(e), fname, cint64_hton(digest), vkey ? "(local) " : "", error ? FitSec_ErrorMessage(error) : "CERT");
 			}
-			printf("%5.5s %20.20s [%016" PRIX64 "] %s- %s\n", FitSec_Name(e), fname, cint64_hton(digest), vkey ? "(local) " : "", error ? FitSec_ErrorMessage(error) : "CERT");
 		}
 		else if (data[0] == 0x03)
 		{
@@ -198,8 +206,8 @@ static int _FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, pchar_t *path, int
 
 int FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, const pchar_t *_path)
 {
-	size_t plen;
-	pchar_t *path;
+	size_t plen, plen_pqc;
+	pchar_t *path, *path_pqc;
 
 	plen = _path ? pchar_len(_path) : 0;
 	path = malloc((plen + 256) * sizeof(pchar_t));
@@ -214,8 +222,28 @@ int FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, const pchar_t *_path)
 	if (plen == 0)
 		path[plen++] = '.';
 	path[plen] = 0;
-	int ret = _FitSec_LoadTrustData(e, curTime, path, plen, path + plen + 255); // path = ../../POOL_CAM
+
+	plen_pqc = _path ? pchar_len(_path) + 4 : 0;
+	path_pqc = malloc((plen + 252) * sizeof(pchar_t));
+
+	if (path_pqc == NULL)
+		return -1;
+	if (plen_pqc)
+	{
+		strcpy(path_pqc, path);
+		strcat(path_pqc, "_PQC");
+		while (plen_pqc && (path_pqc[plen_pqc - 1] == '/' || path_pqc[plen_pqc - 1] == '\\'))
+			plen--;
+	}
+	if (plen_pqc == 0)
+		path_pqc[plen_pqc++] = '.';
+	path_pqc[plen_pqc] = 0;
+	printf("\n path_pqc = %s\n", path);
+
+	int ret = _FitSec_LoadTrustData(e, curTime, path, plen, path + plen + 255); //,path_pqc, plen_pqc, path_pqc + plen_pqc + 251); // path = ../../POOL_CAM
+	// int ret1 = _FitSec_LoadTrustData(e, curTime, path_pqc, plen_pqc, path_pqc + plen_pqc + 255);
 	free(path);
+	free(path_pqc);
 	return ret;
 }
 
@@ -329,6 +357,7 @@ static int _FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, pchar_t *path, int
 			printf("\nthe path is a directory: %s\n", path);
 			DIR *d;
 			struct dirent *de;
+
 			d = opendir(path); // open directory
 			if (d)
 			{
@@ -364,6 +393,7 @@ static int _FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, pchar_t *path, int
 					if (path + plen + dlen < end)
 					{
 						pchar_cpy(path + plen, files[i]);
+						printf("\n\tpathhhhh = %s\n", path);
 						count += _FitSec_LoadTrustData(e, curTime, path, plen + dlen, end);
 						free(files[i]);
 					}
@@ -390,7 +420,7 @@ static int _FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, pchar_t *path, int
 	(src) += (len);
 
 // Funzione per emulare FitSec_InstallCertificate
-EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_len, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror)
+EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_len, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror, int flag_PQC)
 {
 	uint8_t *ptr = data;
 	EtsiExtendedCertificate *cert = (EtsiExtendedCertificate *)malloc(sizeof(EtsiExtendedCertificate));
@@ -416,7 +446,7 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 		cert->issuer.sha256.Digest = malloc(8);
 		total_length += 8;
 		if (turn == 1) // se turn = 1 sto creando il certificato di RCA, altrimenti di AA o AT
-		{ // RCA
+		{			   // RCA
 			READ_DATA(cert->issuer.sha256.Digest, ptr, 8);
 		}
 		else // AA, AT
@@ -830,7 +860,7 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 
 	char dig[32];
 	sha256_calculate(dig, cert, total_length);
-	
+
 	for (int i = 0; i < 8; i++)
 		issuerDigest[i] = dig[i];
 

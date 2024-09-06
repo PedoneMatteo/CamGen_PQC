@@ -159,6 +159,10 @@ c0                                     <eeType>11000000</eeType>
                               sSig:
 98 a6 6b 16 2c e3 b8 8b d5 ca cd 02 85 bc 1d b6 55 74 dc 3c 9e f5 24 b6 fb ab f8 60 5a a7 3c b3
 
+
+In RCA_dilithium certificate, la pubKey inizia a indice 212, con intestazione 80 85
+
+
 - - - - - - CERTIFICATE AA - - - - - - 
 80 
 03                            version
@@ -293,3 +297,5 @@ cf 0e ed a0 b4 10 85 a8 b7 bc c8 f9 16 f8 34 66 31 64 7c 30 a5 0a 36 81 54 07 27
 e1 ca 87 f2 3e 48 ae c3 dc 3c 9b f2 ce 42 59 63 a5 99 db dc 6e 2b 55 8b 9d 21 53 15 7f 88 24 1a 
                               sSig:
 96 2a 36 5a b2 61 0c 58 1a b2 27 f3 fd df 69 e3 ed 24 19 f2 4e 2b 75 07 39 03 b9 f3 51 47 34 bf
+
+
