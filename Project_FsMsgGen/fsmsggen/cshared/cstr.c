@@ -309,6 +309,7 @@ char * cstrnload(char * dst, size_t max_size, const pchar_t * path)
 
 char * cstraload(char ** p, const pchar_t * path)
 {
+	
 	char * ret = NULL;
 	//open the file with a binary mode (rb)
 	FILE * f = pchar_fopen(path, _PCH("rb"));
@@ -333,6 +334,7 @@ char * cstraload(char ** p, const pchar_t * path)
 		}
 		fclose(f);
 	}
+	printf("	ciao\n");
 	return ret;
 }
 

@@ -45,10 +45,16 @@ by simple request to the author.
 #include <openssl/sha.h>
 #include <openssl/ecdsa.h>
 
+#define OQS_SIG_dilithium_2_length_public_key 1312
+#define OQS_SIG_dilithium_2_length_secret_key 2528
+#define OQS_SIG_dilithium_2_length_signature 2420
+
 #endif
+int _num_appPerms;
 int lenCert = 3960; // 187
 char issuerDigest[8];
 EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_len, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror, int flag_PQC);
+void freeCertificate(EtsiExtendedCertificate *cert, int flag_PQC);
 
 void printCertificate(unsigned char *data, int len)
 {
@@ -168,6 +174,7 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 					printf("%02x", (unsigned char)dig[i]);
 				}
 				printf("\n\n");
+				freeCertificate(certif, flag_PQC);
 			}
 			else
 			{
@@ -439,7 +446,7 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 	cert->issuer.issuerType = *ptr++;
 	if (cert->issuer.issuerType == 0x81)
 	{
-		*ptr++;
+		ptr++;
 	}
 	else
 	{
@@ -454,20 +461,20 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 			for (int i = 0; i < 8; i++)
 			{
 				cert->issuer.sha256.Digest[i] = issuerDigest[i];
-				*ptr++;
+				ptr++;
 			}
 		}
 	}
 
 	// toBeSigned
-	*ptr++;
+	ptr++;
 	// Avanza il puntatore e assegna l'idType
 	cert->toBeSigned.id_Value.idType = *ptr++;
 	printf("idType: %x\n", cert->toBeSigned.id_Value.idType);
 
 	if (cert->toBeSigned.id_Value.idType == 0x83)
 	{
-		*ptr++;
+		ptr++;
 	}
 	else
 	{
@@ -540,7 +547,7 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 	printf("assuranceLevel: %x\n", cert->toBeSigned.assuranceLevel);
 	ptr += 2;
 	int num_appPerms = *ptr++;
-
+	_num_appPerms = num_appPerms;
 	printf("num_appPerms: %d\n", num_appPerms);
 
 	cert->toBeSigned.appPermissions = malloc(num_appPerms * sizeof(PsidSsp));
@@ -630,6 +637,7 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 					}
 					ptr += 2;
 
+					cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.initialized = 1;
 					cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValueLength = *ptr;
 					printf("sspValueLength: %d\n", *ptr);
 
@@ -672,6 +680,7 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 						printf("psid (2-byte): 0x%04X\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid);
 						ptr += 2;
 					}
+					cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.initialized = 0;
 				}
 			}
 
@@ -740,79 +749,107 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 				cert->toBeSigned.encryptionKey.publicKey.k = NULL; // Assuming no value is provided
 			}
 		}
+	}else{
+		cert->toBeSigned.encryptionKey.supportedSymmAlg=None;
 	}
 
-	if (*ptr == 0x80)
+	if (flag_PQC)
 	{
-		ptr++;
 		if (*ptr == 0x80)
 		{
-			cert->toBeSigned.verifyKeyIndicator.verificationKey.curve = FS_NISTP256;
-			printf("\nVerification Key Curve: NIST P-256\n");
 			ptr++;
-
-			// Check for the point type
-			if (*ptr == 0x82)
+			if (*ptr == 0x85)
 			{
-				ptr++;
-
-				// Set the point type based on the value
-				cert->toBeSigned.encryptionKey.publicKey.point.type = FS_COMPRESSED_LSB_Y_0;
-				printf("Point Type: Compressed Y=0\n");
-
-				// Allocate memory for the x coordinate (compressed format only has the x coordinate)
-				cert->toBeSigned.encryptionKey.publicKey.point.x = malloc(32 * sizeof(uint8_t)); // NIST P-256 has 32-byte coordinates
-				total_length += 32;
-				// Copy the x coordinate from the provided data
-				printf("X Coordinate: ");
-				for (int i = 0; i < 32; i++)
-				{
-					cert->toBeSigned.encryptionKey.publicKey.point.x[i] = *ptr++;
-					printf("%02x", cert->toBeSigned.encryptionKey.publicKey.point.x[i]);
-				}
-				printf("\n");
-
-				// Since it's compressed-y-0, y coordinate is not used
-				cert->toBeSigned.encryptionKey.publicKey.point.y = NULL;
-				printf("Y Coordinate: NULL\n");
-
-				// If you have a `k` parameter to be set, do it here
-				cert->toBeSigned.encryptionKey.publicKey.k = NULL; // Assuming no value is provided
-			}
-			else if (*ptr == 0x83)
-			{
-				ptr++;
-
-				// Set the point type based on the value
-				cert->toBeSigned.encryptionKey.publicKey.point.type = FS_COMPRESSED_LSB_Y_1;
-				printf("Point Type: Compressed Y=1\n");
-
-				// Allocate memory for the x coordinate (compressed format only has the x coordinate)
-				cert->toBeSigned.encryptionKey.publicKey.point.x = malloc(32 * sizeof(uint8_t)); // NIST P-256 has 32-byte coordinates
-				total_length += 32;
-				// Copy the x coordinate from the provided data
-				printf("X Coordinate: ");
-				for (int i = 0; i < 32; i++)
-				{
-					cert->toBeSigned.encryptionKey.publicKey.point.x[i] = *ptr++;
-					printf("%02x", cert->toBeSigned.encryptionKey.publicKey.point.x[i]);
-				}
-				printf("\n");
-
-				// Since it's compressed-y-1, y coordinate is not used
-				cert->toBeSigned.encryptionKey.publicKey.point.y = NULL;
-				printf("Y Coordinate: NULL\n");
-
-				// If you have a `k` parameter to be set, do it here
-				cert->toBeSigned.encryptionKey.publicKey.k = NULL; // Assuming no value is provided
+				ptr += 4;
+				cert->toBeSigned.verifyKeyIndicator.val.DILverificationKey.publicKey = malloc(OQS_SIG_dilithium_2_length_public_key);
+				total_length += OQS_SIG_dilithium_2_length_public_key;
+				READ_DATA(cert->toBeSigned.verifyKeyIndicator.val.DILverificationKey.publicKey, ptr, OQS_SIG_dilithium_2_length_public_key);
 			}
 		}
 	}
+	else
+	{
+		if (*ptr == 0x80)
+		{
+			ptr++;
+			if (*ptr == 0x80)
+			{
+				cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.curve = FS_NISTP256;
+				printf("\nVerification Key Curve: NIST P-256\n");
+				ptr++;
 
+				// Check for the point type
+				if (*ptr == 0x82)
+				{
+					ptr++;
+
+					// Set the point type based on the value
+					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.type = FS_COMPRESSED_LSB_Y_0;
+					printf("Point Type: Compressed Y=0\n");
+
+					// Allocate memory for the x coordinate (compressed format only has the x coordinate)
+					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.x = malloc(32 * sizeof(uint8_t)); // NIST P-256 has 32-byte coordinates
+					total_length += 32;
+					// Copy the x coordinate from the provided data
+					printf("X Coordinate: ");
+					for (int i = 0; i < 32; i++)
+					{
+						cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.x[i] = *ptr++;
+						printf("%02x", cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.x[i]);
+					}
+					printf("\n");
+
+					// Since it's compressed-y-0, y coordinate is not used
+					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.y = NULL;
+					printf("Y Coordinate: NULL\n");
+
+					// If you have a `k` parameter to be set, do it here
+					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.k = NULL; // Assuming no value is provided
+				}
+				else if (*ptr == 0x83)
+				{
+					ptr++;
+
+					// Set the point type based on the value
+					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.type = FS_COMPRESSED_LSB_Y_1;
+					printf("Point Type: Compressed Y=1\n");
+
+					// Allocate memory for the x coordinate (compressed format only has the x coordinate)
+					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.x = malloc(32 * sizeof(uint8_t)); // NIST P-256 has 32-byte coordinates
+					total_length += 32;
+					// Copy the x coordinate from the provided data
+					printf("X Coordinate: ");
+					for (int i = 0; i < 32; i++)
+					{
+						cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.x[i] = *ptr++;
+						printf("%02x", cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.x[i]);
+					}
+					printf("\n");
+
+					// Since it's compressed-y-1, y coordinate is not used
+					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.y = NULL;
+					printf("Y Coordinate: NULL\n");
+
+					// If you have a `k` parameter to be set, do it here
+					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.k = NULL; // Assuming no value is provided
+				}
+			}
+		}
+	}
+	if (flag_PQC)
+	{
+		if (*ptr == 0x85)
+		{
+			ptr += 4;
+			cert->sig.DILsignature.signature = malloc(OQS_SIG_dilithium_2_length_signature);
+			total_length += OQS_SIG_dilithium_2_length_signature;
+			READ_DATA(cert->sig.DILsignature.signature, ptr, OQS_SIG_dilithium_2_length_signature);
+		}
+	}
 	if (*ptr == 0x80)
 	{
 		// Imposta la curva
-		cert->signature.curve = FS_NISTP256;
+		cert->sig.FSsignature.curve = FS_NISTP256;
 		printf("\nSignature Curve: NIST P-256\n");
 		ptr++; // Avanza al prossimo byte
 
@@ -822,30 +859,30 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 			ptr++; // Avanza al byte successivo che contiene il valore x della firma
 
 			// Allocazione e copia del valore x nella struttura point.x
-			cert->signature.point.type = FS_X_COORDINATE_ONLY; // Indica che è solo la coordinata x
-			cert->signature.point.x = malloc(32 * sizeof(uint8_t));
+			cert->sig.FSsignature.point.type = FS_X_COORDINATE_ONLY; // Indica che è solo la coordinata x
+			cert->sig.FSsignature.point.x = malloc(32 * sizeof(uint8_t));
 			total_length += 32;
 			printf("Signature X Coordinate: ");
 			for (int i = 0; i < 32; i++)
 			{
-				cert->signature.point.x[i] = *ptr++;
-				printf("%02x", cert->signature.point.x[i]);
+				cert->sig.FSsignature.point.x[i] = *ptr++;
+				printf("%02x", cert->sig.FSsignature.point.x[i]);
 			}
 			printf("\n");
 
 			// La coordinata y non è presente poiché è un punto x-only
-			cert->signature.point.y = NULL;
+			cert->sig.FSsignature.point.y = NULL;
 			printf("Signature Y Coordinate: NULL\n");
 
 			// Ora ci aspettiamo che ptr punti a `sSig`
 			// Allocazione e copia del valore s nella struttura
-			cert->signature.s = malloc(32 * sizeof(uint8_t));
+			cert->sig.FSsignature.s = malloc(32 * sizeof(uint8_t));
 			total_length += 32;
 			printf("Signature S Value: ");
 			for (int i = 0; i < 32; i++)
 			{
-				cert->signature.s[i] = *ptr++;
-				printf("%02x", cert->signature.s[i]);
+				cert->sig.FSsignature.s[i] = *ptr++;
+				printf("%02x", cert->sig.FSsignature.s[i]);
 			}
 			printf("\n");
 		}
@@ -867,27 +904,49 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 	return cert;
 }
 
+void freeCertificate(EtsiExtendedCertificate *cert, int flag_PQC)
+{
+	free(cert->issuer.sha256.Digest);
+	free(cert->toBeSigned.id_Value.id.name.val);
+	for (int i = 0; i < _num_appPerms; i++)
+	{
+		free(cert->toBeSigned.appPermissions[i].ssp.bitmapSsp);
+	}
+	free(cert->toBeSigned.appPermissions);
+
+	for (int j = 0; j < cert->toBeSigned.certIssuePermissions.numGroupPermissions; j++)
+	{
+		printf("\n j: %d\n", j);
+		for (int k = 0; k < cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.numRanges; k++)
+		{
+			printf("\n k: %d\n", k);
+			if (cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.initialized)
+			{
+				free(cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValue);
+				free(cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmask);
+			}
+		}
+		free(cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges);
+	}
+	free(cert->toBeSigned.certIssuePermissions.psidGroupPermissions);
+
+	if (cert->toBeSigned.encryptionKey.supportedSymmAlg!=None)
+	{
+		free(cert->toBeSigned.encryptionKey.publicKey.point.x);
+	}
+	if (flag_PQC)
+	{
+		free(cert->toBeSigned.verifyKeyIndicator.val.DILverificationKey.publicKey);
+		free(cert->sig.DILsignature.signature);printf("\n ciao \n");
+	}
+	else
+	{
+		free(cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.x);
+		free(cert->sig.FSsignature.point.x);
+		free(cert->sig.FSsignature.s);
+	}
+	free(cert);
+	printf("\n fine free cert\n");
+}
+
 #endif
-
-/*all'interno del mio certificato c'è questo campo che vedo cosi definito in wireshark
-appPermission: 3 Items
-	Item 0
-		PsidSsp
-			psid: psid-ca-basic-services (36)
-			ssp: bitmapSsp (1)
-				bitmapSsp: 01fffc
-	Item 1
-		PsidSsp
-			psid: psid-den-basic-services(37)
-			ssp: bitmapSsp (1)
-				bitmapSsp: 01ffffff
-	Item 2
-		PsidSsp
-			psid: psid-geonetworking-management-communications (141)
-
-i dati binari che fanno riferimento a questa struttura sono:
-01 03 80 01 24 81 04 03 01 ff fc 80 01 25 81 05 04 01 ff ff ff 00 01 8d
-
-non ho il codice in cui i dati vengono inseriti nell'apposita struttura,
-mi scrivi il codice sia delle strutture e sia delle assegnazioni dei vari campi ad esse?
-*/

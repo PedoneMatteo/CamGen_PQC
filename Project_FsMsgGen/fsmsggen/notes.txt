@@ -160,8 +160,8 @@ c0                                     <eeType>11000000</eeType>
 98 a6 6b 16 2c e3 b8 8b d5 ca cd 02 85 bc 1d b6 55 74 dc 3c 9e f5 24 b6 fb ab f8 60 5a a7 3c b3
 
 
-In RCA_dilithium certificate, la pubKey inizia a indice 212, con intestazione 80 85
-
+In RCA_dilithium certificate, la pubKey inizia a indice 212, e prima ha intestazione 80 85
+In RCA_dilithium certificate, la signature inizia a indice 1532, e prima ha intestazione 85 82
 
 - - - - - - CERTIFICATE AA - - - - - - 
 80 

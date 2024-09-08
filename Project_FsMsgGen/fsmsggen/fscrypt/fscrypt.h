@@ -151,7 +151,8 @@ typedef enum {
 	FS_AES_128_CCM = 0,
 	FS_SM4_CCM,
 
-	FSSymmAlg_Max
+	FSSymmAlg_Max,
+	None
 }FSSymmAlg;
 
 static inline uint8_t FSSymm_KeySize(FSSymmAlg alg) {

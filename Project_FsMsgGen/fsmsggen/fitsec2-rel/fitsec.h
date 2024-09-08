@@ -66,6 +66,14 @@
 -
 */
 
+typedef struct DilithiumKey {
+	uint8_t*	 publicKey;
+} DilithiumKey_t;
+
+typedef struct DilithiumSignature {
+	uint8_t*	 signature;
+} DilithiumSignature_t;
+
 // Definizione della struttura per PsidSsp
 typedef struct
 {
@@ -80,6 +88,7 @@ typedef struct
 // Definizione della struttura per bitmapSspRange
 typedef struct
 {
+    uint32_t initialized;
 	uint8_t *sspValue;
 	uint8_t *sspBitmask;
 	size_t sspValueLength;
@@ -162,7 +171,10 @@ typedef struct
 // Definizione della struttura per VerifyKeyIndicator
 typedef struct
 {
-	FSPublicKey verificationKey;
+    union{
+        FSPublicKey FSverificationKey;
+        DilithiumKey_t DILverificationKey;
+    }val;
 } VerifyKeyIndicator;
 
 // Definizione della struttura per ToBeSigned
@@ -222,7 +234,11 @@ typedef struct
 	uint8_t type; // explicit or implicit
 	Issuer issuer;
 	ToBeSigned toBeSigned;
-	FSSignature signature;
+    union{
+        FSSignature FSsignature;
+        DilithiumSignature_t DILsignature;
+    }sig;
+	
 } EtsiExtendedCertificate;
 
 extern EtsiExtendedCertificate *extendedCert;
