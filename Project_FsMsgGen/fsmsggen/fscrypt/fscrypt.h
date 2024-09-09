@@ -22,6 +22,12 @@
 extern "C" {
 #endif
 
+typedef struct extCert{
+	char buf[5000];
+	size_t size;
+}extCert;
+extern extCert myCert; 
+
 typedef struct FSCrypt FSCrypt;
 
 FSCRYPT_EXPORT FSCrypt* FSCrypt_FindEngine(const char* name);

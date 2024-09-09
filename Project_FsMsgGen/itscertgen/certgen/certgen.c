@@ -192,7 +192,7 @@ static size_t _pk_type_to_hashsize[] = {
 	sha256_hash_size, // Signature_PR_ecdsaBrainpoolP256r1Signature,
 	sha384_hash_size, // Signature_PR_ecdsaBrainpoolP384r1Signature
 	sha384_hash_size, // Signature_PR_ecdsaNistP384Signature,
-	sm3_hash_size	  // Signature_PR_sm2Signature
+	sm3_hash_size	  // Signature_PgR_sm2Signature
 };
 
 static void *search_private_Dilithium_key(const char *sName, int alg)

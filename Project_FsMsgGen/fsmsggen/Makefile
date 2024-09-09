@@ -17,11 +17,13 @@ ifeq (,$(FITSEC_SRC))
 endif
 
 bins           = fsmsggen
-sources       := fsmsggen.c load_data.c msggen_cam.c msggen_denm.c msggen_beacon.c msggen_pki.c utils.c	
+sources       := fsmsggen.c load_data.c msggen_cam.c msggen_denm.c msggen_beacon.c msggen_pki.c utils.c	extensions.c
 packages      += pcap cshared openssl thread
 includes      += $(FITSEC_SRC) $(FSPKI_SRC) $(FSCRYPTDIR) $(CSHAREDDIR) payload uppertester
+includes += /root/Project_FsMsGen/liboqs/build/include
 deps          += $(outdir)/libfitsec2.a $(outdir)/libfspki.a $(outdir)/libfscrypt.a $(outdir)/libuppertester.a $(outdir)/libitspayload.a
 libs          += $(outdir)/libfspki.a $(outdir)/libfitsec2.a -Wl,--whole-archive $(outdir)/libfscrypt.a -Wl,--no-whole-archive $(outdir)/libuppertester.a $(outdir)/libitspayload.a -lm -lcurl
+libs          += -L$(PROJECTROOT)/../liboqs/build/lib -loqs
 predirs       += payload $(FSCRYPTDIR) $(FITSEC_SRC) $(FSPKI_SRC) uppertester
 
 include $(CSHAREDDIR)/common.mk
