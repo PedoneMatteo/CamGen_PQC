@@ -79,8 +79,8 @@ __PACKED__(struct ether_header_t {
     uint16_t type;
 });
 
-uint8_t buf[8192] = {
-    // 1024*8
+uint8_t buf[6368] = {
+    // 1024*8 = 8192
     // Ethernet header
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, // destination: broadcast
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // source MAC
@@ -341,9 +341,9 @@ unsigned int printBuf(uint8_t *bufs)
     int dim;
 
     if (round_send % 10 == 0)
-        dim = 373;
+        dim = 6368; // 373;
     else
-        dim = 192;
+        dim = 2547; // 192;
 
     for (i = 0; i < dim; i++)
     {
@@ -365,7 +365,6 @@ unsigned int printBuf(uint8_t *bufs)
             printf("\n"); // newline every 16 bytes for better readability
         }
     }
-
     return i + 1;
 }
 
@@ -634,7 +633,7 @@ int main(int argc, char **argv)
 void printfCertificate(unsigned char *data)
 {
     printf("\n	CERTIFICATE: \n");
-    for (int i = 0; i < 187; i++)
+    for (int i = 0; i < 2420; i++)
     {
         printf("%02x ", data[i]);
     }
@@ -694,63 +693,67 @@ void MsgGenApp_Send(FitSec *e, MsgGenApp *a)
         printf("\n");
 
         // inject in pcap
-
-        // ph.caplen = ph.len = (uint32_t)(m.messageSize + SHIFT_SEC);
-        if (round_send % 10 == 0)
-            ph.caplen = ph.len = 6368;
+        if (flag_PQC == 0)
+        {
+            ph.caplen = ph.len = (uint32_t)(m.messageSize + SHIFT_SEC);
+        }
         else
-            ph.caplen = ph.len = 2547;
-       
+        {
+            if (round_send % 10 == 0)
+                ph.caplen = ph.len = (uint32_t)6368;
+            else
+                ph.caplen = ph.len = (uint32_t)2547;
+        }
 
         mclog_info(MAIN, "%s Msg sent app=%s gt=" cPrefixUint64 "u (%u bytes)\n",
                    strlocaltime(ph.ts.tv_sec, ph.ts.tv_usec),
                    a->appName, timeval2itstime64(&ph.ts), ph.len);
         printf("\n");
-        
-        char *unsecuredData[81];
-        int j = 0;
-        for (int i = 25; i < 106; i++)
+
+        if (flag_PQC == 1)
         {
-            unsecuredData[j++] = buf[i];
-        }
-        int hl = 32;
-        char h[32]; 
-        sha256_calculate(h, unsecuredData, 81);
-        char *_keyPath = "POOL_CAM_PQC";
-        char *sName = "CERT_IUT_A_AT_Dilithium";
-        char *secretKey = search_private_Dilithium_key(_keyPath, sName);
-        char *signatureMessage = malloc(OQS_SIG_dilithium_2_length_signature);
-        size_t lenSignature = OQS_SIG_dilithium_2_length_signature;
+            char *unsecuredData[81];
+            int j = 0;
+            for (int i = 25; i < 106; i++)
+            {
+                unsecuredData[j++] = buf[i];
+            }
+            int hashLen = 32;
+            char hashUnsec[32];
+            sha256_calculate(hashUnsec, unsecuredData, 81);
+            char *_keyPath = "../../POOL_CAM_PQC";
+            char *sName = "CERT_IUT_A_AT_Dilithium";
+            char *secretKey = search_private_Dilithium_key(_keyPath, sName);
+            char *signatureMessage = malloc(OQS_SIG_dilithium_2_length_signature);
+            size_t lenSignature = OQS_SIG_dilithium_2_length_signature;
 
-        OQS_STATUS check = OQS_SIG_dilithium_2_sign(signatureMessage, &(lenSignature), h, hl, secretKey);
+            OQS_STATUS check = OQS_SIG_dilithium_2_sign(signatureMessage, &(lenSignature), hashUnsec, hashLen, secretKey);
 
-        char h_cert[8];
-        if (round_send % 10 != 0)
-        { // digest
-            sha256_calculate(h_cert, myCert.buf, 3827);
-            int index = 117;
-            buf[index++] = 0x80;
-            for (int i = 0; i < 8; i++)
-                buf[index++] = h_cert;
-            buf[index++] = 0x85;
-            for (int i = 0; i < 2420; i++)
-                buf[index++] = signatureMessage[i];
+            char h_cert[8];
+            if (round_send % 10 != 0)
+            { // digest
+                sha256_calculate(h_cert, myCert.buf, 3827);
+                int index = 117;
+                buf[index++] = 0x80;
+                for (int i = 0; i < 8; i++)
+                    buf[index++] = h_cert[i];
+                buf[index++] = 0x85;
+                for (int i = 0; i < 2420; i++)
+                    buf[index++] = signatureMessage[i];
+            }
+            else
+            { // certificate
+                int index = 120;
+                for (int i = 0; i < 3827; i++)
+                    buf[index++] = myCert.buf[i];
+                buf[index++] = 0x85;
+                for (int i = 0; i < 2420; i++)
+                    buf[index++] = signatureMessage[i];
+            }
         }
-        else
-        { // certificate
-            int index = 120;
-            for (int i = 0; i < 3827; i++)
-                buf[index++] = myCert.buf[i++];
-            buf[index++] = 0x85;
-            for (int i = 0; i < 2420; i++)
-                buf[index++] = signatureMessage[i];
-        }
-        round_send++;
         printf("\n\n round_send = %d \n\n", round_send);
-        if (round_send <= 12)
-        {
+        if(round_send<11)
             _packet_handler(&h, &ph, buf);
-        }
     }
     else
     {
@@ -775,9 +778,16 @@ static void _handler_file(pcap_handler_t *h, struct pcap_pkthdr *ph, const uint8
 static void _handler_iface(pcap_handler_t *h, struct pcap_pkthdr *ph, const uint8_t *data)
 {
     printf("\n  - - - INJECTING MESSAGE (in fsmsggen.c)- - -\n\n");
-    printf("    here\n\n");
+
+    printf("\n len = %ld, data = \n ", ph->len);
     printBuf(data);
-    pcap_inject(h->device, data, ph->len);
+
+    int result = pcap_inject(h->device, data, ph->len);
+    if (result == -1)
+    {
+        fprintf(stderr, "Error injecting packet: %s\n", pcap_geterr(h->device));
+    }
+    round_send++;
     /*
         // wait for next hop
         struct timeval tv;

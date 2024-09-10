@@ -23,7 +23,7 @@ extern "C" {
 #endif
 
 typedef struct extCert{
-	char buf[5000];
+	unsigned char buf[5000];
 	size_t size;
 }extCert;
 extern extCert myCert; 

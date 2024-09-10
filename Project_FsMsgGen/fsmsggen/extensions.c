@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "extensions.h"
 
+int flag_PQC = 0;
+
 
 int sha256_calculate(char *hash, const char *ptr, size_t len)
 {
@@ -17,8 +19,7 @@ void *search_private_Dilithium_key(char* _keyPath, const char *sName)
 	char *secretKey = malloc(OQS_SIG_dilithium_2_length_secret_key);
 	char *path = cvstrdup(_keyPath, "/", sName, ".vkey", NULL);
 	FILE *f = fopen(path, "rb");
-    
-    printf("\n path = %s\n", path);
+  
 	if (f == NULL)
 	{
 		fprintf(stderr, "Error: impossible to open the file %s\n", path);

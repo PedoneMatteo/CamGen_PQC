@@ -83,7 +83,7 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 	int error = 0;
 	printf("\npath in _load_data = %s\n", path);
 	end = cstraload(&data, path);
-	int flag_PQC = 0;
+	
 	if (strstr(path, "Dilithium") != NULL)
 		flag_PQC = 1;
 	// printCertificate(data);
@@ -157,13 +157,14 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 				cert_len+=64;	*/
 
 			printCertificate(data, cert_len);
-			myCert.size=cert_len;
-			for(int i=0; i<cert_len; i++)
-				myCert.buf[i]=data[i];
-			
+
 			size_t certif_len;
 			if (flag_PQC)
-			{/*
+			{
+				myCert.size = cert_len;
+				for (int i = 0; i < cert_len; i++)
+					myCert.buf[i] = data[i];
+				/*
 				EtsiExtendedCertificate *certif = Emulated_InstallCertificate(data, &certif_len, cert_len, vkey, vkey_len, ekey, ekey_len, &error, flag_PQC);
 				char *dig;
 				sha256_calculate(dig, certif, certif_len);
@@ -174,7 +175,7 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 					printf("%02x", (unsigned char)dig[i]);
 				}
 				printf("\n\n");*/
-				//freeCertificate(certif, flag_PQC);
+				// freeCertificate(certif, flag_PQC);
 			}
 			else
 			{
@@ -859,13 +860,13 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 			for (int i = 0; i < OQS_SIG_dilithium_2_length_signature; i++)
 				cert->sig.DILsignature.signature[i] = *ptr++;
 			// printf("\nSignature\n");
-			//for (int i = 0; i < OQS_SIG_dilithium_2_length_signature; i++)
+			// for (int i = 0; i < OQS_SIG_dilithium_2_length_signature; i++)
 			//{
 			//	if (i % 32 == 0)
 			//		printf("\n");
 			//	printf("%02x ", cert->sig.DILsignature.signature[i]);
 			//}
-			//printf("\n");
+			// printf("\n");
 			// printf("\n signature set, starts with %x\n", cert->sig.DILsignature.signature[0]);
 		}
 	}
@@ -962,9 +963,12 @@ void freeCertificate(EtsiExtendedCertificate *cert, int flag_PQC)
 		free(cert->toBeSigned.encryptionKey.publicKey.point.x);
 	}
 	if (flag_PQC)
-	{printf("inizio free pqc\n");
+	{
+		printf("inizio free pqc\n");
 		free(cert->toBeSigned.verifyKeyIndicator.val.DILverificationKey.publicKey);
-	printf("metà free pqc\n");	free(cert->sig.DILsignature.signature);printf("fine free pqc\n");
+		printf("metà free pqc\n");
+		free(cert->sig.DILsignature.signature);
+		printf("fine free pqc\n");
 	}
 	else
 	{
