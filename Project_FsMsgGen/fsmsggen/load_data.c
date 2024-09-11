@@ -164,9 +164,9 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 				myCert.size = cert_len;
 				for (int i = 0; i < cert_len; i++)
 					myCert.buf[i] = data[i];
-				/*
+				
 				EtsiExtendedCertificate *certif = Emulated_InstallCertificate(data, &certif_len, cert_len, vkey, vkey_len, ekey, ekey_len, &error, flag_PQC);
-				char *dig;
+				/*char *dig;
 				sha256_calculate(dig, certif, certif_len);
 				// Visualizzo i primi 8 byte di 32
 				printf("\nSHA-256 Hash: ");

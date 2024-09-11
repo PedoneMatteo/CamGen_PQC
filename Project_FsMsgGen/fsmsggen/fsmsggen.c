@@ -752,8 +752,8 @@ void MsgGenApp_Send(FitSec *e, MsgGenApp *a)
             }
         }
         printf("\n\n round_send = %d \n\n", round_send);
-        if(round_send<11)
-            _packet_handler(&h, &ph, buf);
+        //if(round_send<11)
+        _packet_handler(&h, &ph, buf);
     }
     else
     {
@@ -779,8 +779,8 @@ static void _handler_iface(pcap_handler_t *h, struct pcap_pkthdr *ph, const uint
 {
     printf("\n  - - - INJECTING MESSAGE (in fsmsggen.c)- - -\n\n");
 
-    printf("\n len = %ld, data = \n ", ph->len);
-    printBuf(data);
+   // printf("\n len = %ld, data = \n ", ph->len);
+   // printBuf(data);
 
     int result = pcap_inject(h->device, data, ph->len);
     if (result == -1)
