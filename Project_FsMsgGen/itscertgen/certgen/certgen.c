@@ -151,8 +151,13 @@ static asn_enc_rval_t ToBeSignedCertificate_oer_encoder(const asn_TYPE_descripto
 		else
 		{
 			_tbsHashLength = 32;
+			printf("		_oer_  len = %d\n", rc.encoded);
 			sha256_calculate(_tbsHash, (const char *)oer, rc.encoded);
 		}
+	}
+	
+	for(int i = 0; i < rc.encoded; i++){
+		printf("%02X ", (unsigned char) oer[i]);
 	}
 	return rc;
 }
@@ -580,6 +585,7 @@ int main(int argc, char **argv)
 	{
 		printf("\n signer \n"); // non entra per RCA
 		cvstrncpy(buf, CERT_MAX_SIZE, _searchPath, "/", _signerName, ".oer", NULL);
+		printf("\n    buf = %s\n", buf);
 		ebuf = cstrnload(buf, CERT_MAX_SIZE, buf);
 		if (ebuf == NULL)
 		{
@@ -644,6 +650,8 @@ int main(int argc, char **argv)
 			if (cert->issuer.present == IssuerIdentifier_PR_NOTHING)
 				cert->issuer.present = IssuerIdentifier_PR_sha256AndDigest;
 			sha256_calculate(_signerHashBuf, buf, ebuf - buf);
+			size_t myLen =  (size_t)(ebuf-buf);
+			printf("\n\n 	size cert to produce digest = %ld\n\n", myLen);
 			_signerHash = &_signerHashBuf[0];
 			_signerHashLength = sha256_hash_size;
 			OCTET_STRING_fromBuf(&cert->issuer.choice.sha256AndDigest, &_signerHash[sha256_hash_size - 8], 8);
