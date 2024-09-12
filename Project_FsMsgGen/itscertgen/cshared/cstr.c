@@ -135,6 +135,7 @@ char * cvstrncpy(char * dst, size_t maxsize, const char * ptr, ...)
 {
 	va_list ap;
 	char * p = dst;
+	
 	const char * r = ptr;
 	size_t ms = maxsize;
 	if(ms > 0){

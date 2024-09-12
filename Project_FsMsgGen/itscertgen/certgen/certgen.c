@@ -155,10 +155,15 @@ static asn_enc_rval_t ToBeSignedCertificate_oer_encoder(const asn_TYPE_descripto
 			sha256_calculate(_tbsHash, (const char *)oer, rc.encoded);
 		}
 	}
-	
-	for(int i = 0; i < rc.encoded; i++){
-		printf("%02X ", (unsigned char) oer[i]);
+
+	for (int i = 0; i < rc.encoded; i++)
+	{
+		printf("%02X ", (unsigned char)oer[i]);
 	}
+
+	printf("\n\n 	TO BE SIGNED HASH:\n");
+	for (int i = 0; i < 32; i++)
+		printf("%02X ", (unsigned char)_tbsHash[i]);
 	return rc;
 }
 
@@ -187,8 +192,8 @@ static ecc_curve_id _pk_type_to_hashid[] = {
 	sha_256, // Signature_PR_ecdsaBrainpoolP256r1Signature,
 	sha_384, // Signature_PR_ecdsaBrainpoolP384r1Signature
 	sha_384, // Signature_PR_ecdsaNistP384Signature,
-	sm3,		 // Signature_PR_sm2Signature
-	sha_256  //Dilithium
+	sm3,	 // Signature_PR_sm2Signature
+	sha_256	 // Dilithium
 };
 
 static size_t _pk_type_to_hashsize[] = {
@@ -258,7 +263,7 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 	{
 		printf("\t\n - - - Signature oer encoder - - - \n");
 		// look for signer private key
-		printf("s->present = %d\n",s->present);
+		printf("s->present = %d\n", s->present);
 		ecc_curve_id alg = _pk_type_to_curveid[s->present];
 		printf("alg = %ld\n", alg);
 		ecc_hash_id hashId = _pk_type_to_hashid[s->present];
@@ -281,6 +286,7 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 		int hl = 0;
 		// calculate joint hash (toBeSigned Hash computed in ToBeSignedCertificate_oer_encoder + signerHash)
 		memcpy(_tbsHash + _tbsHashLength, _signerHash, _signerHashLength);
+
 		switch (hashId)
 		{
 		case sha_256:
@@ -318,15 +324,11 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 	{ // added Dilithium Signature
 		printf("\t\n - - - Signature oer encoder - - - \n");
 		s->present = Signature_PR_dilithiumsignature;
-		printf("s->present = %d\n",s->present);
 
 		// look for signer private key
 		ecc_hash_id hashId = _pk_type_to_hashid[s->present];
-		printf("\nhashId = %ld\n", hashId);
 
 		const char *sName = _signerName;
-		printf("signerName = %s\n", _signerName);
-		printf(" issuer present? = %d\n", _cert->issuer.present);
 
 		if (sName == NULL && _cert->issuer.present == IssuerIdentifier_PR_self)
 			sName = _certName;
@@ -337,16 +339,26 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 		{
 			ASN__ENCODE_FAILED;
 		}
-		
+
 		char h[48];
 		int hl = 0;
+
 		// calculate joint hash (toBeSigned Hash computed in ToBeSignedCertificate_oer_encoder + signerHash)
 		memcpy(_tbsHash + _tbsHashLength, _signerHash, _signerHashLength);
+
+		printf("\n\n    TBS HASH + SIGNER HASH;\n");
+		int lenJointHash = _tbsHashLength + _signerHashLength;
+		for (int i = 0; i < lenJointHash; i++)
+			printf("%02X ", (unsigned char)_tbsHash[i]);
+
 		switch (hashId)
 		{
 		case sha_256:
 			sha256_calculate(h, _tbsHash, _tbsHashLength + _signerHashLength);
 			hl = sha256_hash_size;
+			printf("\n\n   hash of jointHash:\n");
+			for (int i = 0; i < hl; i++)
+				printf("%02x ", (unsigned char)h[i]);
 			break;
 		case sha_384:
 			sha384_calculate(h, _tbsHash, _tbsHashLength + _signerHashLength);
@@ -360,6 +372,7 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 
 		if (_debug)
 		{
+			printf("\ndebug\n");
 			char hex[48 * 3 + 1];
 			*_bin2hex(hex, sizeof(hex), _tbsHash, _tbsHashLength) = 0;
 			fprintf(stderr, "DEBUG: ToBeSignedHash[%d]=%s\n", _tbsHashLength, hex);
@@ -368,7 +381,7 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 			*_bin2hex(hex, sizeof(hex), h, hl) = 0;
 			fprintf(stderr, "DEBUG: JoinedHash[%d]=%s\n", hl, hex);
 		}
-		
+
 		s->choice.dilithiumsignature.signature.buf = malloc(OQS_SIG_dilithium_2_length_signature);
 		s->choice.dilithiumsignature.signature.size = OQS_SIG_dilithium_2_length_signature;
 
@@ -378,9 +391,10 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 			printf("\n Error: during gen Signature phase\n");
 			return;
 		}
+
 		free(secret_key);
 	}
-	printf("\n%s\n",td->name);
+
 	return asn_OP_CHOICE.oer_encoder(td, constraints, sptr, cb, app_key);
 }
 
@@ -473,6 +487,7 @@ int main(int argc, char **argv)
 	{
 		_certName = _profileName;
 	}
+
 	printf("\n Cert Name = %s\n", _certName);
 
 	// load XER file
@@ -587,6 +602,7 @@ int main(int argc, char **argv)
 		cvstrncpy(buf, CERT_MAX_SIZE, _searchPath, "/", _signerName, ".oer", NULL);
 		printf("\n    buf = %s\n", buf);
 		ebuf = cstrnload(buf, CERT_MAX_SIZE, buf);
+
 		if (ebuf == NULL)
 		{
 			fprintf(stderr, "%s: signer certificate not found", _signerName);
@@ -601,7 +617,6 @@ int main(int argc, char **argv)
 			fprintf(stderr, "%s: failed to load signer certificate at position %d\n  %.30s\n", _signerName, (int)rc_d.consumed, buf + rc_d.consumed);
 			return -1;
 		}
-		printf("\n signer->toBeSigned.verifyKeyIndicator.present = %d\n", signer->toBeSigned.verifyKeyIndicator.present);
 		switch (signer->toBeSigned.verifyKeyIndicator.present)
 		{
 		case VerificationKeyIndicator_PR_verificationKey:
@@ -616,7 +631,7 @@ int main(int argc, char **argv)
 			fprintf(stderr, "%s: signer verification indicator type is unknown\n", _signerName);
 			return -1;
 		}
-		
+
 		_tbsHashType = cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present = hashType;
 
 		if (signer->signature && signer->signature->choice.ecdsaNistP256Signature.rSig.present != EccP256CurvePoint_PR_x_only)
@@ -650,10 +665,23 @@ int main(int argc, char **argv)
 			if (cert->issuer.present == IssuerIdentifier_PR_NOTHING)
 				cert->issuer.present = IssuerIdentifier_PR_sha256AndDigest;
 			sha256_calculate(_signerHashBuf, buf, ebuf - buf);
-			size_t myLen =  (size_t)(ebuf-buf);
+			size_t myLen = (size_t)(ebuf - buf);
 			printf("\n\n 	size cert to produce digest = %ld\n\n", myLen);
 			_signerHash = &_signerHashBuf[0];
 			_signerHashLength = sha256_hash_size;
+			printf("\n\n 	SIGNER HASH:\n");
+			for (int i = 0; i < sha256_hash_size; i++)
+				printf("%02X ", (unsigned char)_signerHash[i]);
+
+			printf("\n	CERTIFICATE: \n");
+			for (int i = 0; i < myLen; i++)
+			{
+				if (i % 32 == 0)
+					printf("\n");
+				printf("%02x ",(unsigned char) buf[i]);
+			}
+			printf("\n");
+
 			OCTET_STRING_fromBuf(&cert->issuer.choice.sha256AndDigest, &_signerHash[sha256_hash_size - 8], 8);
 			break;
 		case PublicVerificationKey_PR_ecsigSm2:
@@ -671,15 +699,13 @@ int main(int argc, char **argv)
 		printf("\n self signed\n");
 		// self-signed
 		// use hash(empty string)
-		printf("\n cert->toBeSigned.verifyKeyIndicator.present = %d\n", cert->toBeSigned.verifyKeyIndicator.present); //-->1
 		switch (cert->toBeSigned.verifyKeyIndicator.present)
 		{
 		case VerificationKeyIndicator_PR_verificationKey:
 			hashType = cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present;
-			printf("\n HASH TYPE = %d\n", hashType);
+
 			if (hashType == 0)
 				hashType = 6;
-			printf("\n cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present = %d\n", hashType); // hashType = 1
 			break;
 		case VerificationKeyIndicator_PR_reconstructionValue:
 			fprintf(stderr, "%s: self-signed certificate can not contain reconstruction value\n", _signerName);
@@ -690,7 +716,6 @@ int main(int argc, char **argv)
 		}
 
 		_tbsHashType = cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present = hashType;
-		printf("\n hashtype = %d\n", hashType);
 		switch (hashType)
 		{
 		case PublicVerificationKey_PR_ecdsaBrainpoolP256r1:
@@ -721,11 +746,9 @@ int main(int argc, char **argv)
 	// generate keys if necessary
 	// buf = name of private key file
 	int rc = -1;
-	printf("\n hashtype = %d\n", hashType);
+
 	/* after this call, buf contains "outputcertificates/CERT_IUT_A_RCA_Dilithium.vkey" */
 	cvstrncpy(buf, CERT_MAX_SIZE, _keyPath, "/", _certName, EXT_VKEY, NULL);
-	printf("\n cert->toBeSigned.verifyKeyIndicator.present = %d\n", cert->toBeSigned.verifyKeyIndicator.present);
-	printf("\n cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present = %d\n", cert->toBeSigned.verifyKeyIndicator.choice.verificationKey.present);
 
 	switch (cert->toBeSigned.verifyKeyIndicator.present)
 	{
@@ -783,7 +806,6 @@ int main(int argc, char **argv)
 
 	if (cert->toBeSigned.encryptionKey)
 	{ // non entra per RCA
-		printf(" cert->toBeSigned.encryptionKey->publicKey.present = %d\n", cert->toBeSigned.encryptionKey->publicKey.present);
 		rc = -1;
 		cvstrncpy(buf, CERT_MAX_SIZE, _keyPath, "/", _certName, EXT_EKEY, NULL);
 		switch (cert->toBeSigned.encryptionKey->publicKey.present)
@@ -982,6 +1004,12 @@ static int fill_Dilithium_keyPair(DilithiumKey_t *dilithium, int algorithmVersio
 
 	free(private_key);
 
+	//printf("\npubkey:\n");
+	//for(int i=0; i<OQS_SIG_dilithium_2_length_public_key; i++){
+	//	if(i%32==0) printf("\n");
+	//	printf("%02X ", (unsigned char)dilithium->publicKey.buf[i]);
+	//}
+//
 	return 6;
 }
 
