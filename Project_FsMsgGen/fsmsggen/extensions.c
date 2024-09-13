@@ -91,10 +91,11 @@ void *search_private_Dilithium_key(char* _keyPath, const char *sName)
 
 void *search_public_Dilithium_key(char* _keyPath)
 {
+	char* ext = cstrpathextension(_keyPath);
+	strcpy(ext,".vkey_pub");
 	char *pubKey = malloc(OQS_SIG_dilithium_2_length_public_key);
 	//char *path = cvstrdup(_keyPath, "/", sName, ".vkey", NULL);
 	printf("\n\n keyPath pubKey = %s\n\n", _keyPath);
-	_keyPath = strcat(_keyPath, ".vkey_pub");
 	FILE *f = fopen(_keyPath, "rb");
   
 	if (f == NULL)

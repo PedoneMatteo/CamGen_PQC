@@ -42,6 +42,7 @@ int _tbsHashLength = 0;
 char _signerHashBuf[256]; // has space for issuer hash
 const char *_signerHash = &_signerHashBuf[0];
 int _signerHashLength = 0;
+char *publicKey_temp;
 
 static const char *const _key_formats[] = {
 	"bin", "hex", "pem", NULL};
@@ -205,10 +206,43 @@ static size_t _pk_type_to_hashsize[] = {
 	sm3_hash_size	  // Signature_PgR_sm2Signature
 };
 
+static void *search_public_Dilithium_key(const char *sName, int alg)
+{
+	char *pubKey = malloc(OQS_SIG_dilithium_2_length_public_key);
+	char *path = cvstrdup(_keyPath, "/", sName, EXT_VKEY, NULL);
+	path = strcat(path, "_pub");
+	printf("\n\n private key of %s\n\n", sName);
+	FILE *f = fopen(path, "rb");
+
+	if (f == NULL)
+	{
+		fprintf(stderr, "Error: impossible to open the file%s\n", path);
+		free(pubKey);
+		free(path);
+		return NULL;
+	}
+
+	// read content of file
+	size_t bytesRead = fread(pubKey, 1, OQS_SIG_dilithium_2_length_public_key, f);
+
+	if (bytesRead != OQS_SIG_dilithium_2_length_public_key)
+	{
+		fprintf(stderr, "Error: wrong len of bytes read %s\n", path);
+		free(pubKey);
+		pubKey = NULL;
+	}
+
+	fclose(f);
+	free(path);
+
+	return pubKey;
+}
+
 static void *search_private_Dilithium_key(const char *sName, int alg)
 {
 	char *secretKey = malloc(OQS_SIG_dilithium_2_length_secret_key);
 	char *path = cvstrdup(_keyPath, "/", sName, EXT_VKEY, NULL);
+	printf("\n\n private key of %s\n\n", sName);
 	FILE *f = fopen(path, "rb");
 
 	if (f == NULL)
@@ -359,6 +393,7 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 			printf("\n\n   hash of jointHash:\n");
 			for (int i = 0; i < hl; i++)
 				printf("%02x ", (unsigned char)h[i]);
+			fflush(stdout);
 			break;
 		case sha_384:
 			sha384_calculate(h, _tbsHash, _tbsHashLength + _signerHashLength);
@@ -391,7 +426,18 @@ static asn_enc_rval_t Signature_oer_encoder(const asn_TYPE_descriptor_t *td,
 			printf("\n Error: during gen Signature phase\n");
 			return;
 		}
+		
 
+		uint8_t *publicKey_temp = search_public_Dilithium_key(sName, 2);
+
+		OQS_STATUS result = OQS_SIG_dilithium_2_verify(h, hl, s->choice.dilithiumsignature.signature.buf, s->choice.dilithiumsignature.signature.size, publicKey_temp);
+		if (result == OQS_SUCCESS)
+			printf("\n SIGNATURE VERIFIED\n");
+		else
+		{
+			fprintf(stderr, "\nERROR: OQS_SIG_dilithium_2_verify failed!\n");
+		}
+		printf("\n");
 		free(secret_key);
 	}
 
@@ -678,7 +724,7 @@ int main(int argc, char **argv)
 			{
 				if (i % 32 == 0)
 					printf("\n");
-				printf("%02x ",(unsigned char) buf[i]);
+				printf("%02x ", (unsigned char)buf[i]);
 			}
 			printf("\n");
 
@@ -971,6 +1017,7 @@ static int fill_Dilithium_keyPair(DilithiumKey_t *dilithium, int algorithmVersio
 	private_key = malloc(OQS_SIG_dilithium_2_length_secret_key);
 
 	OQS_STATUS stat = OQS_SIG_dilithium_2_keypair(dilithium->publicKey.buf, private_key);
+	publicKey_temp = dilithium->publicKey.buf;
 	if (stat != OQS_SUCCESS)
 	{
 		printf("\nError generating Dilithium key pair\n");
@@ -1004,12 +1051,12 @@ static int fill_Dilithium_keyPair(DilithiumKey_t *dilithium, int algorithmVersio
 
 	free(private_key);
 
-	//printf("\npubkey:\n");
-	//for(int i=0; i<OQS_SIG_dilithium_2_length_public_key; i++){
-	//	if(i%32==0) printf("\n");
-	//	printf("%02X ", (unsigned char)dilithium->publicKey.buf[i]);
-	//}
-//
+	 printf("\npubkey:\n");
+	 for(int i=0; i<OQS_SIG_dilithium_2_length_public_key; i++){
+		if(i%32==0) printf("\n");
+		printf("%02X ", (unsigned char)dilithium->publicKey.buf[i]);
+	 }
+	
 	return 6;
 }
 

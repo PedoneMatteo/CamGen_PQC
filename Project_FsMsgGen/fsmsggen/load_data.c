@@ -64,8 +64,11 @@ int _signerHashLength = 0;
 int _num_appPerms;
 int lenCert = 3960; // 187
 char issuerDigest[8];
-void verifySignature(char *hash, int hashlen, char* sig, char *pubKey);
-EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_len, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror, int flag_PQC, char *entity, char* pathVkey);
+
+char* signerAA;
+char* signerAT;
+
+EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_len, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror, int flag_PQC, char *entity);
 void freeCertificate(EtsiExtendedCertificate *cert, int flag_PQC);
 
 void printCertificate(unsigned char *data, int len)
@@ -95,14 +98,21 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 
 	data = malloc(CERT_MAX_SIZE);
 	end = cstrnload(data, CERT_MAX_SIZE, path);
-	
+
 	char *entity;
-	if (strstr(path, "RCA") != NULL)
+	if (strstr(path, "RCA") != NULL){
 		entity = "RCA";
-	if (strstr(path, "AA") != NULL)
+		signerAA = malloc(strlen(path)+1);
+		strcpy(signerAA, path);
+	}else
+	if (strstr(path, "AA") != NULL){
 		entity = "AA";
+		signerAT = malloc(strlen(path)+1);
+		strcpy(signerAT, path);
+	}else{
 	if (strstr(path, "AT") != NULL)
 		entity = "AT";
+	}
 
 	if (strstr(path, "Dilithium") != NULL)
 		flag_PQC = 1;
@@ -118,7 +128,7 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 			ext = cstrpathextension(fname);
 			printf("\n print extension = %s\n", ext); // ext = .oer         ext-3  =  RCA.oer / _AT.oer / _AA.oer
 
-			char *pathVkey;
+			
 			// cmemcmp() controlla se le stringhe passate alla funzione non sono uguali
 			if ((ext - fname) > 3 && cmemcmp("_EA", ext - 3, 3) && cmemcmp("_AA", ext - 3, 3) && cmemcmp("_RCA", ext - 4, 4))
 			{
@@ -126,8 +136,8 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 				printf("\n print extension after pchar_cpy = %s\n", ext); // ext = .vkey
 				vkey = _data;
 				end = cstrnload(vkey, sizeof(_data), path);
+
 				
-				pathVkey=path;
 
 				printf("\n path = %s\n", path); // path = ../../POOL_CAM/CERT_IUT_A_AT.vkey
 				if (end <= vkey)
@@ -189,7 +199,7 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 				for (int i = 0; i < cert_len; i++)
 					myCert.buf[i] = data[i];
 
-				EtsiExtendedCertificate *certif = Emulated_InstallCertificate(data, &certif_len, cert_len, vkey, vkey_len, ekey, ekey_len, &error, flag_PQC, entity, pathVkey);
+				EtsiExtendedCertificate *certif = Emulated_InstallCertificate(data, &certif_len, cert_len, vkey, vkey_len, ekey, ekey_len, &error, flag_PQC, entity);
 				/*char *dig;
 				sha256_calculate(dig, certif, certif_len);
 				// Visualizzo i primi 8 byte di 32
@@ -277,6 +287,8 @@ int FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, const pchar_t *_path)
 	// int ret1 = _FitSec_LoadTrustData(e, curTime, path_pqc, plen_pqc, path_pqc + plen_pqc + 255);
 	free(path);
 	free(path_pqc);
+	free(signerAT);
+	free(signerAA);
 	return ret;
 }
 
@@ -453,7 +465,7 @@ static int _FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, pchar_t *path, int
 	(src) += (len);
 
 // Funzione per emulare FitSec_InstallCertificate
-EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_len, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror, int flag_PQC, char *entity, char *pathVkey)
+EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_len, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror, int flag_PQC, char *entity)
 {
 	uint8_t *ptr = data;
 	EtsiExtendedCertificate *cert = (EtsiExtendedCertificate *)malloc(sizeof(EtsiExtendedCertificate));
@@ -1029,91 +1041,9 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 		}
 	}
 
-	if (strcmp(entity, "RCA") == 0)
-	{
-		printf("\n\n 		cert_length = %ld\n\n", cert_length);
-		data[cert_length-1] = 0x80;
-		sha256_calculate(_signerHashBuf, data, cert_length);
-		_signerHashRCA = &_signerHashBuf[0];
-		_signerHashLength = sha256_hash_size;
-		printf("\n\n 	SIGNER HASH RCA:\n");
-		for (int i = 0; i < sha256_hash_size; i++)
-			printf("%02X ", (unsigned char)_signerHashRCA[i]);
+	// OQS_API OQS_STATUS
+	verifySignature(data, cert_length, _toBeSigned, lenTBS, cert->sig.DILsignature.signature, entity, cert->toBeSigned.verifyKeyIndicator.val.DILverificationKey.publicKey);
 
-		printf("\n");
-	}
-	else if (strcmp(entity, "AA") == 0)
-	{
-		_tbsHashLength = 32;
-		sha256_calculate(_tbsHash, (const char *)_toBeSigned, lenTBS);
-
-		printf("\n\n 	TO BE SIGNED HASH AA:\n");
-		for (int i = 0; i < 32; i++)
-			printf("%02X ", (unsigned char)_tbsHash[i]);
-
-		char hash[48];
-		int hashlen = 0;
-
-		// calculate joint hash (toBeSigned Hash computed in ToBeSignedCertificate_oer_encoder + signerHash)
-		memcpy(_tbsHash + _tbsHashLength, _signerHashRCA, _signerHashLength);
-
-		printf("\n\n    TBS HASH AA + SIGNER HASH RCA;\n");
-		int lenJointHash = _tbsHashLength + _signerHashLength;
-		for (int i = 0; i < lenJointHash; i++)
-			printf("%02X ", (unsigned char)_tbsHash[i]);
-
-		sha256_calculate(hash, _tbsHash, _tbsHashLength + _signerHashLength);
-		hashlen = sha256_hash_size;
-
-		printf("\n\n   hash of jointHash:\n");
-		for (int i = 0; i < hashlen; i++)
-			printf("%02x ", (unsigned char)hash[i]);
-
-		printf("\n\n 		cert_length = %ld\n\n", cert_length);
-		data[cert_length-1] = 0x80;
-		sha256_calculate(_signerHashBuf, data, cert_length);
-		_signerHashAA = &_signerHashBuf[0];
-		_signerHashLength = sha256_hash_size;
-
-
-		char *pubKey = search_public_Dilithium_key(pathVkey);
-		
-		printf("\npubkey:\n");
-		for(int i=0; i<OQS_SIG_dilithium_2_length_public_key; i++){
-			if(i%32==0) printf("\n");
-			printf("%02X ", (unsigned char)cert->toBeSigned.verifyKeyIndicator.val.DILverificationKey.publicKey[i]);
-		}
-
-
-		// OQS_API OQS_STATUS
-		verifySignature(hash, hashlen,cert->sig.DILsignature.signature, pubKey);
-
-		printf("\n\n 	SIGNER HASH AA:\n");
-		for (int i = 0; i < sha256_hash_size; i++)
-			printf("%02X ", (unsigned char)_signerHashAA[i]);
-
-	}
-	else
-	{
-		_tbsHashLength = 32;
-		sha256_calculate(_tbsHash, (const char *)_toBeSigned, lenTBS);
-
-		char hash[48];
-		int hashlen = 0;
-		// calculate joint hash (toBeSigned Hash computed in ToBeSignedCertificate_oer_encoder + signerHash)
-		memcpy(_tbsHash + _tbsHashLength, _signerHashAA, _signerHashLength);
-		sha256_calculate(hash, _tbsHash, _tbsHashLength + _signerHashLength);
-		hashlen = sha256_hash_size;
-
-		// OQS_API OQS_STATUS
-		OQS_STATUS result = OQS_SIG_dilithium_2_verify(hash, hashlen, cert->sig.DILsignature.signature, OQS_SIG_dilithium_2_length_signature, cert->toBeSigned.verifyKeyIndicator.val.DILverificationKey.publicKey);
-		if (result == OQS_SUCCESS)
-			printf("\n godo\n");
-		else
-		{
-			fprintf(stderr, "\nERROR: OQS_SIG_dilithium_2_verify failed!\n");
-		}
-	}
 
 	// Stampa la lunghezza totale della struttura cert
 	printf("\nTotal length of the cert structure: %zu bytes\n\n", total_length);
@@ -1131,17 +1061,103 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 	return cert;
 }
 
-void verifySignature(char *hash, int hashlen, char* sig, char *pubKey)
+void verifySignature(uint8_t *data, size_t cert_length, uint8_t *_toBeSigned, int lenTBS, uint8_t *sig, char *entity, uint8_t *pubKey)
 {
-	OQS_STATUS result = OQS_SIG_dilithium_2_verify(hash, hashlen, sig/*cert->sig.DILsignature.signature*/, OQS_SIG_dilithium_2_length_signature, pubKey); //cert->toBeSigned.verifyKeyIndicator.val.DILverificationKey.publicKey);
-	
-	if (result == OQS_SUCCESS)
-		printf("\n SIGNATURE VERIFIED\n");
+	if (strcmp(entity, "RCA") == 0)
+	{
+		printf("\n\n 		cert_length = %ld\n\n", cert_length);
+		data[cert_length - 1] = 0x80;
+		sha256_calculate(_signerHashBuf, data, cert_length);
+		_signerHashRCA = &_signerHashBuf[0];
+		_signerHashLength = sha256_hash_size;
+		printf("\n\n 	SIGNER HASH RCA:\n");
+		for (int i = 0; i < sha256_hash_size; i++)
+			printf("%02X ", (unsigned char)_signerHashRCA[i]);
+
+		printf("\n");
+	}
+	else if (strcmp(entity, "AA") == 0)
+	{
+		// TO BE SIGNED HASH
+		_tbsHashLength = 32;
+		sha256_calculate(_tbsHash, (const char *)_toBeSigned, lenTBS);
+
+		printf("\n\n 	TO BE SIGNED HASH AA:\n");
+		for (int i = 0; i < 32; i++)
+			printf("%02X ", (unsigned char)_tbsHash[i]);
+
+		char hash[48];
+		int hashlen = 0;
+
+		// calculate JOINT HASH (toBeSigned Hash computed in ToBeSignedCertificate_oer_encoder + signerHash)
+		memcpy(_tbsHash + _tbsHashLength, _signerHashRCA, _signerHashLength);
+
+		printf("\n\n    TBS HASH AA + SIGNER HASH RCA;\n");
+		int lenJointHash = _tbsHashLength + _signerHashLength;
+		for (int i = 0; i < lenJointHash; i++)
+			printf("%02X ", (unsigned char)_tbsHash[i]);
+
+		//  HASH OF JOINT HASH
+		sha256_calculate(hash, _tbsHash, _tbsHashLength + _signerHashLength);
+		hashlen = sha256_hash_size;
+
+		printf("\n\n   hash of jointHash:\n");
+		for (int i = 0; i < hashlen; i++)
+			printf("%02x ", (unsigned char)hash[i]);
+
+		printf("\n\n 		cert_length = %ld\n\n", cert_length);
+		data[cert_length - 1] = 0x80;
+		sha256_calculate(_signerHashBuf, data, cert_length);
+		_signerHashAA = &_signerHashBuf[0];
+		_signerHashLength = sha256_hash_size;
+
+		char *pubKeySigner = search_public_Dilithium_key(signerAA);
+
+		printf("\npubkey:\n");
+		for (int i = 0; i < OQS_SIG_dilithium_2_length_public_key; i++)
+		{
+			if (i % 32 == 0)
+				printf("\n");
+			printf("%02X ", (unsigned char)pubKey[i]);
+		}
+
+		OQS_STATUS result = OQS_SIG_dilithium_2_verify(hash, hashlen, sig, OQS_SIG_dilithium_2_length_signature, pubKeySigner);
+
+		if (result == OQS_SUCCESS)
+			printf("\n SIGNATURE VERIFIED\n");
+		else
+		{
+			fprintf(stderr, "\nERROR: OQS_SIG_dilithium_2_verify failed!\n");
+		}
+		printf("\n");
+
+		printf("\n\n 	SIGNER HASH AA:\n");
+		for (int i = 0; i < sha256_hash_size; i++)
+			printf("%02X ", (unsigned char)_signerHashAA[i]);
+	}
 	else
 	{
-		fprintf(stderr, "\nERROR: OQS_SIG_dilithium_2_verify failed!\n");
+		_tbsHashLength = 32;
+		sha256_calculate(_tbsHash, (const char *)_toBeSigned, lenTBS);
+
+		char hash[48];
+		int hashlen = 0;
+		// calculate joint hash (toBeSigned Hash computed in ToBeSignedCertificate_oer_encoder + signerHash)
+		memcpy(_tbsHash + _tbsHashLength, _signerHashAA, _signerHashLength);
+		sha256_calculate(hash, _tbsHash, _tbsHashLength + _signerHashLength);
+		hashlen = sha256_hash_size;
+
+		char *pubKeySigner = search_public_Dilithium_key(signerAT);
+		
+		// OQS_API OQS_STATUS
+		OQS_STATUS result = OQS_SIG_dilithium_2_verify(hash, hashlen, sig, OQS_SIG_dilithium_2_length_signature, pubKeySigner);
+		if (result == OQS_SUCCESS)
+			printf("\n SIGNATURE VERIFIED\n");
+		else
+		{
+			fprintf(stderr, "\nERROR: OQS_SIG_dilithium_2_verify failed!\n");
+		}
 	}
-	printf("\n");
 }
 
 void freeCertificate(EtsiExtendedCertificate *cert, int flag_PQC)
