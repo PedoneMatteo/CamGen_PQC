@@ -8,7 +8,6 @@
  * This file is NOT a free or open source software and shall not me used
  * in any way not explicitly authorized by the author.
 *********************************************************************/
-
 #include "fscrypt_plugin.h"
 #include <e4c_lite.h>
 #include <cstr.h>

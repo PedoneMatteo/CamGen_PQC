@@ -22,12 +22,6 @@
 extern "C" {
 #endif
 
-typedef struct extCert{
-	unsigned char buf[5000];
-	size_t size;
-}extCert;
-extern extCert myCert; 
-
 typedef struct FSCrypt FSCrypt;
 
 FSCRYPT_EXPORT FSCrypt* FSCrypt_FindEngine(const char* name);
@@ -119,7 +113,7 @@ typedef struct FSPublicKey {
 typedef void * FSPrivateKey;
 
 FSCRYPT_EXPORT FSPrivateKey*   FSKey_ImportPrivate   (FSCrypt* e, FSCurve curve, const uint8_t * data, size_t len);
-FSCRYPT_EXPORT void            FSKey_InitPublic 	    (FSPublicKey * k, FSCurve curve, FSPointType  pType, const uint8_t * x, const uint8_t * y);
+FSCRYPT_EXPORT void            FSKey_InitPublic 	 (FSPublicKey * k, FSCurve curve, FSPointType  pType, const uint8_t * x, const uint8_t * y);
 
 FSCRYPT_EXPORT FSPrivateKey*   FSKey_Generate        (FSCrypt* e, FSCurve curve, FSPublicKey * k);
 

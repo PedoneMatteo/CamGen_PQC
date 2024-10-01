@@ -59,7 +59,7 @@ static CAM_t* cam = NULL;
 
 static int cam_options(MsgGenApp* app, int argc, char* argv[])
 {
-    printf("\nIM IN CAM_OPTIONS TO INIT THE CAM MESSAGE (msggen_cam.c)\n");
+    printf("\n  CAM_OPTIONS TO INIT THE CAM MESSAGE (msggen_cam.c)\n");
     // init CAM
     if (cam == NULL) {
         // register uppertester
@@ -137,7 +137,7 @@ static GNExtendedHeader _def_eh = {
 
 static void cam_process (MsgGenApp * app, FitSec * e)
 {
-    printf("\n IM in CAM PROCESS (mssgen_cam.c)\n");
+    printf("\n CAM PROCESS (mssgen_cam.c)\n");
     if(_activated){
         MsgGenApp_Send(e, app); 
     }
@@ -170,7 +170,7 @@ unsigned int printBufs (uint8_t *bufs)
 static size_t cam_fill(MsgGenApp* app, FitSec * e, FSMessageInfo* m)
 {
     if(m)
-        printf("\n IM in CAM FILL (mssgen_cam.c)\n");
+        printf("\n CAM FILL (mssgen_cam.c)\n");
     size_t len;
     m->status = 0;
    
@@ -180,9 +180,8 @@ static size_t cam_fill(MsgGenApp* app, FitSec * e, FSMessageInfo* m)
         memset(m->sign.ssp.sspData.opaque, 0, sizeof(m->sign.ssp.sspData.opaque));
         m->sign.ssp.sspLen = 3;
         m->sign.ssp.sspData.bits.version = 1;
-        m->sign.cert = extendedCert;
-        m->encryption.cert = extendedCert ;
-        printf("\n      PrepareSignedMessage (in msggen_cam.c)\n");
+        //m->sign.cert = extendedCert;
+        //m->encryption.cert = extendedCert ;
         len = FitSec_PrepareSignedMessage(e, m); // Prepare the buffer for the signed ITS message envelop
         if (len <= 0) {
             fprintf(stderr, "%-2s PREP %s:\t ERROR: 0x%08X %s\n", FitSec_Name(e), "PrepareSignedMessage", m->status, FitSec_ErrorMessage(m->status));
@@ -224,7 +223,6 @@ static size_t cam_fill(MsgGenApp* app, FitSec * e, FSMessageInfo* m)
         m->payloadSize = p - m->payload;
         ch->plLength = cint16_hton((unsigned short)(rc.encoded + 4)); // plus BTP
         if (_o_secured) {
-            printf("\n      FinalizedSignedMessage (in msggen_cam.c)\n");
           
             len = FitSec_FinalizeSignedMessage(e, m);
            // printBufs(m->message);
@@ -235,7 +233,7 @@ static size_t cam_fill(MsgGenApp* app, FitSec * e, FSMessageInfo* m)
         else {
             m->messageSize = p - m->message;
         }
-    }printf("\n message size = %ld\n", m->messageSize);
+    }
     return len;
 }
 

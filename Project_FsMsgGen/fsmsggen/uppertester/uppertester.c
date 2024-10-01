@@ -178,7 +178,6 @@ int   FSUT_Run(FSUT* ut)
 
 int   FSUT_Proceed(FSUT* ut, FSUT_Message * m)
 {
-    printf("\n  FSUT_Proceed (in uppertester.c)\n");
     struct timeval tv = { 0,0 };
     if(m){ //non entra
     //usefull to process the messagen and calling the handlers associated to ut

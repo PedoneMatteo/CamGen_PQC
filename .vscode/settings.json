@@ -19,6 +19,8 @@
         "kem_kyber.h": "c",
         "kem_ml_kem.h": "c",
         "kem_ntruprime.h": "c",
-        "kem_frodokem.h": "c"
+        "kem_frodokem.h": "c",
+        "cstr.h": "c",
+        "time.h": "c"
     }
 }

@@ -27,4 +27,5 @@ build/x86_64-linux-gnu-d/o-fsmsggen/load_data.o: \
  /root/Project_FsMsGen/liboqs/build/include/oqs/sha2_ops.h \
  /root/Project_FsMsGen/liboqs/build/include/oqs/sha3_ops.h \
  /root/Project_FsMsGen/liboqs/build/include/oqs/sha3x4_ops.h \
- /root/Project_FsMsGen/fsmsggen/./cshared/cstr.h
+ /root/Project_FsMsGen/fsmsggen/./cshared/cstr.h \
+ /root/Project_FsMsGen/fsmsggen/./fitsec2-rel/fitsec.h

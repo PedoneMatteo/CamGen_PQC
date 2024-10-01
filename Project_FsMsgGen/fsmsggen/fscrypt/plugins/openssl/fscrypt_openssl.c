@@ -303,11 +303,11 @@ static bool OpenSSL_CalculatePublicKey  (OpenSSLEngine* c, const FSPrivateKey* p
 static bool            OpenSSL_GenerateKeyPair (OpenSSLEngine* e, FSCurve curve,
                                                 FSPrivateKey** pPrivateKey, FSPublicKey * publicKey)
 {
-    bool ret = false;
+    bool ret = false; 
     const EC_GROUP* g = e->groups[curve];
     int fsize = (int)FSCurve_FieldSize(curve);
     EC_KEY* k = NULL;
-    if (g) {
+    if (g) { 
         k = EC_KEY_new();
         KEY_TRACE(k, "NEW");
         EC_KEY_set_group(k, g);
@@ -410,8 +410,8 @@ static bool  OpenSSL_Verify  (OpenSSLEngine * e, const FSPublicKey * pk,
 static bool  OpenSSL_Sign    (OpenSSLEngine * e, const FSPrivateKey * pk,
                             FSSignature * s, const uint8_t * digest, const uint8_t * k)
 {
-    EC_KEY * key = (EC_KEY *)pk;
-    const EC_GROUP* g = EC_KEY_get0_group((const EC_KEY*)key);
+    EC_KEY * key = (EC_KEY *)pk; 
+    const EC_GROUP* g = EC_KEY_get0_group((const EC_KEY*)key); 
     if (g) {
         int fsize = (EC_GROUP_get_degree(g) + 7) / 8;
         BIGNUM * bk = NULL;

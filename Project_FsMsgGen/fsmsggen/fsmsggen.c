@@ -42,6 +42,7 @@ time_t mkgmtime(struct tm *tim_p);
 #endif
 EtsiExtendedCertificate *extendedCert = NULL;
 extCert myCert;
+
 static FitSecConfig cfg1;
 
 static pchar_t *cfgfile = NULL;
@@ -61,6 +62,10 @@ pchar_t *_in = NULL;
 char *_iface = NULL;
 int _iface_list = 0;
 int round_send = 0;
+
+#define msgLenWithCert_dilithium 6368
+#define msgLenWithDigest_dilithium 2547
+#define lenUnsecuredData 81
 
 static int _UTHandler(FSUT *ut, void *ptr, FSUT_Message *m, int *psize);
 static int _changePseudonym = 0;
@@ -370,7 +375,6 @@ unsigned int printBuf(uint8_t *bufs)
 
 int main(int argc, char **argv)
 {
-
     FitSec *e;
 
 #ifdef _MSC_VER
@@ -386,7 +390,6 @@ int main(int argc, char **argv)
         printf("\napplications_count: %ld\n", _applications_count);
         for (size_t i = 0; i < _applications_count; i++)
         {
-            printf("\n  READY TO CALL CAM_OPTIONS\n");
             int n = _applications[i]->options(_applications[i], argc, argv); // call the call_options function in msggen_cam.c
             if (n < rc)
             {
@@ -492,15 +495,15 @@ int main(int argc, char **argv)
 
     e = FitSec_New(&cfg1, "1"); /** Create and initialize engine */
     if (_o_secured == 0)
-    { // non entra
+    {
         printf("\nnon-secured GN packet set\n");
         buf[SHIFT_GN] = 0x11; // non-secured GN packet
         e = NULL;
     }
     else
-    { // entra qui
+    {
         if (storage1)
-        { // storage1 == NULL -> non entra
+        {
             copt_value_t v;
             v.v_str = storage1;
             copt_on_load(&options[2], "load", &v);
@@ -517,7 +520,7 @@ int main(int argc, char **argv)
     }
 
     if (_o_uppertester)
-    { // non entra
+    {
         mclog_info(UT, "Start UpperTester Engine at %s:%u\n", _o_ut_addr, _o_ut_port);
         ut = FSUT_New(_o_ut_addr, _o_ut_port);
         for (size_t i = 0; i < _applications_count; i++)
@@ -542,7 +545,6 @@ int main(int argc, char **argv)
         timeradd(&t_next, &t_add, &t_next); // this function add "t_add" to "t_next". The result is saved in "t_next"
         FSUT_Message *m = NULL;
 
-        // non entra nell'if perchè 1<1
         if (arg < argc)
         {
             printf("\n\n1) arg = %d , argc = %d\n", arg, argc);
@@ -573,7 +575,7 @@ int main(int argc, char **argv)
                     {
                         uint32_t t = unix2itstime32(time(NULL)) + _tdelta;
                         FitSec_LoadTrustData(e, t, argv[arg]); // jump in load_data.c
-                                                               //                        FitSec_RevalidateCertificates(e);
+                        // FitSec_RevalidateCertificates(e);
                         arg++;
                     }
                 }
@@ -642,16 +644,14 @@ void printfCertificate(unsigned char *data)
 
 void MsgGenApp_Send(FitSec *e, MsgGenApp *a)
 {
-    // printBuf(buf);
-    printf("\nIM IN MsgGenApp_Send (in fsmsggen.c)\n");
+    printf("\n MsgGenApp_Send (in fsmsggen.c)\n");
     struct pcap_pkthdr ph;
     FSMessageInfo m = {0};
     gettimeofday(&ph.ts, NULL);
     ph.ts.tv_sec += _tdelta;
     m.message = (char *)&buf[SHIFT_SEC];     // pointer to the first byte of Secured Header
-    m.messageSize = sizeof(buf) - SHIFT_SEC; // + 32+32+64;
-    m.sign.cert = extendedCert;
-    // printBuf(m.message);
+    m.messageSize = sizeof(buf) - SHIFT_SEC; 
+    // m.sign.cert = extendedCert;
     m.sign.signerType = FS_SI_AUTO;
     m.position = position;
     m.generationTime = timeval2itstime64(&ph.ts);
@@ -659,28 +659,16 @@ void MsgGenApp_Send(FitSec *e, MsgGenApp *a)
     {
         FitSec_ChangeId(e, FITSEC_AID_ANY);
     }
-    // call to cam_fill
-    // printf("\n\nPRE FILL\n\n");
-    // printBuf(buf);
+
     size_t len = a->fill(a, e, &m);
-    // printBuf(buf);
-    printf("\n\nPOST FILL\n\n");
 
     if (len > 0)
     {
         // fill the src addr
-
         if (!_gn_src && m.sign.cert)
-        {                                                       // typedef uint64_t FSHashedId8;
-            FSHashedId8 id = FSCertificate_Digest(m.sign.cert); // printfCertificate(m.sign.cert);
-            printf("\n          signer digest = %lx \n", id);
-            //  id+=183218691671231434;
-            //  printf("\n          new signer digest = %lx \n", id); printf("\n");
-            //  printBuf(buf);  printf("\n");
-            //  printf("\npointer buf+6 = %p\n",buf+6);
-            //  printf("\npointer id = %p\n",&id);
+        {
+            FSHashedId8 id = FSCertificate_Digest(m.sign.cert);
             memcpy(buf + 6, &id, 6);
-            printf("\n");
         }
         if (m.payloadType == FS_PAYLOAD_UNSECURED)
         {
@@ -690,75 +678,96 @@ void MsgGenApp_Send(FitSec *e, MsgGenApp *a)
         {
             buf[SHIFT_GN] = 0x12;
         }
-        printf("\n");
 
         // inject in pcap
-        if (flag_PQC == 0)
+        if (flag_PQC == 1)
         {
-            ph.caplen = ph.len = (uint32_t)(m.messageSize + SHIFT_SEC);
+            if (round_send % 10 == 0)
+                ph.caplen = ph.len = (uint32_t)msgLenWithCert_dilithium;
+            else
+                ph.caplen = ph.len = (uint32_t)msgLenWithDigest_dilithium;
         }
         else
         {
-            if (round_send % 10 == 0)
-                ph.caplen = ph.len = (uint32_t)6368;
-            else
-                ph.caplen = ph.len = (uint32_t)2547;
+            ph.caplen = ph.len = (uint32_t)(m.messageSize + SHIFT_SEC);
         }
 
         mclog_info(MAIN, "%s Msg sent app=%s gt=" cPrefixUint64 "u (%u bytes)\n",
                    strlocaltime(ph.ts.tv_sec, ph.ts.tv_usec),
                    a->appName, timeval2itstime64(&ph.ts), ph.len);
-        printf("\n");
 
         if (flag_PQC == 1)
         {
-            char *unsecuredData[81];
+            double start_time = get_time();
+            char unsecuredData[lenUnsecuredData];
             int j = 0;
             for (int i = 25; i < 106; i++)
-            {
                 unsecuredData[j++] = buf[i];
-            }
             int hashLen = 32;
             char hashUnsec[32];
-            sha256_calculate(hashUnsec, unsecuredData, 81);
-            char *_keyPath = "../../POOL_CAM_PQC";
-            char *sName = "CERT_IUT_A_AT_Dilithium";
-            char *secretKey = search_private_Dilithium_key(_keyPath, sName);
+            sha256_calculate(hashUnsec, unsecuredData, lenUnsecuredData);
+
+            char *secretKey = search_private_Dilithium_key(pathMyCert);
             char *signatureMessage = malloc(OQS_SIG_dilithium_2_length_signature);
             size_t lenSignature = OQS_SIG_dilithium_2_length_signature;
 
             OQS_STATUS check = OQS_SIG_dilithium_2_sign(signatureMessage, &(lenSignature), hashUnsec, hashLen, secretKey);
+            if(check!=OQS_SUCCESS)
+                fprintf(stderr, "Error signing message\n");
 
-            char h_cert[8];
+            double end_time = get_time();
+            printf("Dilithium sign time: %f seconds\n\n", end_time - start_time);
+
+            FSCrypt* cript = FSCrypt_FindEngine("openssl");
+            FSPrivateKey* privKey = FSKey_Generate(cript, FS_NISTP256, NULL);
+            FSSignature *sigEcdsa = malloc(sizeof(FSSignature));
+            sigEcdsa->curve = FS_NISTP256;
+            sigEcdsa->point.x = malloc(32*sizeof(uint8_t));
+            sigEcdsa->point.y = malloc(32*sizeof(uint8_t));
+            sigEcdsa->s = malloc(64*sizeof(uint8_t));
+            bool res = FSSignature_Sign(cript, sigEcdsa, privKey, hashUnsec);
+            if(res)
+                printf("grandeeeeeee\n\n");
+            else
+                printf("mi sono rotto \n\n\n");
+
+            unsigned char h_cert[32];
+            unsigned char lsb[8];
             if (round_send % 10 != 0)
-            { // digest
-                sha256_calculate(h_cert, myCert.buf, 3827);
+            {
+                // computation digest of certificate
+                sha256_calculate(h_cert, myCert.buf, myCert.size);
+                memcpy(lsb, &h_cert[24], 8);
+               
                 int index = 117;
+                // type of signer: digest
                 buf[index++] = 0x80;
+                // filling digest field
                 for (int i = 0; i < 8; i++)
-                    buf[index++] = h_cert[i];
+                    buf[index++] = lsb[i];
+                // type of signature: Dilithium
                 buf[index++] = 0x85;
+                // filling signature field
                 for (int i = 0; i < 2420; i++)
                     buf[index++] = signatureMessage[i];
             }
             else
-            { // certificate
+            {
                 int index = 120;
-                for (int i = 0; i < 3827; i++)
+                // filling certificate field
+                for (int i = 0; i < myCert.size; i++)
                     buf[index++] = myCert.buf[i];
+                // type of signature: Dilithium
                 buf[index++] = 0x85;
+                // filling signature field
                 for (int i = 0; i < 2420; i++)
                     buf[index++] = signatureMessage[i];
             }
         }
-        printf("\n\n round_send = %d \n\n", round_send);
-        //if(round_send<11)
         _packet_handler(&h, &ph, buf);
     }
     else
-    {
         usleep(1000000 / _rate);
-    }
 }
 
 static void _handler_none(pcap_handler_t *h, struct pcap_pkthdr *ph, const uint8_t *data)
@@ -779,15 +788,14 @@ static void _handler_iface(pcap_handler_t *h, struct pcap_pkthdr *ph, const uint
 {
     printf("\n  - - - INJECTING MESSAGE (in fsmsggen.c)- - -\n\n");
 
-   // printf("\n len = %ld, data = \n ", ph->len);
-   // printBuf(data);
-
     int result = pcap_inject(h->device, data, ph->len);
+    round_send++;
+    if(round_send==100) round_send = 0;
     if (result == -1)
     {
         fprintf(stderr, "Error injecting packet: %s\n", pcap_geterr(h->device));
     }
-    round_send++;
+
     /*
         // wait for next hop
         struct timeval tv;

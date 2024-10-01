@@ -203,7 +203,7 @@ HashedId32 ::= OCTET STRING (SIZE(32))
  */
 HashedId48 ::= OCTET STRING(SIZE(48))
 
-/* added for Dilithium jey and signature*/
+/* added for Dilithium key and signature*/
 HashedId1312 ::= OCTET STRING(SIZE(1312))
 HashedId2420 ::= OCTET STRING(SIZE(2420))
 --***************************************************************************--

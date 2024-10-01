@@ -63,10 +63,10 @@ int _signerHashLength = 0;
 
 int _num_appPerms;
 int lenCert = 3960; // 187
-char issuerDigest[8];
 
-char* signerAA;
-char* signerAT;
+char *signerAA;
+char *signerAT;
+
 
 EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_len, size_t cert_length, const char *vkey, size_t vkey_length, const char *ekey, size_t ekey_length, int *perror, int flag_PQC, char *entity);
 void freeCertificate(EtsiExtendedCertificate *cert, int flag_PQC);
@@ -83,7 +83,33 @@ void printCertificate(unsigned char *data, int len)
 	printf("\n");
 }
 
-int turn = 0;
+int isRCA = 0;
+
+char *set_signer(char *path)
+{
+	char *entity;
+	if (strstr(path, "RCA") != NULL)
+	{
+		entity = "RCA";
+		signerAA = malloc(strlen(path) + 1);
+		strcpy(signerAA, path);
+	}
+	else if (strstr(path, "AA") != NULL)
+	{
+		entity = "AA";
+		signerAT = malloc(strlen(path) + 1);
+		strcpy(signerAT, path);
+	}
+	else
+	{
+		if (strstr(path, "AT") != NULL){
+			entity = "AT";
+			pathMyCert = malloc(strlen(path)+1);
+			memcpy(pathMyCert,path,strlen(path)+1);
+		}
+	}
+	return entity;
+}
 
 static char _data[4096]; // for keys only
 static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_t *fname)
@@ -94,25 +120,12 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 	pchar_t *ext;
 	FSHashedId8 digest = (FSHashedId8)0;
 	int error = 0;
-	printf("\npath in _load_data = %s\n", path);
 
 	data = malloc(CERT_MAX_SIZE);
 	end = cstrnload(data, CERT_MAX_SIZE, path);
 
-	char *entity;
-	if (strstr(path, "RCA") != NULL){
-		entity = "RCA";
-		signerAA = malloc(strlen(path)+1);
-		strcpy(signerAA, path);
-	}else
-	if (strstr(path, "AA") != NULL){
-		entity = "AA";
-		signerAT = malloc(strlen(path)+1);
-		strcpy(signerAT, path);
-	}else{
-	if (strstr(path, "AT") != NULL)
-		entity = "AT";
-	}
+	// set the entity of the path as the signer of the lower entity in the PKI
+	char *entity = set_signer(path);
 
 	if (strstr(path, "Dilithium") != NULL)
 		flag_PQC = 1;
@@ -126,20 +139,13 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 			size_t cert_len = end - data;
 
 			ext = cstrpathextension(fname);
-			printf("\n print extension = %s\n", ext); // ext = .oer         ext-3  =  RCA.oer / _AT.oer / _AA.oer
-
-			
-			// cmemcmp() controlla se le stringhe passate alla funzione non sono uguali
+			// cmemcmp() checks if the strings are not the same
 			if ((ext - fname) > 3 && cmemcmp("_EA", ext - 3, 3) && cmemcmp("_AA", ext - 3, 3) && cmemcmp("_RCA", ext - 4, 4))
 			{
-				pchar_cpy(ext, ".vkey");								  // strcpy
-				printf("\n print extension after pchar_cpy = %s\n", ext); // ext = .vkey
+				pchar_cpy(ext, ".vkey");
 				vkey = _data;
 				end = cstrnload(vkey, sizeof(_data), path);
 
-				
-
-				printf("\n path = %s\n", path); // path = ../../POOL_CAM/CERT_IUT_A_AT.vkey
 				if (end <= vkey)
 				{
 					end = vkey;
@@ -153,7 +159,6 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 				pchar_cpy(ext, ".ekey");
 				ekey = end;
 				end = cstrnload(ekey, sizeof(_data) - (end - _data), path);
-				printf("\n path = %s\n", path); // path = ../../POOL_CAM/CERT_IUT_A_AT.ekey
 				if (end <= ekey)
 				{
 					end = ekey;
@@ -166,57 +171,24 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 				errno = 0;
 			}
 			*ext = 0;
-			turn++;
-			/** Install certificate (root, AA, local AT pseudonymes, any other)
-			 *  Install any kind of certificates: AA, AT, EC, EA, Root, etc.
-			 *  Local AT certificates shall be followed by private keys.
-			 *  TODO: support for HSM key sorage
-			 *  @param e     The FitSec engine
-			 *  @param cert         The buffer with the certificate data
-			 *  @param cert_length  The buffer size
-			 *  @param vkey         The verification private key.
-			 *                      Required for AT certificates. Must be NULL for other types.
-			 *
-			 *  @param vkey_length  The size of the key
-			 *  @param ekey         The encryption private key.fitsec.
-			 *                      Optional for AT certificates. Must be NULL for other types.
-			 *  @param ekey_length  The size of the key
-			 *  @param perror       The status of the procedure. See fitsec_error.h.
-			 *  @return             The certificate structure or NULL if certificate is not installed.
-			 */
-			printf("\n	 encryption key len = %ld -- verification key len = %ld\n\n", ekey_len, vkey_len);
-			printf("\n   cert len = %d\n", cert_len);
-			/*	ekey_len+=32;
-				vkey_len+=32;
-				cert_len+=64;	*/
+			isRCA++; 
 
-			printCertificate(data, cert_len);
+			// printCertificate(data, cert_len);
 
 			size_t certif_len;
 			if (flag_PQC)
 			{
-				myCert.size = cert_len;
-				for (int i = 0; i < cert_len; i++)
-					myCert.buf[i] = data[i];
-
 				EtsiExtendedCertificate *certif = Emulated_InstallCertificate(data, &certif_len, cert_len, vkey, vkey_len, ekey, ekey_len, &error, flag_PQC, entity);
-				/*char *dig;
-				sha256_calculate(dig, certif, certif_len);
-				// Visualizzo i primi 8 byte di 32
-				printf("\nSHA-256 Hash: ");
-				for (int i = 0; i < 8; i++)
+				if (certif == NULL)
 				{
-					printf("%02x", (unsigned char)dig[i]);
+					printf(" ERROR: PQC certificate not valid");
 				}
-				printf("\n\n");*/
-				// freeCertificate(certif, flag_PQC);
 			}
 			else
 			{
 				const FSCertificate *c = FitSec_InstallCertificate(e, data, cert_len, vkey, vkey_len, ekey, ekey_len, &error);
 				digest = FSCertificate_Digest(c);
 				const char *name = FSCertificate_Name(c);
-				printf("\n 	digest of %s = %lx\n\n", name, digest);
 				if (name == NULL)
 				{
 					FSCertificate_SetName(c, fname);
@@ -235,7 +207,6 @@ static FSHashedId8 _load_data(FitSec *e, FSTime32 curTime, pchar_t *path, pchar_
 		{
 			printf("%-2s %20.20s Unknown format\n", FitSec_Name(e), fname);
 		}
-		printf("\n free data \n");
 		free(data);
 	}
 	else
@@ -281,7 +252,6 @@ int FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, const pchar_t *_path)
 	if (plen_pqc == 0)
 		path_pqc[plen_pqc++] = '.';
 	path_pqc[plen_pqc] = 0;
-	printf("\n path_pqc = %s\n", path);
 
 	int ret = _FitSec_LoadTrustData(e, curTime, path, plen, path + plen + 255); //,path_pqc, plen_pqc, path_pqc + plen_pqc + 251); // path = ../../POOL_CAM
 	// int ret1 = _FitSec_LoadTrustData(e, curTime, path_pqc, plen_pqc, path_pqc + plen_pqc + 255);
@@ -341,13 +311,13 @@ static int _FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, pchar_t *path, int
 
 #else
 
-// Funzione di confronto per ordinare i file
+// Comparison function to sort files
 int compare_files(const void *a, const void *b)
 {
 	const char *file_a = *(const char **)a;
 	const char *file_b = *(const char **)b;
 
-	// Definisci la logica di ordinamento basata sui nomi specifici
+	// Define the sorting logic based on specific names
 	if (strstr(file_a, "RCA") && !strstr(file_b, "RCA"))
 		return -1;
 	if (strstr(file_b, "RCA") && !strstr(file_a, "RCA"))
@@ -367,13 +337,13 @@ int compare_files(const void *a, const void *b)
 	if (strstr(file_b, "AT") && strstr(file_a, "AT"))
 		return 1;
 
-	// Se non sono né RCA, né AA, né AT, ordina alfabeticamente
+	// If neither RCA, AA, nor AT, sort alphabetically
 	return strcmp(file_a, file_b);
 }
 
 static int _FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, pchar_t *path, int plen, pchar_t *end)
 {
-	printf("\n\n IM IN _FitSec_LoadTrustData\n\n");
+	printf("\n\n  _FitSec_LoadTrustData\n\n");
 	int count = 0;
 	struct stat st;
 	if (0 == stat(path, &st))
@@ -381,14 +351,12 @@ static int _FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, pchar_t *path, int
 		if (S_ISREG(st.st_mode))
 		{										 // check if the path is a regular file
 			pchar_t *fn = pchar_rchr(path, '/'); // find the last occurence of "/" into the path to obtain the name of the file
-			printf("\nREGULAR FILE: path: %s , fn: %s\n", path, fn);
 			if (fn && fn[1] != 0)
 				fn++;
 			else
 				fn = path;
-			printf("\npath: %s , fn: %s\n", path, fn);
 			if (0 == _load_data(e, curTime, path, fn))
-			{ // call _load_data to fill the struct FitSec with the file
+			{ // call _load_data to fill the struct FitSec with the content of the file
 				errno = 0;
 				count++;
 			}
@@ -399,7 +367,6 @@ static int _FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, pchar_t *path, int
 		}
 		else if (S_ISDIR(st.st_mode))
 		{ // check if the path is a directory
-			printf("\nthe path is a directory: %s\n", path);
 			DIR *d;
 			struct dirent *de;
 
@@ -438,7 +405,6 @@ static int _FitSec_LoadTrustData(FitSec *e, FSTime32 curTime, pchar_t *path, int
 					if (path + plen + dlen < end)
 					{
 						pchar_cpy(path + plen, files[i]);
-						printf("\n\tpathhhhh = %s\n", path);
 						count += _FitSec_LoadTrustData(e, curTime, path, plen + dlen, end);
 						free(files[i]);
 					}
@@ -490,16 +456,15 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 	{
 		cert->issuer.sha256.Digest = malloc(8);
 		total_length += 8;
-		if (turn == 1) // se turn = 1 sto creando il certificato di RCA, altrimenti di AA o AT
-		{			   // RCA
+		if (isRCA == 1) // if turn = 1 RCA certificate, otherwise AA or AT certificate
+		{	 // RCA
 			READ_DATA(cert->issuer.sha256.Digest, ptr, 8);
 		}
 		else // AA, AT
 		{
 			for (int i = 0; i < 8; i++)
 			{
-				cert->issuer.sha256.Digest[i] = issuerDigest[i];
-				ptr++;
+				cert->issuer.sha256.Digest[i] = *ptr++;
 			}
 		}
 	}
@@ -509,11 +474,10 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 	int lenTBS = 0;
 	ptr++;
 	lenTBS++;
-	// Avanza il puntatore e assegna l'idType
+	
 	cert->toBeSigned.id_Value.idType = *ptr++;
 	lenTBS++;
-	printf("idType: %x\n", cert->toBeSigned.id_Value.idType);
-
+	
 	if (cert->toBeSigned.id_Value.idType == 0x83)
 	{
 		ptr++;
@@ -521,37 +485,21 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 	}
 	else
 	{
-		// Assegna la lunghezza del nome
 		cert->toBeSigned.id_Value.id.name.len = *ptr++;
 		lenTBS++;
-		printf("name.len: %x\n", cert->toBeSigned.id_Value.id.name.len);
-
-		// Alloca memoria e legge il valore del nome
+		
 		cert->toBeSigned.id_Value.id.name.val = malloc(cert->toBeSigned.id_Value.id.name.len);
 		total_length += cert->toBeSigned.id_Value.id.name.len;
 		READ_DATA(cert->toBeSigned.id_Value.id.name.val, ptr, cert->toBeSigned.id_Value.id.name.len);
 		lenTBS += cert->toBeSigned.id_Value.id.name.len;
-		// Stampa il valore del nome come stringa
-		printf("name.val: ");
-		for (int i = 0; i < cert->toBeSigned.id_Value.id.name.len; i++)
-		{
-			printf("%02x ", cert->toBeSigned.id_Value.id.name.val[i]);
-		}
-		printf("\n");
 	}
 
-	// Legge il cracaId
-	printf("cracaId: ");
 	for (int i = 0; i < 3; i++)
 	{
 		cert->toBeSigned.cracaId[i] = *ptr++;
 		lenTBS++;
-		printf("%02x ", cert->toBeSigned.cracaId[i]);
 	}
-	printf("\n");
 
-	// Legge il crlSeries
-	printf("crlSeries: ");
 	for (int i = 0; i < 2; i++)
 	{
 		if (*ptr == 0x00)
@@ -561,48 +509,33 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 		}
 		else
 			cert->toBeSigned.crlSeries[i] = 0x00;
-		printf("%02x ", cert->toBeSigned.crlSeries[i]);
 	}
-	printf("\n");
 
-	// Legge il validityPeriod start
-	printf("validityPeriod.start: ");
 	for (int i = 0; i < 4; i++)
 	{
 		cert->toBeSigned.validityPeriod.start[i] = *ptr++;
 		lenTBS++;
-		printf("%02x ", cert->toBeSigned.validityPeriod.start[i]);
 	}
-	printf("\n");
 
-	// Legge il durationType
 	cert->toBeSigned.validityPeriod.durationType = *ptr++;
 	lenTBS++;
-	printf("durationType: %x\n", cert->toBeSigned.validityPeriod.durationType);
 
 	if (cert->toBeSigned.validityPeriod.durationType == 0x84)
 	{
-		// Legge la durata in ore
-		printf("duration.hours: ");
 		for (int i = 0; i < 2; i++)
 		{
 			cert->toBeSigned.validityPeriod.duration.hours[i] = *ptr++;
 			lenTBS++;
-			printf("%02x ", cert->toBeSigned.validityPeriod.duration.hours[i]);
 		}
-		printf("\n");
 	}
 
-	// Legge l'assuranceLevel
 	cert->toBeSigned.assuranceLevel = *ptr;
-	printf("assuranceLevel: %x\n", cert->toBeSigned.assuranceLevel);
 	ptr += 2;
 	lenTBS += 2;
 	int num_appPerms = *ptr++;
 	lenTBS++;
 	_num_appPerms = num_appPerms;
-	printf("num_appPerms: %d\n", num_appPerms);
-
+	
 	cert->toBeSigned.appPermissions = malloc(num_appPerms * sizeof(PsidSsp));
 	total_length += (num_appPerms * sizeof(PsidSsp));
 
@@ -610,15 +543,13 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 	{
 		int ifBitmap = *ptr++;
 		lenTBS++;
-		printf("ifBitmap[%d]: %x\n", i, ifBitmap);
-
+	
 		if (*ptr == 0x01)
 		{
 			ptr++;
 			lenTBS++;
 			cert->toBeSigned.appPermissions[i].psid = *ptr++;
 			lenTBS++;
-			printf("psid[%d] (1-byte): %x\n", i, cert->toBeSigned.appPermissions[i].psid);
 			cert->toBeSigned.appPermissions[i].ssp.bitmapSspLength = 0;
 		}
 		else if (*ptr == 0x02)
@@ -626,7 +557,6 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 			ptr++;
 			lenTBS++;
 			cert->toBeSigned.appPermissions[i].psid = (*ptr << 8) | *(ptr + 1);
-			printf("psid[%d] (2-byte): %x\n", i, cert->toBeSigned.appPermissions[i].psid);
 			ptr += 2;
 			lenTBS += 2;
 			cert->toBeSigned.appPermissions[i].ssp.bitmapSspLength = 0;
@@ -638,8 +568,7 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 			lenTBS += 2;
 			cert->toBeSigned.appPermissions[i].ssp.bitmapSspLength = *ptr++;
 			lenTBS++;
-			printf("bitmapSspLength[%d]: %d\n", i, cert->toBeSigned.appPermissions[i].ssp.bitmapSspLength);
-
+		
 			cert->toBeSigned.appPermissions[i].ssp.bitmapSsp = malloc(cert->toBeSigned.appPermissions[i].ssp.bitmapSspLength);
 			total_length += cert->toBeSigned.appPermissions[i].ssp.bitmapSspLength;
 
@@ -647,25 +576,21 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 			{
 				cert->toBeSigned.appPermissions[i].ssp.bitmapSsp[j] = *ptr++;
 				lenTBS++;
-				printf("bitmapSsp[%d][%d]: %x\n", i, j, cert->toBeSigned.appPermissions[i].ssp.bitmapSsp[j]);
 			}
 		}
-		else
-		{
-			printf("Skipping, no bitmap SSP present for appPermissions[%d]\n", i);
-		}
+	//	else
+	//		printf("Skipping, no bitmap SSP present for appPermissions[%d]\n", i);
+		
 	}
 
 	if (*ptr == 0x01)
 	{
-		printf("\ncertIssuePermissions detected\n");
 		ptr++;
 		lenTBS++;
 
 		int numGroupPerms = *ptr++;
 		lenTBS++;
-		printf("numGroupPerms: %d\n", numGroupPerms);
-
+		
 		cert->toBeSigned.certIssuePermissions.numGroupPermissions = numGroupPerms;
 		cert->toBeSigned.certIssuePermissions.psidGroupPermissions = malloc(numGroupPerms * sizeof(PsidGroupPermissions));
 		total_length += (numGroupPerms * sizeof(PsidGroupPermissions));
@@ -678,14 +603,12 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 			cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.numRanges = *ptr;
 			int numRanges = *ptr++;
 			lenTBS++;
-			printf("Group %d - numRanges: %d\n", j, numRanges);
-
+			
 			cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges = malloc(numRanges * sizeof(PsidSspRange));
 			total_length += (numRanges * sizeof(PsidSspRange));
 
 			for (int k = 0; k < numRanges; k++)
 			{
-				printf("\n\n k = %d \n\n", k);
 				if (*ptr == 0x80)
 				{
 					ptr++;
@@ -696,14 +619,12 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 						lenTBS++;
 						cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid = *ptr++;
 						lenTBS++;
-						printf("psid (1-byte): 0x%02X\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid);
 					}
 					else
 					{
 						ptr++;
 						lenTBS++;
 						cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid = (*ptr << 8) | *(ptr + 1);
-						printf("psid (2-byte): 0x%04X\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid);
 						ptr += 2;
 						lenTBS += 2;
 					}
@@ -712,8 +633,7 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 
 					cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.initialized = 1;
 					cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValueLength = *ptr;
-					printf("sspValueLength: %d\n", *ptr);
-
+					
 					cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValue = malloc(*ptr * sizeof(uint8_t));
 					total_length += cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValueLength; // Aggiungi la lunghezza della sspValue
 					ptr++;
@@ -723,12 +643,10 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 					{
 						cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValue[z] = *ptr++;
 						lenTBS++;
-						printf("sspValue[%d]: 0x%02X\n", z, cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspValue[z]);
 					}
 
 					cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmaskLength = *ptr;
-					printf("sspBitmaskLength: %d\n", *ptr);
-
+					
 					cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmask = malloc(*ptr * sizeof(uint8_t));
 					total_length += cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmaskLength;
 					ptr++;
@@ -738,9 +656,7 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 					{
 						cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmask[z] = *ptr++;
 						lenTBS++;
-						printf("sspBitmask[%d]: 0x%02X\n", z, cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].sspRange.sspBitmask[z]);
 					}
-					// printf("ptr = %x\n",*ptr);
 				}
 				else if (*ptr == 0x00)
 				{
@@ -752,12 +668,10 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 						lenTBS++;
 						cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid = *ptr++;
 						lenTBS++;
-						printf("psid (1-byte): 0x%02X\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid);
 					}
 					else
 					{
 						cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid = (*ptr << 8) | *(ptr + 1);
-						printf("psid (2-byte): 0x%04X\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].subjectPermissions.explicitPermissions.psidSspRanges[k].psid);
 						ptr += 2;
 						lenTBS += 2;
 					}
@@ -771,10 +685,8 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 				lenTBS++;
 				cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].minChainLength = *ptr++;
 				lenTBS++;
-				printf("minChainLength: %d\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].minChainLength);
 				cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].eeType = *ptr++;
 				lenTBS++;
-				printf("eeType: %x\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].eeType);
 			}
 			else
 			{
@@ -782,7 +694,6 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 				cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].chainLengthRange = 0;
 				cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].eeType = *ptr++;
 				lenTBS++;
-				printf("Default minChainLength: 1, chainLengthRange: 0, eeType: %x\n", cert->toBeSigned.certIssuePermissions.psidGroupPermissions[j].eeType);
 			}
 
 			if (j + 1 < numGroupPerms)
@@ -797,7 +708,6 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 	{
 		// Fill supportedSymmAlg
 		cert->toBeSigned.encryptionKey.supportedSymmAlg = FS_AES_128_CCM;
-		printf("\nSupported Symmetric Algorithm: AES-128-CCM\n");
 		ptr++;
 		lenTBS++;
 
@@ -808,8 +718,7 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 			lenTBS++;
 			// Set the curve type
 			cert->toBeSigned.encryptionKey.publicKey.curve = FS_NISTP256;
-			printf("Public Key Curve: NIST P-256\n");
-
+			
 			// Check for the point type
 			if (*ptr == 0x83)
 			{
@@ -818,25 +727,20 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 
 				// Set the point type based on the value
 				cert->toBeSigned.encryptionKey.publicKey.point.type = FS_COMPRESSED_LSB_Y_1;
-				printf("Point Type: Compressed Y=1\n");
-
+				
 				// Allocate memory for the x coordinate (compressed format only has the x coordinate)
 				cert->toBeSigned.encryptionKey.publicKey.point.x = malloc(32 * sizeof(uint8_t)); // NIST P-256 has 32-byte coordinates
 				total_length += 32;
 				// Copy the x coordinate from the provided data
-				printf("X Coordinate: ");
 				for (int i = 0; i < 32; i++)
 				{
 					cert->toBeSigned.encryptionKey.publicKey.point.x[i] = *ptr++;
 					lenTBS++;
-					printf("%02x", cert->toBeSigned.encryptionKey.publicKey.point.x[i]);
 				}
-				printf("\n");
-
+				
 				// Since it's compressed-y-1, y coordinate is not used
 				cert->toBeSigned.encryptionKey.publicKey.point.y = NULL;
-				printf("Y Coordinate: NULL\n");
-
+			
 				// If you have a `k` parameter to be set, do it here
 				cert->toBeSigned.encryptionKey.publicKey.k = NULL; // Assuming no value is provided
 			}
@@ -846,25 +750,20 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 				lenTBS++;
 				// Set the point type based on the value
 				cert->toBeSigned.encryptionKey.publicKey.point.type = FS_COMPRESSED_LSB_Y_0;
-				printf("Point Type: Compressed Y=1\n");
-
+			
 				// Allocate memory for the x coordinate (compressed format only has the x coordinate)
 				cert->toBeSigned.encryptionKey.publicKey.point.x = malloc(32 * sizeof(uint8_t)); // NIST P-256 has 32-byte coordinates
 				total_length += 32;
 				// Copy the x coordinate from the provided data
-				printf("X Coordinate: ");
 				for (int i = 0; i < 32; i++)
 				{
 					cert->toBeSigned.encryptionKey.publicKey.point.x[i] = *ptr++;
 					lenTBS++;
-					printf("%02x", cert->toBeSigned.encryptionKey.publicKey.point.x[i]);
 				}
-				printf("\n");
-
+				
 				// Since it's compressed-y-1, y coordinate is not used
 				cert->toBeSigned.encryptionKey.publicKey.point.y = NULL;
-				printf("Y Coordinate: NULL\n");
-
+			
 				// If you have a `k` parameter to be set, do it here
 				cert->toBeSigned.encryptionKey.publicKey.k = NULL; // Assuming no value is provided
 			}
@@ -889,12 +788,6 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 				lenTBS += 4;
 				READ_DATA(cert->toBeSigned.verifyKeyIndicator.val.DILverificationKey.publicKey, ptr, OQS_SIG_dilithium_2_length_public_key);
 				lenTBS += OQS_SIG_dilithium_2_length_public_key;
-				// printf("\nPubKey\n");
-				// for(int i=0; i<OQS_SIG_dilithium_2_length_public_key; i++){
-				//	if(i%32==0) printf("\n");
-				//	printf("%02x ",  cert->toBeSigned.verifyKeyIndicator.val.DILverificationKey.publicKey[i]);
-				// }printf("\n");
-				// printf("\n public key set, starts with %x\n",cert->toBeSigned.verifyKeyIndicator.val.DILverificationKey.publicKey[0]);
 			}
 		}
 	}
@@ -907,7 +800,6 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 			if (*ptr == 0x80)
 			{
 				cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.curve = FS_NISTP256;
-				printf("\nVerification Key Curve: NIST P-256\n");
 				ptr++;
 				lenTBS++;
 
@@ -919,24 +811,19 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 
 					// Set the point type based on the value
 					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.type = FS_COMPRESSED_LSB_Y_0;
-					printf("Point Type: Compressed Y=0\n");
-
+					
 					// Allocate memory for the x coordinate (compressed format only has the x coordinate)
 					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.x = malloc(32 * sizeof(uint8_t)); // NIST P-256 has 32-byte coordinates
 					total_length += 32;
 					// Copy the x coordinate from the provided data
-					printf("X Coordinate: ");
 					for (int i = 0; i < 32; i++)
 					{
 						cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.x[i] = *ptr++;
 						lenTBS++;
-						printf("%02x", cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.x[i]);
 					}
-					printf("\n");
 
 					// Since it's compressed-y-0, y coordinate is not used
 					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.y = NULL;
-					printf("Y Coordinate: NULL\n");
 
 					// If you have a `k` parameter to be set, do it here
 					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.k = NULL; // Assuming no value is provided
@@ -948,25 +835,20 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 
 					// Set the point type based on the value
 					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.type = FS_COMPRESSED_LSB_Y_1;
-					printf("Point Type: Compressed Y=1\n");
-
+					
 					// Allocate memory for the x coordinate (compressed format only has the x coordinate)
 					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.x = malloc(32 * sizeof(uint8_t)); // NIST P-256 has 32-byte coordinates
 					total_length += 32;
 					// Copy the x coordinate from the provided data
-					printf("X Coordinate: ");
 					for (int i = 0; i < 32; i++)
 					{
 						cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.x[i] = *ptr++;
 						lenTBS++;
-						printf("%02x", cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.x[i]);
 					}
-					printf("\n");
-
+					
 					// Since it's compressed-y-1, y coordinate is not used
 					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.point.y = NULL;
-					printf("Y Coordinate: NULL\n");
-
+					
 					// If you have a `k` parameter to be set, do it here
 					cert->toBeSigned.verifyKeyIndicator.val.FSverificationKey.k = NULL; // Assuming no value is provided
 				}
@@ -981,100 +863,70 @@ EtsiExtendedCertificate *Emulated_InstallCertificate(char *data, size_t *struct_
 			cert->sig.DILsignature.signature = malloc(OQS_SIG_dilithium_2_length_signature);
 			total_length += OQS_SIG_dilithium_2_length_signature;
 			ptr += 4;
-			// READ_DATA(cert->sig.DILsignature.signature, ptr, OQS_SIG_dilithium_2_length_signature);
-
+			
 			for (int i = 0; i < OQS_SIG_dilithium_2_length_signature; i++)
 				cert->sig.DILsignature.signature[i] = *ptr++;
-			// printf("\nSignature\n");
-			// for (int i = 0; i < OQS_SIG_dilithium_2_length_signature; i++)
-			//{
-			//	if (i % 32 == 0)
-			//		printf("\n");
-			//	printf("%02x ", cert->sig.DILsignature.signature[i]);
-			//}
-			// printf("\n");
-			// printf("\n signature set, starts with %x\n", cert->sig.DILsignature.signature[0]);
-		}
+			}
 	}
 	else
 	{
 		if (*ptr == 0x80)
 		{
-			// Imposta la curva
+			
 			cert->sig.FSsignature.curve = FS_NISTP256;
-			printf("\nSignature Curve: NIST P-256\n");
-			ptr++; // Avanza al prossimo byte
+			ptr++; 
 
-			// Ora ci aspettiamo che ptr punti a `rSig` (x-only)
 			if (*ptr == 0x80)
 			{
-				ptr++; // Avanza al byte successivo che contiene il valore x della firma
-
-				// Allocazione e copia del valore x nella struttura point.x
-				cert->sig.FSsignature.point.type = FS_X_COORDINATE_ONLY; // Indica che è solo la coordinata x
+				ptr++; 
+				cert->sig.FSsignature.point.type = FS_X_COORDINATE_ONLY; 
 				cert->sig.FSsignature.point.x = malloc(32 * sizeof(uint8_t));
 				total_length += 32;
-				printf("Signature X Coordinate: ");
 				for (int i = 0; i < 32; i++)
 				{
 					cert->sig.FSsignature.point.x[i] = *ptr++;
-					printf("%02x", cert->sig.FSsignature.point.x[i]);
 				}
-				printf("\n");
-
-				// La coordinata y non è presente poiché è un punto x-only
+				
 				cert->sig.FSsignature.point.y = NULL;
-				printf("Signature Y Coordinate: NULL\n");
 
-				// Ora ci aspettiamo che ptr punti a `sSig`
-				// Allocazione e copia del valore s nella struttura
 				cert->sig.FSsignature.s = malloc(32 * sizeof(uint8_t));
 				total_length += 32;
-				printf("Signature S Value: ");
 				for (int i = 0; i < 32; i++)
 				{
 					cert->sig.FSsignature.s[i] = *ptr++;
-					printf("%02x", cert->sig.FSsignature.s[i]);
 				}
-				printf("\n");
 			}
 		}
 	}
 
 	// OQS_API OQS_STATUS
-	verifySignature(data, cert_length, _toBeSigned, lenTBS, cert->sig.DILsignature.signature, entity, cert->toBeSigned.verifyKeyIndicator.val.DILverificationKey.publicKey);
+	verifySignature(data, cert_length, _toBeSigned, lenTBS, cert->sig.DILsignature.signature, entity);
 
-
-	// Stampa la lunghezza totale della struttura cert
-	printf("\nTotal length of the cert structure: %zu bytes\n\n", total_length);
 	*struct_len = total_length;
 
-	if (turn == 3)
+	if (isRCA == 3) 
 		extendedCert = &cert;
 
-	char dig[32];
-	sha256_calculate(dig, cert, total_length);
-
-	for (int i = 0; i < 8; i++)
-		issuerDigest[i] = dig[i];
 	ptr = NULL;
+
+	if (strcmp(entity, "AT") == 0)
+	{
+		myCert.size = cert_length;
+		for (int i = 0; i < cert_length; i++)
+			myCert.buf[i] = data[i];
+	}
 	return cert;
 }
 
-void verifySignature(uint8_t *data, size_t cert_length, uint8_t *_toBeSigned, int lenTBS, uint8_t *sig, char *entity, uint8_t *pubKey)
+void verifySignature(uint8_t *data, size_t cert_length, uint8_t *_toBeSigned, int lenTBS, uint8_t *sig, char *entity)
 {
 	if (strcmp(entity, "RCA") == 0)
 	{
-		printf("\n\n 		cert_length = %ld\n\n", cert_length);
+		// computation digest of RCA
 		data[cert_length - 1] = 0x80;
 		sha256_calculate(_signerHashBuf, data, cert_length);
 		_signerHashRCA = &_signerHashBuf[0];
 		_signerHashLength = sha256_hash_size;
-		printf("\n\n 	SIGNER HASH RCA:\n");
-		for (int i = 0; i < sha256_hash_size; i++)
-			printf("%02X ", (unsigned char)_signerHashRCA[i]);
-
-		printf("\n");
 	}
 	else if (strcmp(entity, "AA") == 0)
 	{
@@ -1082,61 +934,30 @@ void verifySignature(uint8_t *data, size_t cert_length, uint8_t *_toBeSigned, in
 		_tbsHashLength = 32;
 		sha256_calculate(_tbsHash, (const char *)_toBeSigned, lenTBS);
 
-		printf("\n\n 	TO BE SIGNED HASH AA:\n");
-		for (int i = 0; i < 32; i++)
-			printf("%02X ", (unsigned char)_tbsHash[i]);
-
 		char hash[48];
 		int hashlen = 0;
 
 		// calculate JOINT HASH (toBeSigned Hash computed in ToBeSignedCertificate_oer_encoder + signerHash)
 		memcpy(_tbsHash + _tbsHashLength, _signerHashRCA, _signerHashLength);
-
-		printf("\n\n    TBS HASH AA + SIGNER HASH RCA;\n");
-		int lenJointHash = _tbsHashLength + _signerHashLength;
-		for (int i = 0; i < lenJointHash; i++)
-			printf("%02X ", (unsigned char)_tbsHash[i]);
-
-		//  HASH OF JOINT HASH
 		sha256_calculate(hash, _tbsHash, _tbsHashLength + _signerHashLength);
 		hashlen = sha256_hash_size;
 
-		printf("\n\n   hash of jointHash:\n");
-		for (int i = 0; i < hashlen; i++)
-			printf("%02x ", (unsigned char)hash[i]);
-
-		printf("\n\n 		cert_length = %ld\n\n", cert_length);
+		// computation digest of AA
 		data[cert_length - 1] = 0x80;
 		sha256_calculate(_signerHashBuf, data, cert_length);
 		_signerHashAA = &_signerHashBuf[0];
 		_signerHashLength = sha256_hash_size;
 
 		char *pubKeySigner = search_public_Dilithium_key(signerAA);
-
-		printf("\npubkey:\n");
-		for (int i = 0; i < OQS_SIG_dilithium_2_length_public_key; i++)
-		{
-			if (i % 32 == 0)
-				printf("\n");
-			printf("%02X ", (unsigned char)pubKey[i]);
-		}
-
+		// verification function
 		OQS_STATUS result = OQS_SIG_dilithium_2_verify(hash, hashlen, sig, OQS_SIG_dilithium_2_length_signature, pubKeySigner);
-
-		if (result == OQS_SUCCESS)
-			printf("\n SIGNATURE VERIFIED\n");
-		else
-		{
+		if (result != OQS_SUCCESS){
 			fprintf(stderr, "\nERROR: OQS_SIG_dilithium_2_verify failed!\n");
 		}
-		printf("\n");
-
-		printf("\n\n 	SIGNER HASH AA:\n");
-		for (int i = 0; i < sha256_hash_size; i++)
-			printf("%02X ", (unsigned char)_signerHashAA[i]);
 	}
 	else
 	{
+		// TO BE SIGNED HASH
 		_tbsHashLength = 32;
 		sha256_calculate(_tbsHash, (const char *)_toBeSigned, lenTBS);
 
@@ -1148,13 +969,10 @@ void verifySignature(uint8_t *data, size_t cert_length, uint8_t *_toBeSigned, in
 		hashlen = sha256_hash_size;
 
 		char *pubKeySigner = search_public_Dilithium_key(signerAT);
-		
-		// OQS_API OQS_STATUS
+
+		// verification function
 		OQS_STATUS result = OQS_SIG_dilithium_2_verify(hash, hashlen, sig, OQS_SIG_dilithium_2_length_signature, pubKeySigner);
-		if (result == OQS_SUCCESS)
-			printf("\n SIGNATURE VERIFIED\n");
-		else
-		{
+		if (result != OQS_SUCCESS){
 			fprintf(stderr, "\nERROR: OQS_SIG_dilithium_2_verify failed!\n");
 		}
 	}
@@ -1194,11 +1012,11 @@ void freeCertificate(EtsiExtendedCertificate *cert, int flag_PQC)
 	}
 	if (flag_PQC)
 	{
-		printf("inizio free pqc\n");
+		printf("start free pqc\n");
 		free(cert->toBeSigned.verifyKeyIndicator.val.DILverificationKey.publicKey);
-		printf("metà free pqc\n");
+		printf("half free pqc\n");
 		free(cert->sig.DILsignature.signature);
-		printf("fine free pqc\n");
+		printf("end free pqc\n");
 	}
 	else
 	{
@@ -1207,7 +1025,7 @@ void freeCertificate(EtsiExtendedCertificate *cert, int flag_PQC)
 		free(cert->sig.FSsignature.s);
 	}
 	free(cert);
-	printf("\n fine free cert\n");
+	printf("\n end free cert\n");
 }
 
 #endif
