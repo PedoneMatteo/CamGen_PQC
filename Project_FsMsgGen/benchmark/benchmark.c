@@ -1,3 +1,7 @@
+/*
+A standalone program used to test the signing and verifyng time of ECDSA, Dilithium, Falcon and Sphincs algorithm.
+*/
+
 #include <stdio.h>
 #include <time.h>
 #include <openssl/evp.h>
@@ -22,7 +26,7 @@ double get_time() {
 }
 
 // Funzione per firmare con ECC utilizzando le nuove API di OpenSSL 3.0
-void sign_with_ecc(const unsigned char *message, size_t message_len) {
+double sign_with_ecc(const unsigned char *message, size_t message_len) {
     EVP_PKEY *pkey = NULL;
     EVP_PKEY_CTX *pctx = NULL;
     EVP_MD_CTX *mdctx = NULL;
@@ -93,16 +97,18 @@ void sign_with_ecc(const unsigned char *message, size_t message_len) {
     }
     end_time = get_time();
     printf("ECC verification time: %f seconds\n\n", end_time - start_time);
-
+    
 cleanup:
     EVP_MD_CTX_free(mdctx);
     EVP_PKEY_free(pkey);
     EVP_PKEY_CTX_free(pctx);
     OPENSSL_free(sig);
+
+    return end_time - start_time;
 }
 
 // Funzione simulata per firmare con Dilithium 
-void sign_with_dilithium(const unsigned char *message, size_t message_len) {
+double sign_with_dilithium(const unsigned char *message, size_t message_len) {
     uint8_t *publicKey = malloc(OQS_SIG_dilithium_2_length_public_key);
     uint8_t *secretKey = malloc(OQS_SIG_dilithium_2_length_secret_key);
     uint8_t *signature = malloc(OQS_SIG_dilithium_2_length_signature);
@@ -134,10 +140,11 @@ void sign_with_dilithium(const unsigned char *message, size_t message_len) {
         printf("Dilithium verification succeeded (size: %zu bytes)\n", signatureLen);
     }
     printf("Dilithium verification time: %f seconds\n\n", end_time - start_time);
+    return end_time - start_time;
 }
 
 // Funzione simulata per firmare con Falcon
-void sign_with_falcon(const unsigned char *message, size_t message_len) {
+double sign_with_falcon(const unsigned char *message, size_t message_len) {
     uint8_t *publicKey = malloc(OQS_SIG_falcon_512_length_public_key);
     uint8_t *secretKey = malloc(OQS_SIG_falcon_512_length_secret_key);
     uint8_t *signature = malloc(OQS_SIG_falcon_512_length_signature);
@@ -170,10 +177,11 @@ void sign_with_falcon(const unsigned char *message, size_t message_len) {
         printf("Falcon verification succeeded (size: %zu bytes)\n", signatureLen);
     }
     printf("Falcon verification time: %f seconds\n\n", end_time - start_time);
+    return end_time - start_time;
 }
 
 // Funzione simulata per firmare con Sphincs
-void sign_with_sphincs(const unsigned char *message, size_t message_len) {
+double sign_with_sphincs(const unsigned char *message, size_t message_len) {
     uint8_t *publicKey = malloc(OQS_SIG_sphincs_shake_128s_simple_length_public_key);
     uint8_t *secretKey = malloc(OQS_SIG_sphincs_shake_128s_simple_length_secret_key);
     uint8_t *signature = malloc(OQS_SIG_sphincs_shake_128s_simple_length_signature);
@@ -206,21 +214,31 @@ void sign_with_sphincs(const unsigned char *message, size_t message_len) {
         printf("Sphincs verification succeeded (size: %zu bytes)\n", signatureLen);
     }
     printf("Sphincs verification time: %f seconds\n\n", end_time - start_time);
+    return end_time - start_time;
 }
 
 int main() {
-    const unsigned char message[] = {0x03,0x67,0x89,0x21,0x23,0x01,0xA5,0x2E};
-    size_t message_len = 8;
-
+    const unsigned char message[] = {0x03,0x67,0x89,0x21,0x23,0x01,0xA5,0x2E,0x25,0x32,0x76,0x67,0xF3,0x31,0x01,0x42,0x03,0x67,0x89,0x21,0x23,0x01,0xA5,0x2E,0x25,0x32,0x76,0x67,0xF3,0x31,0x01,0x42};
+    size_t message_len = 32;
+    double ecc=0.0, dil=0.0, fal=0.0, sph=0.0;
+    for(int i=0; i<2000; i++){
+        printf("\n    ROUND = %d\n\n", i+1);
     // Misura il tempo per ECC
-    sign_with_ecc(message, message_len);
+    ecc += sign_with_ecc(message, message_len);
 
     // Misura il tempo per Dilithium (simulato)
-    sign_with_dilithium(message, message_len);
+    dil+= sign_with_dilithium(message, message_len);
   
-    sign_with_falcon(message, message_len);
+    fal+= sign_with_falcon(message, message_len);
 
-    sign_with_sphincs(message, message_len);
-    
+    sph+= sign_with_sphincs(message, message_len);
+    }
+    double avgEcc, avgD, avgF, avgS;
+    avgEcc = ecc/2000;
+    avgD=dil/2000;
+    avgF=fal/2000;
+    avgS=sph/2000;
+    printf("avg verifica:\n ecc: %f s \n dilithium: %f s \n falcon: %f s \n sphincs: %f s \n", avgEcc, avgD, avgF, avgS);
+
     return 0;
 }

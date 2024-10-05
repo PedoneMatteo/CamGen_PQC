@@ -7,6 +7,8 @@
 #include <time.h>
 
 #include "../liboqs/build/include/oqs/sig_dilithium.h"
+#include "../liboqs/build/include/oqs/sig_falcon.h"
+#include "../liboqs/build/include/oqs/sig_sphincs.h"
 #include "./cshared/cstr.h"
 #include "./fitsec2-rel/fitsec.h"
 
@@ -18,6 +20,7 @@ extern int flag_PQC;
 int sha256_calculate(char *hash, const char *ptr, size_t len);
 void *search_private_Dilithium_key(char* pathCertificate);
 void *search_public_Dilithium_key(char* _keyPath);
+void compare_sigTime(char* hash, int hashLen, double dilithiumTime);
 double get_time();
 //int OCTET_STRING_fromBuf(OCTET_STRING_t *st, const char *str, int len);
 

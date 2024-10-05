@@ -1,0 +1,8 @@
+Standard mode:
+    ./fsmsggen -i eth0 -1 ../../POOL_CAM
+
+Non-standard mode:
+    ./fsmsggen -i eth0 -1 ../../POOL_CAM ../../POOL_CAM_PQC
+
+Extending MTU:
+    sudo ip link set dev eth0 mtu 7000

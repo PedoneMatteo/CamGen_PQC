@@ -649,8 +649,8 @@ void MsgGenApp_Send(FitSec *e, MsgGenApp *a)
     FSMessageInfo m = {0};
     gettimeofday(&ph.ts, NULL);
     ph.ts.tv_sec += _tdelta;
-    m.message = (char *)&buf[SHIFT_SEC];     // pointer to the first byte of Secured Header
-    m.messageSize = sizeof(buf) - SHIFT_SEC; 
+    m.message = (char *)&buf[SHIFT_SEC]; // pointer to the first byte of Secured Header
+    m.messageSize = sizeof(buf) - SHIFT_SEC;
     // m.sign.cert = extendedCert;
     m.sign.signerType = FS_SI_AUTO;
     m.position = position;
@@ -698,7 +698,6 @@ void MsgGenApp_Send(FitSec *e, MsgGenApp *a)
 
         if (flag_PQC == 1)
         {
-            double start_time = get_time();
             char unsecuredData[lenUnsecuredData];
             int j = 0;
             for (int i = 25; i < 106; i++)
@@ -711,26 +710,18 @@ void MsgGenApp_Send(FitSec *e, MsgGenApp *a)
             char *signatureMessage = malloc(OQS_SIG_dilithium_2_length_signature);
             size_t lenSignature = OQS_SIG_dilithium_2_length_signature;
 
+            double start_time = get_time();
             OQS_STATUS check = OQS_SIG_dilithium_2_sign(signatureMessage, &(lenSignature), hashUnsec, hashLen, secretKey);
-            if(check!=OQS_SUCCESS)
-                fprintf(stderr, "Error signing message\n");
-
             double end_time = get_time();
-            printf("Dilithium sign time: %f seconds\n\n", end_time - start_time);
+            if (check != OQS_SUCCESS)
+                fprintf(stderr, "Error signing message\n");
+            // printf("\nDilithium sign time:  %f seconds\n", end_time - start_time);
 
-            FSCrypt* cript = FSCrypt_FindEngine("openssl");
-            FSPrivateKey* privKey = FSKey_Generate(cript, FS_NISTP256, NULL);
-            FSSignature *sigEcdsa = malloc(sizeof(FSSignature));
-            sigEcdsa->curve = FS_NISTP256;
-            sigEcdsa->point.x = malloc(32*sizeof(uint8_t));
-            sigEcdsa->point.y = malloc(32*sizeof(uint8_t));
-            sigEcdsa->s = malloc(64*sizeof(uint8_t));
-            bool res = FSSignature_Sign(cript, sigEcdsa, privKey, hashUnsec);
-            if(res)
-                printf("grandeeeeeee\n\n");
-            else
-                printf("mi sono rotto \n\n\n");
-
+            /*
+             Function to compare the signing time of Dilithium with simulations of Ecdsa, Falcon and Sphincs
+            */
+            /* compare_sigTime(hashUnsec, hashLen, end_time - start_time); */
+ 
             unsigned char h_cert[32];
             unsigned char lsb[8];
             if (round_send % 10 != 0)
@@ -738,7 +729,7 @@ void MsgGenApp_Send(FitSec *e, MsgGenApp *a)
                 // computation digest of certificate
                 sha256_calculate(h_cert, myCert.buf, myCert.size);
                 memcpy(lsb, &h_cert[24], 8);
-               
+
                 int index = 117;
                 // type of signer: digest
                 buf[index++] = 0x80;
@@ -790,7 +781,8 @@ static void _handler_iface(pcap_handler_t *h, struct pcap_pkthdr *ph, const uint
 
     int result = pcap_inject(h->device, data, ph->len);
     round_send++;
-    if(round_send==100) round_send = 0;
+    if (round_send == 100)
+        round_send = 0;
     if (result == -1)
     {
         fprintf(stderr, "Error injecting packet: %s\n", pcap_geterr(h->device));
